@@ -1,0 +1,5 @@
+trailingComma: "es5"
+singleQuote: false
+quoteProps: "as-needed"
+bracketSpacing: true
+arrowParens: always

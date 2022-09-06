@@ -22,7 +22,7 @@ import usersRouter from "./routes/users";
 
 class HttpException extends Error {
   status: number;
-  message: string;
+  override message: string;
   constructor(status: number, message: string) {
     super(message);
     this.status = status;
@@ -56,15 +56,15 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
-app.use((req: Request, res: Response, next) => {
+app.use((_req: Request, _res: Response, next) => {
   next(createError(404));
 });
 
 // error handler
 app.use((err: HttpException, req: Request, res: Response) => {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.locals["message"] = err.message;
+  res.locals["error"] = req.app.get("env") === "development" ? err : {};
 
   // render the error page
   res.status(err.status || 500);

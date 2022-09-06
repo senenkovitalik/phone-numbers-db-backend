@@ -10,32 +10,32 @@ module.exports = {
   mode: NODE_ENV,
   target: "node",
   resolve: {
-    extensions: [".ts", ".js"]
+    extensions: [".ts", ".js"],
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
         use: ["ts-loader"],
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+    ],
   },
   externals: [nodeExternals()],
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "index.js",
-    clean: true
+    clean: true,
   },
   plugins: [
     new ESLintPlugin({
-      extensions: ["js", "ts"]
+      extensions: ["js", "ts"],
     }),
     new CopyPlugin({
       patterns: [
         { from: "./src/public", to: "public" },
-        { from: "./src/views", to: "views" }
-      ]
-    })
-  ]
+        { from: "./src/views", to: "views" },
+      ],
+    }),
+  ],
 };
