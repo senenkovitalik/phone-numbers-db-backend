@@ -1,9 +1,10 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
+    "username": "armagedon",
+    "password": "5ij9mN!C8d@E_aF",
+    "database": "phones_handbook",
+    "host": "db4free.net",
+    "port": 3306,
     "dialect": "mysql"
   },
   "test": {
