@@ -4,21 +4,11 @@ import createError from "http-errors";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-// import { Sequelize } from "sequelize";
+
+import { sequelize } from "./db/models/index";
 
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
-
-// const sequelize = new Sequelize(
-//   "phones_handbook",
-//   "armagedon",
-//   "5ij9mN!C8d@E_aF",
-//   {
-//     host: "db4free.net",
-//     port: 3306,
-//     dialect: "mysql"
-//   }
-// );
 
 class HttpException extends Error {
   status: number;
@@ -30,16 +20,14 @@ class HttpException extends Error {
   }
 }
 
-// (async () => {
-//   try {
-//     await sequelize.authenticate();
-//     // @ts-ignore
-//     console.log("Connection has been established successfully.");
-//   } catch (error) {
-//     // @ts-ignore
-//     console.error("Unable to connect to the database:", error);
-//   }
-// })();
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("connected to db");
+  })
+  .catch(() => {
+    throw "error";
+  });
 
 const app: Express = express();
 
