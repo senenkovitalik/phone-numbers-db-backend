@@ -1,19 +1,10 @@
-import { Sequelize, Dialect } from "sequelize";
+import { Sequelize } from "sequelize";
 import { PhoneSystemTypeFactory } from "./PhoneSystemType";
 
-type ConfigFields = {
-  username: string;
-  password: string;
-  database: string;
-  host: string;
-  port: number;
-  dialect: Dialect;
-};
+import Config, { Env } from "../config/config";
 
-const env = process.env["NODE_ENV"] || "development";
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
-const config: ConfigFields = require(__dirname + "/../config/config.json")[env];
+const env = (process.env["NODE_ENV"] || "development") as Env;
+const config = Config[env];
 
 export const sequelize = new Sequelize(
   config.database,
