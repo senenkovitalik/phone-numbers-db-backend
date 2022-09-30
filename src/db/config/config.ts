@@ -1,21 +1,4 @@
-import type { Dialect } from "sequelize";
-
-type ConfigFields = {
-  username: string;
-  password?: string;
-  database: string;
-  host: string;
-  port?: number;
-  dialect: Dialect;
-};
-
-export type Env = "development" | "test" | "production";
-
-type ConfigType = {
-  [key in Env]: ConfigFields;
-};
-
-console.log(`HOST: ${process.env["MYSQL_HOST"] || ""}`);
+import type { ConfigType } from "./types";
 
 const Config: ConfigType = {
   development: {
@@ -40,4 +23,8 @@ const Config: ConfigType = {
   },
 };
 
-export default Config;
+/*
+  Don't chnage this line!!!
+  Sequelize CLI expects only this way export
+*/
+module.exports = Config;
