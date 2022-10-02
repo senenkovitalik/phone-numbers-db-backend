@@ -6,7 +6,11 @@
     "predev": "NODE_ENV=development webpack",
     "dev": "node ./build/index.js",
     "prestart": "NODE_ENV=production webpack",
-    "start": "node ./build/index.js"
+    "start": "node ./build/index.js",
+    "migrations:build": "./generate-migrations.sh",
+    "migrations:run": "sequelize-cli db:migrate",
+    "seeders:build": "./generate-seeders.sh",
+    "seeders:run": "sequelize-cli db:seed:all"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -19,7 +23,6 @@
     "sequelize": "6.21.4"
   },
   "devDependencies": {
-    "@tsconfig/node16-strictest-esm": "^1.0.3",
     "@types/cookie-parser": "1.4.3",
     "@types/debug": "4.1.7",
     "@types/express": "4.17.13",
