@@ -27,4 +27,4 @@ const Config: ConfigType = {
   Don't chnage this line!!!
   Sequelize CLI expects only this way export
 */
-module.exports = Config;
+export = Config;

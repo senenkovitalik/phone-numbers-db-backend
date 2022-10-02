@@ -1,7 +1,8 @@
 import { Sequelize } from "sequelize";
 import { PhoneSystemTypeFactory } from "./PhoneSystemType";
 
-import Config, { Env } from "../config/config";
+import Config = require("../config/config");
+import type { Env } from "../config/types";
 
 const env = (process.env["NODE_ENV"] || "development") as Env;
 const config = Config[env];
