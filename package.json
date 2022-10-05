@@ -7,6 +7,7 @@
     "dev": "node ./build/index.js",
     "prestart": "NODE_ENV=production webpack",
     "start": "node ./build/index.js",
+    "config:build": "./generate-config.sh",
     "migrations:build": "./generate-migrations.sh",
     "migrations:run": "sequelize-cli db:migrate",
     "seeders:build": "./generate-seeders.sh",
