@@ -5,8 +5,6 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 
-import { sequelize } from "./db/models/index";
-
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
 
@@ -19,15 +17,6 @@ class HttpException extends Error {
     this.message = message;
   }
 }
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("connected to db");
-  })
-  .catch(() => {
-    throw "error";
-  });
 
 const app: Express = express();
 
