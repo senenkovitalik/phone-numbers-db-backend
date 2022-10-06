@@ -1,13 +1,20 @@
+import type { Dialect } from "sequelize/types";
 import type { ConfigType } from "./types";
+
+import * as dotenv from 'dotenv';
+dotenv.config()
 
 const Config: ConfigType = {
   development: {
-    username: process.env["MYSQL_USER"] || "",
-    password: process.env["MYSQL_PASSWORD"] || "",
-    database: process.env["MYSQL_DB"] || "",
-    host: process.env["MYSQL_HOST"] || "127.0.0.1",
-    port: 3306,
-    dialect: "mysql",
+    username: process.env["DB_USER"] as string,
+    password: process.env["DB_PASSWORD"] as string,
+    database: process.env["DB_NAME"] as string,
+    host: process.env["DB_HOST"] as string,
+    port: process.env["DB_PORT"] as unknown as number,
+    dialect: process.env["DB_DIALECT"] as Dialect,
+    migrationStorageTableName: "migrations",
+    seederStorageTableName: "seeders",
+    logging:true,
   },
   test: {
     username: "root",

@@ -7,6 +7,9 @@ type ConfigFields = {
   host: string;
   port?: number;
   dialect: Dialect;
+  migrationStorageTableName?: string;
+  seederStorageTableName?: string;
+  logging?: boolean;
 };
 
 export type Env = "development" | "test" | "production";
