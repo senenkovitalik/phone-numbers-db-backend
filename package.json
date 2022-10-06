@@ -7,8 +7,9 @@
     "dev": "node ./build/index.js",
     "prestart": "NODE_ENV=production webpack",
     "start": "node ./build/index.js",
-    "config:build": "./generate-config.sh",
-    "migrations:build": "./generate-migrations.sh",
+    "db:run": "docker compose up -d --build mysql",
+    "config:build": "./scripts/generate-config.sh",
+    "migrations:build": "./scripts/generate-migrations.sh",
     "migrations:run": "sequelize-cli db:migrate",
     "seeders:build": "./generate-seeders.sh",
     "seeders:run": "sequelize-cli db:seed:all"
@@ -16,6 +17,7 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
