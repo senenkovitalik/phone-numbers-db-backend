@@ -4,6 +4,7 @@ import {
   InferCreationAttributes,
   DataTypes,
   Sequelize,
+  CreationOptional,
 } from "sequelize";
 
 import debugModule from "debug";
@@ -17,6 +18,8 @@ export class LocationsSubscribersType extends Model<
 > {
   declare subscriberId: number;
   declare locationId: number;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 }
 
 export const LocationsSubscribersFactory = (sequelize: Sequelize) => {
@@ -29,22 +32,24 @@ export const LocationsSubscribersFactory = (sequelize: Sequelize) => {
         allowNull: false,
         references: {
           model: Location,
-          key: "id"
-        }
+          key: "id",
+        },
       },
       subscriberId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
           model: Subscriber,
-          key: "id"
-        }
+          key: "id",
+        },
       },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
       tableName: "locations_subscribers",
-      underscored: true
+      underscored: true,
     }
   );
 };

@@ -1,5 +1,4 @@
 import { QueryInterface, DataTypes } from "sequelize";
-import { Location, Subscriber } from "../models";
 import type { LocationsSubscribersType } from "../models/LocationsSubscribers";
 
 const TABLE_NAME = "locations_subscribers";
@@ -10,19 +9,27 @@ module.exports = {
       locationId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
+        field: "location_id",
         references: {
-          model: Location,
+          model: "location",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       subscriberId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
+        field: "subscriber_id",
         references: {
-          model: Subscriber,
+          model: "subscriber",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     });
   },
   down: (queryInterface: QueryInterface) => {
