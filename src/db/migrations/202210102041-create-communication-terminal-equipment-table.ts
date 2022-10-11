@@ -1,7 +1,7 @@
 import { QueryInterface, DataTypes } from "sequelize";
 import type { CommunicationTerminalEquipmentType } from "../models/CommunicationTerminalEquipment";
 
-const TABLE_NAME = "communication_terminal_equiipment";
+const TABLE_NAME = "communication_terminal_equipment";
 
 module.exports = {
   up: (queryInterface: QueryInterface) => {
