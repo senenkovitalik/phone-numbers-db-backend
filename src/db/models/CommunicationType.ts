@@ -41,19 +41,11 @@ export const CommunicationTypeFactory = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      parentId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        references: {
-          model: CommunicationType,
-          key: "id",
-        },
-      },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
-      underscored: true,
     }
   );
 };
