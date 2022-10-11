@@ -5,10 +5,12 @@ import {
   DataTypes,
   Sequelize,
   CreationOptional,
+  ForeignKey,
 } from "sequelize";
 
 import debugModule from "debug";
-import { Location, Subscriber } from ".";
+import type { LocationType } from "./Location";
+import type { SubscriberType } from "./Subscriber";
 
 const debug = debugModule("DB:LocationSubscriber");
 
@@ -16,8 +18,8 @@ export class LocationsSubscribersType extends Model<
   InferAttributes<LocationsSubscribersType>,
   InferCreationAttributes<LocationsSubscribersType>
 > {
-  declare subscriberId: number;
-  declare locationId: number;
+  declare subscriberId: ForeignKey<SubscriberType["id"]>;
+  declare locationId: ForeignKey<LocationType["id"]>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
@@ -27,22 +29,6 @@ export const LocationsSubscribersFactory = (sequelize: Sequelize) => {
 
   return LocationsSubscribersType.init(
     {
-      locationId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false,
-        references: {
-          model: Location,
-          key: "id",
-        },
-      },
-      subscriberId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false,
-        references: {
-          model: Subscriber,
-          key: "id",
-        },
-      },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
     },
