@@ -1,11 +1,15 @@
 #!/bin/sh
 
+src_dir=$(pwd)/src/db/migrations
+dst_dir=$(pwd)/build/db
+
+rm -rf $dst_dir/*
+
 echo "Transpile migrations..."
 
-search_dir=$(pwd)/src/db/migrations
-
-./node_modules/typescript/bin/tsc $search_dir/*.ts \
+./node_modules/typescript/bin/tsc $src_dir/*.ts \
   --module commonjs \
   --moduleResolution node \
   --target es2021 \
-  --outDir $(pwd)/build/db/migrations
+  --outDir $dst_dir
+\
