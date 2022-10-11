@@ -13,8 +13,6 @@ COPY . .
 
 RUN npm run predev
 
-RUN ./scripts/generate-config.sh
-RUN ./scripts/generate-migrations.sh
-
+RUN ./scripts/compile-sequelize-files.sh
 
 CMD npm run migrations:run; node ./build/index.js;
