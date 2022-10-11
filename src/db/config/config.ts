@@ -12,9 +12,9 @@ const Config: ConfigType = {
     host: process.env["DB_HOST"] as string,
     port: process.env["DB_PORT"] as unknown as number,
     dialect: process.env["DB_DIALECT"] as Dialect,
-    migrationStorageTableName: "migrations",
-    seederStorageTableName: "seeders",
-    logging:true,
+    migrationStorageTableName: "SEQUELIZE_migrations",
+    seederStorageTableName: "SEQUELIZE_seeders",
+    logging: true,
   },
   test: {
     username: "root",
