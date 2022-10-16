@@ -1,27 +1,25 @@
-import type { QueryInterface } from "sequelize";
+import type { Attributes, QueryInterface } from "sequelize";
+import { underscoreObjectFields } from "../../utils";
+import type { UserType } from "../models/User";
 
 const TABLE_NAME = "user";
 
-// find a way how to specify user type
-// problem with underscored attributes
-const user = {
+const user: Attributes<UserType> = {
   id: 1,
   email: "admin@phonebook.com",
   password: "$2a$10$Qns/Yv.dqjeApxD/EzIxR.cPMZYsmwRgs/u/9YWuMgB4RAEKju/VK",
-  is_admin: true,
-  created_at: new Date(),
-  updated_at: new Date(),
+  isAdmin: true,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
+
+const underscoredUserData = underscoreObjectFields(user);
 
 module.exports = {
   up: (queryInterface: QueryInterface) => {
-    return queryInterface.bulkInsert(TABLE_NAME, [user]);
+    return queryInterface.bulkInsert(TABLE_NAME, [underscoredUserData]);
   },
   down: (queryInterface: QueryInterface) => {
-    return queryInterface.bulkDelete(
-      TABLE_NAME,
-      [{ email: "admin@phonebook.com" }],
-      {}
-    );
+    return queryInterface.bulkDelete(TABLE_NAME, [{ email: user.email }], {});
   },
 };
