@@ -14,6 +14,7 @@ module.exports = {
       email: {
         type: DataTypes.STRING(30),
         allowNull: false,
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
@@ -24,7 +25,15 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
         field: "is_admin",
-      }
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: "created_at",
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: "updated_at",
+      },
     });
   },
   down: (queryInterface: QueryInterface) => {

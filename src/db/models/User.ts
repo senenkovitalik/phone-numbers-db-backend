@@ -5,9 +5,7 @@ import {
   CreationOptional,
   DataTypes,
   Sequelize,
-  ForeignKey,
 } from "sequelize";
-import type { SubscriberType } from "./Subscriber";
 
 export class UserType extends Model<
   InferAttributes<UserType>,
@@ -17,7 +15,8 @@ export class UserType extends Model<
   declare email: string;
   declare password: string;
   declare isAdmin: boolean;
-  declare suscriberId: ForeignKey<SubscriberType["id"]>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 }
 
 export const UserFactory = (sequelize: Sequelize) => {
@@ -31,6 +30,7 @@ export const UserFactory = (sequelize: Sequelize) => {
       email: {
         type: DataTypes.STRING(30),
         allowNull: false,
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
@@ -41,6 +41,8 @@ export const UserFactory = (sequelize: Sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
