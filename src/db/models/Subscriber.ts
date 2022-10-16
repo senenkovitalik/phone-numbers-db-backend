@@ -5,6 +5,9 @@ import {
   CreationOptional,
   DataTypes,
   Sequelize,
+  HasOneGetAssociationMixin,
+  HasOneSetAssociationMixin,
+  HasOneCreateAssociationMixin,
 } from "sequelize";
 
 import debugModule from "debug";
@@ -18,6 +21,10 @@ export class SubscriberType extends Model<
   declare firstname: string;
   declare lastname: string;
   declare middlename: string;
+
+  declare getUser: HasOneGetAssociationMixin<SubscriberType>;
+  declare setUser: HasOneSetAssociationMixin<SubscriberType, number>;
+  declare createUser: HasOneCreateAssociationMixin<SubscriberType>;
 }
 
 export const SubscriberFactory = (sequelize: Sequelize) => {
@@ -33,17 +40,17 @@ export const SubscriberFactory = (sequelize: Sequelize) => {
       firstname: {
         type: DataTypes.STRING(30),
         allowNull: true,
-        field: 'first_name'
+        field: "first_name",
       },
       middlename: {
         type: DataTypes.STRING(30),
         allowNull: true,
-        field: 'middle_name'
+        field: "middle_name",
       },
       lastname: {
         type: DataTypes.STRING(30),
         allowNull: true,
-        field: 'last_name'
+        field: "last_name",
       },
     },
     {

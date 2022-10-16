@@ -7,6 +7,7 @@ import { LocationsSubscribersFactory } from "./LocationsSubscribers";
 import { CommunicationTypeFactory } from "./CommunicationType";
 import { CommunicationTerminalEquipmentTypeFactory } from "./CommunicationTerminalEquipment";
 import { CommunicationPhoneNumberFactory } from "./CommunicationPhoneNumber";
+import { UserFactory } from "./User";
 
 const env = (process.env["NODE_ENV"] || "development") as Env;
 const config = Config[env];
@@ -28,6 +29,8 @@ export const CommunicationTerminalEquipment =
 export const CommunicationPhoneNumberModel =
   CommunicationPhoneNumberFactory(sequelize);
 
+export const User = UserFactory(sequelize);  
+
 Subscriber.belongsToMany(Location, { through: LocationsSubscribers });
 Location.belongsToMany(Subscriber, { through: LocationsSubscribers });
 
@@ -42,3 +45,6 @@ CommunicationPhoneNumberModel.belongsTo(CommunicationTerminalEquipment);
 
 CommunicationTypeModel.hasMany(CommunicationPhoneNumberModel);
 CommunicationPhoneNumberModel.belongsTo(CommunicationTypeModel);
+
+Subscriber.hasOne(User);
+User.belongsTo(Subscriber);
