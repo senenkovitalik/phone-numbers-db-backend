@@ -16,6 +16,6 @@
 
 Test user for development:
 
-email: test@phonebook.com
+email: admin@phonebook.com
 
 password: 12345678
