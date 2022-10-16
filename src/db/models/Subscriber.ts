@@ -5,9 +5,6 @@ import {
   CreationOptional,
   DataTypes,
   Sequelize,
-  HasOneGetAssociationMixin,
-  HasOneSetAssociationMixin,
-  HasOneCreateAssociationMixin,
 } from "sequelize";
 
 import debugModule from "debug";
@@ -21,10 +18,6 @@ export class SubscriberType extends Model<
   declare firstname: string;
   declare lastname: string;
   declare middlename: string;
-
-  declare getUser: HasOneGetAssociationMixin<SubscriberType>;
-  declare setUser: HasOneSetAssociationMixin<SubscriberType, number>;
-  declare createUser: HasOneCreateAssociationMixin<SubscriberType>;
 }
 
 export const SubscriberFactory = (sequelize: Sequelize) => {

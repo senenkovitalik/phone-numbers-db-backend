@@ -6,9 +6,6 @@ import {
   DataTypes,
   Sequelize,
   ForeignKey,
-  BelongsToGetAssociationMixin,
-  BelongsToSetAssociationMixin,
-  BelongsToCreateAssociationMixin,
 } from "sequelize";
 import type { SubscriberType } from "./Subscriber";
 
@@ -21,10 +18,6 @@ export class UserType extends Model<
   declare password: string;
   declare isAdmin: boolean;
   declare suscriberId: ForeignKey<SubscriberType["id"]>;
-
-  declare getSubscriber: BelongsToGetAssociationMixin<SubscriberType>;
-  declare setSubscriber: BelongsToSetAssociationMixin<SubscriberType, number>;
-  declare createSubscriber: BelongsToCreateAssociationMixin<SubscriberType>;
 }
 
 export const UserFactory = (sequelize: Sequelize) => {

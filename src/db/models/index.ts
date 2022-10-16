@@ -29,7 +29,7 @@ export const CommunicationTerminalEquipment =
 export const CommunicationPhoneNumberModel =
   CommunicationPhoneNumberFactory(sequelize);
 
-export const User = UserFactory(sequelize);  
+export const User = UserFactory(sequelize);
 
 Subscriber.belongsToMany(Location, { through: LocationsSubscribers });
 Location.belongsToMany(Subscriber, { through: LocationsSubscribers });
@@ -45,6 +45,3 @@ CommunicationPhoneNumberModel.belongsTo(CommunicationTerminalEquipment);
 
 CommunicationTypeModel.hasMany(CommunicationPhoneNumberModel);
 CommunicationPhoneNumberModel.belongsTo(CommunicationTypeModel);
-
-Subscriber.hasOne(User);
-User.belongsTo(Subscriber);
