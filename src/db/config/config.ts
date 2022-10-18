@@ -13,6 +13,7 @@ const Config: ConfigType = {
     port: process.env["DB_PORT"] as unknown as number,
     dialect: process.env["DB_DIALECT"] as Dialect,
     migrationStorageTableName: "SEQUELIZE_migrations",
+    seederStorage: "sequelize",
     seederStorageTableName: "SEQUELIZE_seeders",
     logging: true,
   },

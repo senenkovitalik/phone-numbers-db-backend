@@ -8,6 +8,7 @@ type ConfigFields = {
   port?: number;
   dialect: Dialect;
   migrationStorageTableName?: string;
+  seederStorage?: "none" | "sequelize" | "json",
   seederStorageTableName?: string;
   logging?: boolean;
 };
