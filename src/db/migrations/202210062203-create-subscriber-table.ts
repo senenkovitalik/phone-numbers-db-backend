@@ -1,11 +1,11 @@
-import { QueryInterface, DataTypes } from "sequelize";
-import type { SubscriberType } from "../models/Subscriber";
+import { DataTypes, QueryInterface } from "sequelize";
+import type { Subscriber } from "../models/Subscriber";
 
 const TABLE_NAME = "subscriber";
 
 module.exports = {
   up: (queryInterface: QueryInterface) => {
-    return queryInterface.createTable<SubscriberType>(TABLE_NAME, {
+    return queryInterface.createTable<Subscriber>(TABLE_NAME, {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,

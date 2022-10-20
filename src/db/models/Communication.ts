@@ -9,24 +9,19 @@ import {
 
 import { sequelize } from "./index";
 
-import type { Communication } from "./Communication";
-import type { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
-
-export class CommunicationPhoneNumber extends Model<
-  InferAttributes<CommunicationPhoneNumber>,
-  InferCreationAttributes<CommunicationPhoneNumber>
+export class Communication extends Model<
+  InferAttributes<Communication>,
+  InferCreationAttributes<Communication>
 > {
   declare id: CreationOptional<number>;
   declare value: string;
-  declare communicationTypeId: ForeignKey<Communication["id"]>;
-  declare communicationTerminalEquipmentId: ForeignKey<
-    CommunicationTerminalEquipment["id"]
-  >;
+  declare description: string | null;
+  declare parentId: ForeignKey<Communication["id"]>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-CommunicationPhoneNumber.init(
+Communication.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -34,14 +29,17 @@ CommunicationPhoneNumber.init(
       allowNull: false,
     },
     value: {
-      type: DataTypes.STRING(15),
+      type: DataTypes.STRING(10),
       allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
-    underscored: true,
   }
 );
