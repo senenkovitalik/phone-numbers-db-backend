@@ -1,11 +1,11 @@
-import { QueryInterface, DataTypes } from "sequelize";
-import type { CommunicationTerminalEquipmentType } from "../models/CommunicationTerminalEquipment";
+import { DataTypes, QueryInterface } from "sequelize";
+import type { CommunicationTerminalEquipment } from "../models/CommunicationTerminalEquipment";
 
 const TABLE_NAME = "communication_terminal_equipment";
 
 module.exports = {
   up: (queryInterface: QueryInterface) => {
-    return queryInterface.createTable<CommunicationTerminalEquipmentType>(TABLE_NAME, {
+    return queryInterface.createTable<CommunicationTerminalEquipment>(TABLE_NAME, {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,

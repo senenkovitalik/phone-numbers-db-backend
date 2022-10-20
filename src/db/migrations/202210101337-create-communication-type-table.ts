@@ -1,11 +1,11 @@
-import { QueryInterface, DataTypes } from "sequelize";
-import type { CommunicationType } from "../models/CommunicationType";
+import { DataTypes, QueryInterface } from "sequelize";
+import type { Communication } from "../models/Communication";
 
 const TABLE_NAME = "communication_type";
 
 module.exports = {
   up: (queryInterface: QueryInterface) => {
-    return queryInterface.createTable<CommunicationType>(TABLE_NAME, {
+    return queryInterface.createTable<Communication>(TABLE_NAME, {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,

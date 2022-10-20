@@ -1,18 +1,13 @@
 import {
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
   CreationOptional,
-  DataTypes,
-  Sequelize,
+  DataTypes, InferAttributes,
+  InferCreationAttributes, Model
 } from "sequelize";
 
-import debugModule from "debug";
-const debug = debugModule("DB:Subscriber");
-
-export class SubscriberType extends Model<
-  InferAttributes<SubscriberType>,
-  InferCreationAttributes<SubscriberType>
+import { sequelize } from "./index";
+export class Subscriber extends Model<
+  InferAttributes<Subscriber>,
+  InferCreationAttributes<Subscriber>
 > {
   declare id: CreationOptional<number>;
   declare firstname: string;
@@ -20,35 +15,32 @@ export class SubscriberType extends Model<
   declare middlename: string;
 }
 
-export const SubscriberFactory = (sequelize: Sequelize) => {
-  debug("init Subscriber model");
-
-  return SubscriberType.init(
-    {
-      id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        primaryKey: true,
-        allowNull: false,
-      },
-      firstname: {
-        type: DataTypes.STRING(30),
-        allowNull: true,
-        field: 'first_name'
-      },
-      middlename: {
-        type: DataTypes.STRING(30),
-        allowNull: true,
-        field: 'middle_name'
-      },
-      lastname: {
-        type: DataTypes.STRING(30),
-        allowNull: true,
-        field: 'last_name'
-      },
+Subscriber.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      allowNull: false,
     },
-    {
-      sequelize,
-      tableName: "subscriber",
-    }
-  );
-};
+    firstname: {
+      type: DataTypes.STRING(30),
+      allowNull: true,
+      field: "first_name",
+    },
+    middlename: {
+      type: DataTypes.STRING(30),
+      allowNull: true,
+      field: "middle_name",
+    },
+    lastname: {
+      type: DataTypes.STRING(30),
+      allowNull: true,
+      field: "last_name",
+    },
+  },
+  {
+    sequelize,
+    tableName: "subscriber",
+  }
+);
+
