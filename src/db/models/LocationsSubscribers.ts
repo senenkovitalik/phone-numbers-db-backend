@@ -1,41 +1,35 @@
 import {
-  Model,
+  CreationOptional,
+  DataTypes,
+  ForeignKey,
   InferAttributes,
   InferCreationAttributes,
-  DataTypes,
-  Sequelize,
-  CreationOptional,
-  ForeignKey,
+  Model
 } from "sequelize";
 
-import debugModule from "debug";
-import type { LocationType } from "./Location";
-import type { SubscriberType } from "./Subscriber";
+import { sequelize } from "./index";
 
-const debug = debugModule("DB:LocationSubscriber");
+import type { Location } from "./Location";
+import type { Subscriber } from "./Subscriber";
 
-export class LocationsSubscribersType extends Model<
-  InferAttributes<LocationsSubscribersType>,
-  InferCreationAttributes<LocationsSubscribersType>
+export class LocationsSubscribers extends Model<
+  InferAttributes<LocationsSubscribers>,
+  InferCreationAttributes<LocationsSubscribers>
 > {
-  declare subscriberId: ForeignKey<SubscriberType["id"]>;
-  declare locationId: ForeignKey<LocationType["id"]>;
+  declare subscriberId: ForeignKey<Subscriber["id"]>;
+  declare locationId: ForeignKey<Location["id"]>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-export const LocationsSubscribersFactory = (sequelize: Sequelize) => {
-  debug("init LocationSubscriber model");
-
-  return LocationsSubscribersType.init(
-    {
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
-    },
-    {
-      sequelize,
-      tableName: "locations_subscribers",
-      underscored: true,
-    }
-  );
-};
+LocationsSubscribers.init(
+  {
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+  },
+  {
+    sequelize,
+    tableName: "locations_subscribers",
+    underscored: true,
+  }
+);
