@@ -50,7 +50,7 @@ function onListening(server: Server, debug: Debugger) {
     typeof addr === "string"
       ? `pipe ${addr}`
       : `port ${addr !== null ? addr.port : ""}`;
-  debug("Listening on " + bind);
+  debug("🚀 Server ready at " + bind);
 }
 
 function underscore(str: string, all_upper_case: boolean): string {
