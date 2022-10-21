@@ -10,6 +10,7 @@ import http from "http";
 import createError from "http-errors";
 import logger from "morgan";
 import path from "path";
+import { sequelize } from "./db";
 const debug = debugModule("sandbox:server");
 
 import { resolvers } from "./graphql/resolvers";
@@ -17,24 +18,29 @@ import { typeDefs } from "./graphql/typeDefs";
 
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
-import { normalizePort, onError, onListening } from "./utils";
-class HttpException extends Error {
-  status: number;
-  override message: string;
-  constructor(status: number, message: string) {
-    super(message);
-    this.status = status;
-    this.message = message;
-  }
-}
+import type { HttpException, MyContext } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface MyContext {}
+import { normalizePort, onError, onListening } from "./utils";
+
+const port = normalizePort(process.env["PORT"] || "3000");
 
 async function startApolloServer() {
+  try {
+    await sequelize.authenticate();
+    debug("Connection to DB has been established successfully.");
+  } catch (error) {
+    debug("Unable to connect to the database:", error);
+  }
+
   const app: Express = express();
 
   const httpServer = http.createServer(app);
+
+  httpServer.on("error", (error: NodeJS.ErrnoException) =>
+    onError(error, port, debug)
+  );
+
+  httpServer.on("listening", () => onListening(httpServer, debug));
 
   const server = new ApolloServer<MyContext>({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -65,7 +71,7 @@ async function startApolloServer() {
     bodyParser.json(),
     expressMiddleware(server, {
       // eslint-disable-next-line @typescript-eslint/require-await
-      context: async ({ req }) => ({ token: req.headers["token"] }),
+      context: async () => ({}),
     })
   );
 
@@ -86,14 +92,7 @@ async function startApolloServer() {
   });
 
   await new Promise<void>((resolve) => {
-    const port = normalizePort(process.env["PORT"] || "3000");
-
     httpServer.listen({ port }, resolve);
-
-    httpServer.on("error", (error: NodeJS.ErrnoException) =>
-      onError(error, port, debug)
-    );
-    httpServer.on("listening", () => onListening(httpServer, debug));
   });
 }
 

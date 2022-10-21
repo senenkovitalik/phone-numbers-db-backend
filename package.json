@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "predev": "NODE_ENV=development webpack",
-    "dev": "node ./build/index.js",
+    "dev": "DEBUG=* node ./build/index.js",
     "prestart": "NODE_ENV=production webpack",
-    "start": "node ./build/index.js",
+    "start": "npm run codegen && node ./build/index.js",
     "db:run": "docker compose up -d --build mysql",
     "sequelize:compile": "./scripts/compile-sequelize-files.sh",
     "migrations:run": "sequelize-cli db:migrate",
-    "seeders:run": "sequelize-cli db:seed:all"
+    "seeders:run": "sequelize-cli db:seed:all",
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.0.1",
@@ -29,6 +30,9 @@
     "sequelize": "6.21.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.13.7",
+    "@graphql-codegen/typescript": "2.7.5",
+    "@graphql-codegen/typescript-resolvers": "2.7.5",
     "@types/cookie-parser": "1.4.3",
     "@types/cors": "^2.8.12",
     "@types/debug": "4.1.7",

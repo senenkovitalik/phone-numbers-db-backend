@@ -1,6 +1,7 @@
+import type { Resolvers } from "../__generated/graphql";
 import * as Queries from "./Queries";
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
     ...Queries
   },

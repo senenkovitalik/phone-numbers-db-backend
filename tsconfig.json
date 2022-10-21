@@ -21,7 +21,7 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "importsNotUsedAsValues": "error",
+    "importsNotUsedAsValues": "preserve",
     "checkJs": true,
     "paths": {
       "*": ["node_modules/*"]

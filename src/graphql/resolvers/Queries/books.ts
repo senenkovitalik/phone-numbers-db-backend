@@ -9,4 +9,6 @@ const booksDB = [
   },
 ];
 
-export const books = () => booksDB;
+export const books = () => {
+  return booksDB;
+};
