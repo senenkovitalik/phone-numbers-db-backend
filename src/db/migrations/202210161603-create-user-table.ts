@@ -1,11 +1,11 @@
-import { QueryInterface, DataTypes } from "sequelize";
-import type { UserType } from "../models/User";
+import { DataTypes, QueryInterface } from "sequelize";
+import type { User } from "../models/User";
 
 const TABLE_NAME = "user";
 
 module.exports = {
   up: (queryInterface: QueryInterface) => {
-    return queryInterface.createTable<UserType>(TABLE_NAME, {
+    return queryInterface.createTable<User>(TABLE_NAME, {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,

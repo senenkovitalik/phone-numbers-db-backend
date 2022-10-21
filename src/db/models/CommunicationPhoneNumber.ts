@@ -7,10 +7,10 @@ import {
   Model
 } from "sequelize";
 
-import { sequelize } from "./index";
+import { sequelize } from "../index";
 
-import type { Communication } from "./Communication";
-import type { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
+import { Communication } from "./Communication";
+import { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
 
 export class CommunicationPhoneNumber extends Model<
   InferAttributes<CommunicationPhoneNumber>,
@@ -45,3 +45,7 @@ CommunicationPhoneNumber.init(
     underscored: true,
   }
 );
+
+CommunicationPhoneNumber.belongsTo(CommunicationTerminalEquipment);
+
+CommunicationPhoneNumber.belongsTo(Communication);

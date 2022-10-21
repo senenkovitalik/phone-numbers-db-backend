@@ -7,10 +7,11 @@ import {
   Model
 } from "sequelize";
 
-import { sequelize } from "./index";
+import { sequelize } from "../index";
 
-import type { Communication } from "./Communication";
-import type { Location } from "./Location";
+import { Communication } from "./Communication";
+import { CommunicationPhoneNumber } from "./CommunicationPhoneNumber";
+import { Location } from "./Location";
 
 export class CommunicationTerminalEquipment extends Model<
   InferAttributes<CommunicationTerminalEquipment>,
@@ -59,3 +60,9 @@ CommunicationTerminalEquipment.init(
     tableName: "communication_terminal_equiipment",
   }
 );
+
+CommunicationTerminalEquipment.belongsTo(Location);
+
+CommunicationTerminalEquipment.belongsTo(Communication);
+
+CommunicationTerminalEquipment.hasMany(CommunicationPhoneNumber);

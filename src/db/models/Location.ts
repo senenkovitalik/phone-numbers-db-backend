@@ -6,7 +6,10 @@ import {
   Model
 } from "sequelize";
 
-import { sequelize } from "./index";
+import { sequelize } from "../index";
+import { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
+import { LocationsSubscribers } from "./LocationsSubscribers";
+import { Subscriber } from "./Subscriber";
 export class Location extends Model<
   InferAttributes<Location>,
   InferCreationAttributes<Location>
@@ -72,3 +75,7 @@ Location.init(
     tableName: "location",
   }
 );
+
+Location.belongsToMany(Subscriber, { through: LocationsSubscribers });
+
+Location.hasMany(CommunicationTerminalEquipment);

@@ -3,8 +3,9 @@ import {
   DataTypes, InferAttributes,
   InferCreationAttributes, Model
 } from "sequelize";
-
-import { sequelize } from "./index";
+import { sequelize } from "../index";
+import { Location } from "./Location";
+import { LocationsSubscribers } from "./LocationsSubscribers";
 export class Subscriber extends Model<
   InferAttributes<Subscriber>,
   InferCreationAttributes<Subscriber>
@@ -44,3 +45,4 @@ Subscriber.init(
   }
 );
 
+Subscriber.belongsToMany(Location, { through: LocationsSubscribers });

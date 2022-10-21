@@ -1,15 +1,13 @@
 import {
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
   CreationOptional,
-  DataTypes,
-  Sequelize,
+  DataTypes, InferAttributes,
+  InferCreationAttributes, Model
 } from "sequelize";
 
-export class UserType extends Model<
-  InferAttributes<UserType>,
-  InferCreationAttributes<UserType>
+import { sequelize } from "../index";
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
 > {
   declare id: CreationOptional<number>;
   declare email: string;
@@ -19,35 +17,33 @@ export class UserType extends Model<
   declare updatedAt: CreationOptional<Date>;
 }
 
-export const UserFactory = (sequelize: Sequelize) => {
-  return UserType.init(
-    {
-      id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        primaryKey: true,
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      allowNull: false,
     },
-    {
-      sequelize,
-      tableName: "user",
-      underscored: true,
-    }
-  );
-};
+    email: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+  },
+  {
+    sequelize,
+    tableName: "user",
+    underscored: true,
+  }
+);

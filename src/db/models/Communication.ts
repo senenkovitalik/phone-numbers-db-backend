@@ -7,7 +7,10 @@ import {
   Model
 } from "sequelize";
 
-import { sequelize } from "./index";
+import { sequelize } from "../index";
+
+import { CommunicationPhoneNumber } from "./CommunicationPhoneNumber";
+import { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
 
 export class Communication extends Model<
   InferAttributes<Communication>,
@@ -43,3 +46,7 @@ Communication.init(
     sequelize,
   }
 );
+
+Communication.hasMany(CommunicationTerminalEquipment);
+
+Communication.hasMany(CommunicationPhoneNumber);
