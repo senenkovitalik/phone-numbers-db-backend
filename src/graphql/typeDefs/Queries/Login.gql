@@ -1,0 +1,4 @@
+type AuthData {
+  token: String!
+  expiresIn: String!
+}
