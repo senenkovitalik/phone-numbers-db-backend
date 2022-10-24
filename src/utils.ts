@@ -1,5 +1,11 @@
-import type { Server } from "http";
+import { ContextFunction } from "@apollo/server";
+import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
 import type { Debugger } from "debug";
+import debugModule from "debug";
+import type { Server } from "http";
+import jwt from "jsonwebtoken";
+
+import { MyContext, UserPayload } from "./types";
 
 function normalizePort(val: string) {
   const port = parseInt(val, 10);
@@ -89,5 +95,49 @@ function underscoreObjectFields(
 
   return newObj;
 }
+
+export const buildGraphQLContext: ContextFunction<
+  [ExpressContextFunctionArgument],
+  MyContext
+  // eslint-disable-next-line @typescript-eslint/require-await
+> = async ({ req }) => {
+  const debug = debugModule("graphql:context-builder");
+
+  const authHeader = req.get("Authorization");
+
+  if (!authHeader) {
+    return {
+      user: null,
+    };
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  if (!token) {
+    return {
+      user: null,
+    };
+  }
+
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env["JWT_PASSWORD"] as string
+    ) as UserPayload;
+
+    return {
+      user: {
+        id: decoded.userId,
+        email: decoded.email,
+      },
+    };
+  } catch (e) {
+    debug(e);
+
+    return {
+      user: null,
+    };
+  }
+};
 
 export { normalizePort, onError, onListening, underscoreObjectFields };

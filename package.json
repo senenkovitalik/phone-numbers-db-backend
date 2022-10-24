@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "predev": "NODE_ENV=development webpack",
-    "dev": " node ./build/index.js",
+    "dev": "node ./build/index.js",
     "prestart": "NODE_ENV=production webpack",
     "start": "npm run codegen && node ./build/index.js",
     "db:run": "docker compose up -d --build mysql",

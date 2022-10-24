@@ -10,17 +10,20 @@ import http from "http";
 import createError from "http-errors";
 import logger from "morgan";
 import path from "path";
+
 import { sequelize } from "./db";
-const debug = debugModule("sandbox:server");
 
 import { resolvers } from "./graphql/resolvers";
 import { typeDefs } from "./graphql/typeDefs";
 
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
+
 import type { HttpException, MyContext } from "./types";
 
-import { normalizePort, onError, onListening } from "./utils";
+import { buildGraphQLContext, normalizePort, onError, onListening } from "./utils";
+
+const debug = debugModule("main");
 
 const port = normalizePort(process.env["PORT"] || "3000");
 
@@ -43,7 +46,6 @@ async function startApolloServer() {
   httpServer.on("listening", () => onListening(httpServer, debug));
 
   const server = new ApolloServer<MyContext>({
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
@@ -70,8 +72,7 @@ async function startApolloServer() {
     cors<cors.CorsRequest>(),
     bodyParser.json(),
     expressMiddleware(server, {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      context: async () => ({}),
+      context: buildGraphQLContext
     })
   );
 

@@ -32,7 +32,6 @@ export const login = async (
   );
 
   return {
-    token: token,
-    expiresIn: "1h",
+    token,
   };
 };

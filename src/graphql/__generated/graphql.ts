@@ -17,12 +17,12 @@ export type Scalars = {
 
 export type AuthData = {
   __typename?: 'AuthData';
-  expiresIn: Scalars['String'];
   token: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  books: Array<Scalars['String']>;
   login?: Maybe<AuthData>;
 };
 
@@ -117,12 +117,12 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type AuthDataResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['AuthData'] = ResolversParentTypes['AuthData']> = ResolversObject<{
-  expiresIn?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  books?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   login?: Resolver<Maybe<ResolversTypes['AuthData']>, ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
 }>;
 

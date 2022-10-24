@@ -8,5 +8,16 @@ export class HttpException extends Error {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MyContext {}
+export interface UserPayload {
+  userId: string;
+  email: string;
+}
+
+export interface UserInterface {
+  id: string;
+  email: string;
+}
+
+export interface MyContext {
+  user: UserInterface | null;
+}
