@@ -1,1 +1,8 @@
-.eslintrc.cjs
+build
+
+.eslintrc.js
+webpack.config.js
+
+codegen.ts
+
+/src/graphql/__generated/graphql.ts

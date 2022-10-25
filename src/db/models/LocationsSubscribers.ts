@@ -7,7 +7,7 @@ import {
   Model
 } from "sequelize";
 
-import { sequelize } from "./index";
+import { sequelize } from "../index";
 
 import type { Location } from "./Location";
 import type { Subscriber } from "./Subscriber";

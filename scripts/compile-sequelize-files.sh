@@ -1,7 +1,7 @@
 #!/bin/sh
 
 src_dir=$(pwd)/src/db
-dst_dir=$(pwd)/build/db
+dst_dir=$(pwd)/build
 
 rm -rf $dst_dir/*
 
