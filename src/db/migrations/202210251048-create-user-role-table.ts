@@ -1,30 +1,22 @@
 import { DataTypes, QueryInterface } from "sequelize";
-import type { User } from "../models/User";
 
-const TABLE_NAME = "user";
+import { UserRoles } from "../../types";
+import { UserRole } from "../models/UserRole";
+
+const TABLE_NAME = "user_role";
 
 module.exports = {
   up: (queryInterface: QueryInterface) => {
-    return queryInterface.createTable<User>(TABLE_NAME, {
+    return queryInterface.createTable<UserRole>(TABLE_NAME, {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         allowNull: false,
       },
-      email: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
+      role: {
+        type: DataTypes.ENUM,
+        values: Object.values(UserRoles),
         unique: true,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-        field: "is_admin",
       },
       createdAt: {
         type: DataTypes.DATE,

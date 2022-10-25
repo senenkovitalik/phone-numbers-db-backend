@@ -21,3 +21,8 @@ export interface UserInterface {
 export interface MyContext {
   user: UserInterface | null;
 }
+
+export enum UserRoles {
+  ADMIN = "ADMIN",
+  USER = "USER"
+}
