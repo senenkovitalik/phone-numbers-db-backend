@@ -1,5 +1,5 @@
 import { ContextFunction } from "@apollo/server";
-import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
+import { ExpressContextFunctionArgument } from "@apollo/server/express4";
 import type { Debugger } from "debug";
 import debugModule from "debug";
 import type { Server } from "http";
