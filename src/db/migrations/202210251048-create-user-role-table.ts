@@ -11,7 +11,7 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
       },
       role: {
         type: DataTypes.ENUM,
