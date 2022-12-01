@@ -1,50 +1,45 @@
 import {
   CreationOptional,
   DataTypes,
-  ForeignKey,
   InferAttributes,
   InferCreationAttributes,
   Model
 } from "sequelize";
 
+import { UserRoles } from "../../types";
 import { sequelize } from "../index";
-import { UserRole } from "./UserRole";
-export class User extends Model<
-  InferAttributes<User>,
-  InferCreationAttributes<User>
+import { User } from "./User";
+
+export class UserRole extends Model<
+  InferAttributes<UserRole>,
+  InferCreationAttributes<UserRole>
 > {
   declare id: CreationOptional<number>;
-  declare email: string;
-  declare password: string;
-  declare userRoleId: ForeignKey<UserRole["id"]>
+  declare role: UserRoles;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-User.init(
+UserRole.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
-      allowNull: false,
+      autoIncrement: true,
     },
-    email: {
-      type: DataTypes.STRING(30),
-      allowNull: false,
+    role: {
+      type: DataTypes.ENUM,
+      values: Object.values(UserRoles),
       unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
-    tableName: "user",
+    tableName: "user_role",
     underscored: true,
   }
 );
 
-User.belongsTo(UserRole);
+UserRole.hasMany(User);

@@ -1,14 +1,14 @@
-import type { Attributes, QueryInterface } from "sequelize";
-import { underscoreObjectFields } from "../../utils";
-import type { User } from "../models/User";
+import type { InferAttributes, QueryInterface } from "sequelize";
+
+import { User } from "../models";
+import { underscoreObjectFields } from "../utils";
 
 const TABLE_NAME = "user";
 
-const user: Attributes<User> = {
-  id: 1,
+const user: InferAttributes<User, { omit: "id" }> = {
   email: "admin@phonebook.com",
   password: "$2a$10$Qns/Yv.dqjeApxD/EzIxR.cPMZYsmwRgs/u/9YWuMgB4RAEKju/VK",
-  isAdmin: true,
+  userRoleId: 1,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
