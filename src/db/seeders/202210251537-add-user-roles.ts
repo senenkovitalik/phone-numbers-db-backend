@@ -17,7 +17,7 @@ const underscoredRoles = roles.map(role => underscoreObjectFields(role));
 
 module.exports = {
   up: () => {
-    return UserRole.bulkCreate(underscoredRoles);
+    return UserRole.bulkCreate(underscoredRoles as Array<InferAttributes<UserRole, { omit: "id" }>>);
   },
   down: (queryInterface: QueryInterface) => {
     return queryInterface.bulkDelete(
