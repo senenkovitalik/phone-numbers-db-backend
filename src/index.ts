@@ -25,7 +25,7 @@ import { buildGraphQLContext, normalizePort, onError, onListening } from "./util
 
 const debug = debugModule("main");
 
-const port = normalizePort(process.env["PORT"] || "3000");
+const port = normalizePort(process.env["PORT"] || "3001");
 
 async function startApolloServer() {
   try {
@@ -97,4 +97,7 @@ async function startApolloServer() {
   });
 }
 
-startApolloServer().catch(() => console.error("Some error happens"));
+startApolloServer().catch((e) => {
+  console.error("Some error happens");
+  console.error(e);
+});
