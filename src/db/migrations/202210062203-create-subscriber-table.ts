@@ -26,6 +26,14 @@ module.exports = {
         allowNull: true,
         field: 'last_name'
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: "created_at",
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: "updated_at",
+      },
     });
   },
   down: (queryInterface: QueryInterface) => {

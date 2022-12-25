@@ -14,6 +14,8 @@ export class Subscriber extends Model<
   declare firstname: string;
   declare lastname: string;
   declare middlename: string;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 }
 
 Subscriber.init(
@@ -38,10 +40,13 @@ Subscriber.init(
       allowNull: true,
       field: "last_name",
     },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
     tableName: "subscriber",
+    underscored: true
   }
 );
 
