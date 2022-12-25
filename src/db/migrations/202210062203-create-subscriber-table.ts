@@ -9,19 +9,19 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
       },
-      firstname: {
+      firstName: {
         type: DataTypes.STRING(30),
         allowNull: true,
         field: 'first_name'
       },
-      middlename: {
+      middleName: {
         type: DataTypes.STRING(30),
         allowNull: true,
         field: 'middle_name'
       },
-      lastname: {
+      lastName: {
         type: DataTypes.STRING(30),
         allowNull: true,
         field: 'last_name'

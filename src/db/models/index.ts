@@ -7,6 +7,8 @@ import { Subscriber } from "./Subscriber";
 import { User } from "./User";
 import { UserRole } from "./UserRole";
 
+Subscriber.belongsToMany(Location, { through: LocationsSubscribers });
+
 Location.belongsToMany(Subscriber, { through: LocationsSubscribers });
 Location.hasMany(CommunicationTerminalEquipment);
 

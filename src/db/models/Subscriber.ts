@@ -1,19 +1,19 @@
 import {
   CreationOptional,
-  DataTypes, InferAttributes,
-  InferCreationAttributes, Model
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
 } from "sequelize";
 import { sequelize } from "../index";
-import { Location } from "./Location";
-import { LocationsSubscribers } from "./LocationsSubscribers";
 export class Subscriber extends Model<
   InferAttributes<Subscriber>,
   InferCreationAttributes<Subscriber>
 > {
   declare id: CreationOptional<number>;
-  declare firstname: string;
-  declare lastname: string;
-  declare middlename: string;
+  declare firstName: string;
+  declare lastName: string;
+  declare middleName: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
@@ -23,19 +23,19 @@ Subscriber.init(
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
-      allowNull: false,
+      autoIncrement: true,
     },
-    firstname: {
+    firstName: {
       type: DataTypes.STRING(30),
       allowNull: true,
       field: "first_name",
     },
-    middlename: {
+    middleName: {
       type: DataTypes.STRING(30),
       allowNull: true,
       field: "middle_name",
     },
-    lastname: {
+    lastName: {
       type: DataTypes.STRING(30),
       allowNull: true,
       field: "last_name",
@@ -46,8 +46,6 @@ Subscriber.init(
   {
     sequelize,
     tableName: "subscriber",
-    underscored: true
+    underscored: true,
   }
 );
-
-Subscriber.belongsToMany(Location, { through: LocationsSubscribers });
