@@ -8,7 +8,6 @@ import {
 
 import { UserRoles } from "../../types";
 import { sequelize } from "../index";
-import { User } from "./User";
 
 export class UserRole extends Model<
   InferAttributes<UserRole>,
@@ -42,4 +41,4 @@ UserRole.init(
   }
 );
 
-UserRole.hasMany(User);
+

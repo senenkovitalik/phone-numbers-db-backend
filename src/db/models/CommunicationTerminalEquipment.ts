@@ -10,7 +10,6 @@ import {
 import { sequelize } from "../index";
 
 import { Communication } from "./Communication";
-import { CommunicationPhoneNumber } from "./CommunicationPhoneNumber";
 import { Location } from "./Location";
 
 export class CommunicationTerminalEquipment extends Model<
@@ -60,9 +59,3 @@ CommunicationTerminalEquipment.init(
     tableName: "communication_terminal_equiipment",
   }
 );
-
-CommunicationTerminalEquipment.belongsTo(Location);
-
-CommunicationTerminalEquipment.belongsTo(Communication);
-
-CommunicationTerminalEquipment.hasMany(CommunicationPhoneNumber);

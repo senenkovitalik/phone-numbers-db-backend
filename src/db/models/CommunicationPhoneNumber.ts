@@ -45,7 +45,3 @@ CommunicationPhoneNumber.init(
     underscored: true,
   }
 );
-
-CommunicationPhoneNumber.belongsTo(CommunicationTerminalEquipment);
-
-CommunicationPhoneNumber.belongsTo(Communication);
