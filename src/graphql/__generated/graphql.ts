@@ -15,21 +15,65 @@ export type Scalars = {
   Float: number;
 };
 
+export type Aggregate = {
+  __typename?: 'Aggregate';
+  aggregate: Count;
+};
+
 export type AuthData = {
   __typename?: 'AuthData';
   token: Scalars['String'];
 };
 
+export type Count = {
+  __typename?: 'Count';
+  count: Scalars['Int'];
+};
+
+export enum OrderBy {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
 export type Query = {
   __typename?: 'Query';
-  books: Array<Scalars['String']>;
   login?: Maybe<AuthData>;
+  subscribers: Array<Subscriber>;
+  subscribers_aggregate: Aggregate;
+  subscribers_by_pk?: Maybe<Subscriber>;
 };
 
 
 export type QueryLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type QuerySubscribersArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Subscribers_Order_By>>;
+};
+
+
+export type QuerySubscribers_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+export type Subscriber = {
+  __typename?: 'Subscriber';
+  firstName: Scalars['String'];
+  id: Scalars['Int'];
+  lastName: Scalars['String'];
+  middleName: Scalars['String'];
+};
+
+export type Subscribers_Order_By = {
+  firstName?: InputMaybe<OrderBy>;
+  id?: InputMaybe<OrderBy>;
+  lastName?: InputMaybe<OrderBy>;
+  middleName?: InputMaybe<OrderBy>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -102,18 +146,34 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Aggregate: ResolverTypeWrapper<Aggregate>;
   AuthData: ResolverTypeWrapper<AuthData>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Count: ResolverTypeWrapper<Count>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  OrderBy: OrderBy;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Subscriber: ResolverTypeWrapper<Subscriber>;
+  subscribers_order_by: Subscribers_Order_By;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Aggregate: Aggregate;
   AuthData: AuthData;
   Boolean: Scalars['Boolean'];
+  Count: Count;
+  Int: Scalars['Int'];
   Query: {};
   String: Scalars['String'];
+  Subscriber: Subscriber;
+  subscribers_order_by: Subscribers_Order_By;
+}>;
+
+export type AggregateResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Aggregate'] = ResolversParentTypes['Aggregate']> = ResolversObject<{
+  aggregate?: Resolver<ResolversTypes['Count'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AuthDataResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['AuthData'] = ResolversParentTypes['AuthData']> = ResolversObject<{
@@ -121,13 +181,31 @@ export type AuthDataResolvers<ContextType = MyContext, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type CountResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Count'] = ResolversParentTypes['Count']> = ResolversObject<{
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  books?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   login?: Resolver<Maybe<ResolversTypes['AuthData']>, ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
+  subscribers?: Resolver<Array<ResolversTypes['Subscriber']>, ParentType, ContextType, Partial<QuerySubscribersArgs>>;
+  subscribers_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType>;
+  subscribers_by_pk?: Resolver<Maybe<ResolversTypes['Subscriber']>, ParentType, ContextType, RequireFields<QuerySubscribers_By_PkArgs, 'id'>>;
+}>;
+
+export type SubscriberResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Subscriber'] = ResolversParentTypes['Subscriber']> = ResolversObject<{
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  middleName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
+  Aggregate?: AggregateResolvers<ContextType>;
   AuthData?: AuthDataResolvers<ContextType>;
+  Count?: CountResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscriber?: SubscriberResolvers<ContextType>;
 }>;
 

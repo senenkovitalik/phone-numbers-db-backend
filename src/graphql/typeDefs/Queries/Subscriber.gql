@@ -1,0 +1,26 @@
+type Subscriber {
+  id: Int!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+}
+
+type Count {
+  count: Int!
+}
+
+enum OrderBy {
+  asc
+  desc
+}
+
+input subscribers_order_by {
+  id: OrderBy
+  firstName: OrderBy
+  lastName: OrderBy
+  middleName: OrderBy
+}
+
+type Aggregate {
+  aggregate: Count!
+}
