@@ -1,0 +1,12 @@
+type Mutation {
+  update_subscribers_by_pk(
+    id: Int!
+    data: subscribers_update_input!
+  ): Subscriber!
+}
+
+input subscribers_update_input {
+  firstName: String!
+  middleName: String!
+  lastName: String!
+}

@@ -30,6 +30,17 @@ export type Count = {
   count: Scalars['Int'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  update_subscribers_by_pk: Subscriber;
+};
+
+
+export type MutationUpdate_Subscribers_By_PkArgs = {
+  data: Subscribers_Update_Input;
+  id: Scalars['Int'];
+};
+
 export enum OrderBy {
   Asc = 'asc',
   Desc = 'desc'
@@ -74,6 +85,12 @@ export type Subscribers_Order_By = {
   id?: InputMaybe<OrderBy>;
   lastName?: InputMaybe<OrderBy>;
   middleName?: InputMaybe<OrderBy>;
+};
+
+export type Subscribers_Update_Input = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  middleName: Scalars['String'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -151,11 +168,13 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Count: ResolverTypeWrapper<Count>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
   OrderBy: OrderBy;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriber: ResolverTypeWrapper<Subscriber>;
   subscribers_order_by: Subscribers_Order_By;
+  subscribers_update_input: Subscribers_Update_Input;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -165,10 +184,12 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   Count: Count;
   Int: Scalars['Int'];
+  Mutation: {};
   Query: {};
   String: Scalars['String'];
   Subscriber: Subscriber;
   subscribers_order_by: Subscribers_Order_By;
+  subscribers_update_input: Subscribers_Update_Input;
 }>;
 
 export type AggregateResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Aggregate'] = ResolversParentTypes['Aggregate']> = ResolversObject<{
@@ -184,6 +205,10 @@ export type AuthDataResolvers<ContextType = MyContext, ParentType extends Resolv
 export type CountResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Count'] = ResolversParentTypes['Count']> = ResolversObject<{
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  update_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationUpdate_Subscribers_By_PkArgs, 'data' | 'id'>>;
 }>;
 
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -205,6 +230,7 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Aggregate?: AggregateResolvers<ContextType>;
   AuthData?: AuthDataResolvers<ContextType>;
   Count?: CountResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscriber?: SubscriberResolvers<ContextType>;
 }>;
