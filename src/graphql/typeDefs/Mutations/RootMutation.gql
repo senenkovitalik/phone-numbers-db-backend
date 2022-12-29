@@ -4,6 +4,7 @@ type Mutation {
     data: subscribers_update_input!
   ): Subscriber!
   insert_subscribers_one(data: subscribers_update_input): Subscriber!
+  delete_subscribers_by_pk(id: Int!): Subscriber!
 }
 
 input subscribers_update_input {

@@ -32,8 +32,14 @@ export type Count = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  delete_subscribers_by_pk: Subscriber;
   insert_subscribers_one: Subscriber;
   update_subscribers_by_pk: Subscriber;
+};
+
+
+export type MutationDelete_Subscribers_By_PkArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -214,6 +220,7 @@ export type CountResolvers<ContextType = MyContext, ParentType extends Resolvers
 }>;
 
 export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  delete_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationDelete_Subscribers_By_PkArgs, 'id'>>;
   insert_subscribers_one?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, Partial<MutationInsert_Subscribers_OneArgs>>;
   update_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationUpdate_Subscribers_By_PkArgs, 'data' | 'id'>>;
 }>;
