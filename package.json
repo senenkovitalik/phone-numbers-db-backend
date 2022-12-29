@@ -9,8 +9,8 @@
     "start": "npm run codegen && node ./build/index.js",
     "db:run": "docker compose up -d --build mysql",
     "sequelize:compile": "./scripts/compile-sequelize-files.sh",
-    "migrations:run": "sequelize-cli db:migrate",
-    "seeders:run": "sequelize-cli db:seed:all",
+    "migrate": "sequelize-cli db:migrate",
+    "seed": "sequelize-cli db:seed:all",
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
