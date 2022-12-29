@@ -1,0 +1,12 @@
+input communication_types_order_by {
+  id: OrderBy
+  firstName: OrderBy
+  lastName: OrderBy
+  middleName: OrderBy
+}
+
+type CommunicationType {
+  id: Int!
+  value: String!
+  description: String
+}

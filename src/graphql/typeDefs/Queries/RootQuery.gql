@@ -1,6 +1,10 @@
 type Query {
   login(email: String!, password: String!): AuthData
+
   subscribers(limit: Int, offset: Int, order_by: [subscribers_order_by!]): [Subscriber!]!
   subscribers_aggregate: Aggregate!
   subscribers_by_pk(id: Int!): Subscriber
+
+  communication_types(limit: Int, offset: Int, order_by: [communication_types_order_by!]): [CommunicationType!]!
+  communication_types_aggregate: Aggregate!
 }
