@@ -32,9 +32,15 @@ export type Count = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  delete_subscribers: SubscriberDeleteRes;
   delete_subscribers_by_pk: Subscriber;
   insert_subscribers_one: Subscriber;
   update_subscribers_by_pk: Subscriber;
+};
+
+
+export type MutationDelete_SubscribersArgs = {
+  where: Subscribers_Delete_Input;
 };
 
 
@@ -90,6 +96,15 @@ export type Subscriber = {
   id: Scalars['Int'];
   lastName: Scalars['String'];
   middleName: Scalars['String'];
+};
+
+export type SubscriberDeleteRes = {
+  __typename?: 'SubscriberDeleteRes';
+  affected_rows: Scalars['Int'];
+};
+
+export type Subscribers_Delete_Input = {
+  ids: Array<Scalars['Int']>;
 };
 
 export type Subscribers_Order_By = {
@@ -185,6 +200,8 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriber: ResolverTypeWrapper<Subscriber>;
+  SubscriberDeleteRes: ResolverTypeWrapper<SubscriberDeleteRes>;
+  subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
 }>;
@@ -200,6 +217,8 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars['String'];
   Subscriber: Subscriber;
+  SubscriberDeleteRes: SubscriberDeleteRes;
+  subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
 }>;
@@ -220,6 +239,7 @@ export type CountResolvers<ContextType = MyContext, ParentType extends Resolvers
 }>;
 
 export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  delete_subscribers?: Resolver<ResolversTypes['SubscriberDeleteRes'], ParentType, ContextType, RequireFields<MutationDelete_SubscribersArgs, 'where'>>;
   delete_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationDelete_Subscribers_By_PkArgs, 'id'>>;
   insert_subscribers_one?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, Partial<MutationInsert_Subscribers_OneArgs>>;
   update_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationUpdate_Subscribers_By_PkArgs, 'data' | 'id'>>;
@@ -240,6 +260,11 @@ export type SubscriberResolvers<ContextType = MyContext, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriberDeleteResResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['SubscriberDeleteRes'] = ResolversParentTypes['SubscriberDeleteRes']> = ResolversObject<{
+  affected_rows?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Aggregate?: AggregateResolvers<ContextType>;
   AuthData?: AuthDataResolvers<ContextType>;
@@ -247,5 +272,6 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscriber?: SubscriberResolvers<ContextType>;
+  SubscriberDeleteRes?: SubscriberDeleteResResolvers<ContextType>;
 }>;
 

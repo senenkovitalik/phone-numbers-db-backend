@@ -2,7 +2,9 @@ import { Subscriber } from "../../../db/models";
 import {
   MutationInsert_Subscribers_OneArgs,
   MutationUpdate_Subscribers_By_PkArgs,
+  SubscriberDeleteRes,
   Subscribers_Update_Input,
+  MutationDelete_SubscribersArgs,
 } from "../../__generated/graphql";
 
 export const update_subscribers_by_pk = async (
@@ -53,6 +55,28 @@ export const delete_subscribers_by_pk = async (
     }
 
     return res;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const delete_subscribers = async (
+  _parent: unknown,
+  { where: { ids } }: MutationDelete_SubscribersArgs
+): Promise<SubscriberDeleteRes> => {
+  try {
+    const count = await Subscriber.destroy({ where: { id: ids  } });
+
+    if (count === 1) {
+      throw new Error(
+        `Subscribers ID=${ids.join(", ")} not found. No rows affected.`
+      );
+    }
+
+    return {
+      affected_rows: count,
+    };
   } catch (e) {
     console.error(e);
     throw e;
