@@ -1,0 +1,13 @@
+type SubscriberDeleteRes {
+  affected_rows: Int!
+}
+
+input subscribers_update_input {
+  firstName: String!
+  middleName: String!
+  lastName: String!
+}
+
+input subscribers_delete_input {
+  ids: [Int!]!
+}
