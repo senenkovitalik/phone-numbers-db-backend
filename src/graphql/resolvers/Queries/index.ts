@@ -1,3 +1,4 @@
 export * from "./login";
 export * from "./subscribers";
 export * from "./communicationTypes";
+export * from "./communicationPhoneNumbers";

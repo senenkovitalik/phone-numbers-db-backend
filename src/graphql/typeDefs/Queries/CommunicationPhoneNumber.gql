@@ -1,0 +1,13 @@
+type CommunicationPhoneNumber {
+  id: Int!
+  value: String!
+  communicationTypeId: Int!
+  locationId: Int!
+}
+
+input communication_phone_numbers_order_by {
+  id: OrderBy
+  value: OrderBy
+  communicationTypeId: OrderBy
+  locationId: OrderBy
+}

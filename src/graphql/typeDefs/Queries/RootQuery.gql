@@ -7,4 +7,7 @@ type Query {
 
   communication_types(limit: Int, offset: Int, order_by: [communication_types_order_by!]): [CommunicationType!]!
   communication_types_aggregate: Aggregate!
+
+  communication_phone_numbers(limit: Int, offset: Int, order_by: [communication_phone_numbers_order_by!]): [CommunicationPhoneNumber]! 
+  communication_phone_numbers_aggregate: Aggregate!
 }

@@ -25,6 +25,14 @@ export type AuthData = {
   token: Scalars['String'];
 };
 
+export type CommunicationPhoneNumber = {
+  __typename?: 'CommunicationPhoneNumber';
+  communicationTypeId: Scalars['Int'];
+  id: Scalars['Int'];
+  locationId: Scalars['Int'];
+  value: Scalars['String'];
+};
+
 export type CommunicationType = {
   __typename?: 'CommunicationType';
   description?: Maybe<Scalars['String']>;
@@ -73,12 +81,21 @@ export enum OrderBy {
 
 export type Query = {
   __typename?: 'Query';
+  communication_phone_numbers: Array<Maybe<CommunicationPhoneNumber>>;
+  communication_phone_numbers_aggregate: Aggregate;
   communication_types: Array<CommunicationType>;
   communication_types_aggregate: Aggregate;
   login?: Maybe<AuthData>;
   subscribers: Array<Subscriber>;
   subscribers_aggregate: Aggregate;
   subscribers_by_pk?: Maybe<Subscriber>;
+};
+
+
+export type QueryCommunication_Phone_NumbersArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Communication_Phone_Numbers_Order_By>>;
 };
 
 
@@ -117,6 +134,13 @@ export type Subscriber = {
 export type SubscriberDeleteRes = {
   __typename?: 'SubscriberDeleteRes';
   affected_rows: Scalars['Int'];
+};
+
+export type Communication_Phone_Numbers_Order_By = {
+  communicationTypeId?: InputMaybe<OrderBy>;
+  id?: InputMaybe<OrderBy>;
+  locationId?: InputMaybe<OrderBy>;
+  value?: InputMaybe<OrderBy>;
 };
 
 export type Communication_Types_Order_By = {
@@ -216,6 +240,7 @@ export type ResolversTypes = ResolversObject<{
   Aggregate: ResolverTypeWrapper<Aggregate>;
   AuthData: ResolverTypeWrapper<AuthData>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CommunicationPhoneNumber: ResolverTypeWrapper<CommunicationPhoneNumber>;
   CommunicationType: ResolverTypeWrapper<CommunicationType>;
   Count: ResolverTypeWrapper<Count>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -225,6 +250,7 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriber: ResolverTypeWrapper<Subscriber>;
   SubscriberDeleteRes: ResolverTypeWrapper<SubscriberDeleteRes>;
+  communication_phone_numbers_order_by: Communication_Phone_Numbers_Order_By;
   communication_types_order_by: Communication_Types_Order_By;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_order_by: Subscribers_Order_By;
@@ -236,6 +262,7 @@ export type ResolversParentTypes = ResolversObject<{
   Aggregate: Aggregate;
   AuthData: AuthData;
   Boolean: Scalars['Boolean'];
+  CommunicationPhoneNumber: CommunicationPhoneNumber;
   CommunicationType: CommunicationType;
   Count: Count;
   Int: Scalars['Int'];
@@ -244,6 +271,7 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String'];
   Subscriber: Subscriber;
   SubscriberDeleteRes: SubscriberDeleteRes;
+  communication_phone_numbers_order_by: Communication_Phone_Numbers_Order_By;
   communication_types_order_by: Communication_Types_Order_By;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_order_by: Subscribers_Order_By;
@@ -257,6 +285,14 @@ export type AggregateResolvers<ContextType = MyContext, ParentType extends Resol
 
 export type AuthDataResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['AuthData'] = ResolversParentTypes['AuthData']> = ResolversObject<{
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type CommunicationPhoneNumberResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['CommunicationPhoneNumber'] = ResolversParentTypes['CommunicationPhoneNumber']> = ResolversObject<{
+  communicationTypeId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  locationId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -280,6 +316,8 @@ export type MutationResolvers<ContextType = MyContext, ParentType extends Resolv
 }>;
 
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  communication_phone_numbers?: Resolver<Array<Maybe<ResolversTypes['CommunicationPhoneNumber']>>, ParentType, ContextType, Partial<QueryCommunication_Phone_NumbersArgs>>;
+  communication_phone_numbers_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType>;
   communication_types?: Resolver<Array<ResolversTypes['CommunicationType']>, ParentType, ContextType, Partial<QueryCommunication_TypesArgs>>;
   communication_types_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType>;
   login?: Resolver<Maybe<ResolversTypes['AuthData']>, ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
@@ -304,6 +342,7 @@ export type SubscriberDeleteResResolvers<ContextType = MyContext, ParentType ext
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Aggregate?: AggregateResolvers<ContextType>;
   AuthData?: AuthDataResolvers<ContextType>;
+  CommunicationPhoneNumber?: CommunicationPhoneNumberResolvers<ContextType>;
   CommunicationType?: CommunicationTypeResolvers<ContextType>;
   Count?: CountResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

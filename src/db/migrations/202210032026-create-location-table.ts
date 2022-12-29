@@ -9,7 +9,7 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
       },
       country: {
         type: DataTypes.STRING(30),
@@ -46,6 +46,14 @@ module.exports = {
       room: {
         type: DataTypes.STRING(3),
         allowNull: true,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: "created_at",
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: "updated_at",
       },
     });
   },
