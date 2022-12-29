@@ -9,27 +9,15 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
       },
       value: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(20),
         allowNull: false,
       },
       description: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      parentId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: true,
-        field: "parent_id",
-        defaultValue: null,
-        references: {
-          model: "communication_type",
-          key: "id",
-        },
-        onDelete: "SET DEFAULT",
-        onUpdate: "CASCADE",
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,

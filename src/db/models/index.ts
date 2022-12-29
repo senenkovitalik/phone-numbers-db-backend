@@ -1,6 +1,5 @@
 import { Communication } from "./Communication";
 import { CommunicationPhoneNumber } from "./CommunicationPhoneNumber";
-import { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
 import { Location } from "./Location";
 import { LocationsSubscribers } from "./LocationsSubscribers";
 import { Subscriber } from "./Subscriber";
@@ -8,26 +7,19 @@ import { User } from "./User";
 import { UserRole } from "./UserRole";
 
 Subscriber.belongsToMany(Location, { through: LocationsSubscribers });
-
 Location.belongsToMany(Subscriber, { through: LocationsSubscribers });
-Location.hasMany(CommunicationTerminalEquipment);
 
-Communication.hasMany(CommunicationTerminalEquipment);
+CommunicationPhoneNumber.belongsTo(Communication);
 Communication.hasMany(CommunicationPhoneNumber);
 
-CommunicationTerminalEquipment.belongsTo(Location);
-CommunicationTerminalEquipment.belongsTo(Communication);
-CommunicationTerminalEquipment.hasMany(CommunicationPhoneNumber);
-
-CommunicationPhoneNumber.belongsTo(CommunicationTerminalEquipment);
-CommunicationPhoneNumber.belongsTo(Communication);
+CommunicationPhoneNumber.belongsTo(Location);
+Location.hasMany(CommunicationPhoneNumber);
 
 UserRole.hasMany(User);
 User.belongsTo(UserRole);
 
 export * from "./Communication";
 export * from "./CommunicationPhoneNumber";
-export * from "./CommunicationTerminalEquipment";
 export * from "./Location";
 export * from "./LocationsSubscribers";
 export * from "./Subscriber";
