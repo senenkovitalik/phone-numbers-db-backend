@@ -45,6 +45,15 @@ export type Count = {
   count: Scalars['Int'];
 };
 
+export type FilterId = {
+  _eq?: InputMaybe<Scalars['Int']>;
+  _in?: InputMaybe<Array<Scalars['Int']>>;
+};
+
+export type FilterString = {
+  _eq: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   delete_subscribers: SubscriberDeleteRes;
@@ -85,6 +94,7 @@ export type Query = {
   communication_phone_numbers_aggregate: Aggregate;
   communication_types: Array<CommunicationType>;
   communication_types_aggregate: Aggregate;
+  communication_types_by_pk?: Maybe<CommunicationType>;
   login?: Maybe<AuthData>;
   subscribers: Array<Subscriber>;
   subscribers_aggregate: Aggregate;
@@ -96,6 +106,12 @@ export type QueryCommunication_Phone_NumbersArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Communication_Phone_Numbers_Order_By>>;
+  where?: InputMaybe<Communication_Phone_Numbers_Where_Exp>;
+};
+
+
+export type QueryCommunication_Phone_Numbers_AggregateArgs = {
+  where?: InputMaybe<Communication_Phone_Numbers_Where_Exp>;
 };
 
 
@@ -103,6 +119,17 @@ export type QueryCommunication_TypesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Communication_Types_Order_By>>;
+  where?: InputMaybe<Communication_Types_Where_Exp>;
+};
+
+
+export type QueryCommunication_Types_AggregateArgs = {
+  where?: InputMaybe<Communication_Types_Where_Exp>;
+};
+
+
+export type QueryCommunication_Types_By_PkArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -115,7 +142,13 @@ export type QueryLoginArgs = {
 export type QuerySubscribersArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Subscribers_Order_By>>;
+  order_by?: InputMaybe<Subscribers_Order_By>;
+  where?: InputMaybe<Subscribers_Where_Exp>;
+};
+
+
+export type QuerySubscribers_AggregateArgs = {
+  where?: InputMaybe<Subscribers_Where_Exp>;
 };
 
 
@@ -143,11 +176,21 @@ export type Communication_Phone_Numbers_Order_By = {
   value?: InputMaybe<OrderBy>;
 };
 
+export type Communication_Phone_Numbers_Where_Exp = {
+  id?: InputMaybe<FilterId>;
+  value?: InputMaybe<FilterString>;
+};
+
 export type Communication_Types_Order_By = {
-  firstName?: InputMaybe<OrderBy>;
+  description?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
-  lastName?: InputMaybe<OrderBy>;
-  middleName?: InputMaybe<OrderBy>;
+  value?: InputMaybe<OrderBy>;
+};
+
+export type Communication_Types_Where_Exp = {
+  description?: InputMaybe<FilterString>;
+  id?: InputMaybe<FilterId>;
+  value?: InputMaybe<FilterString>;
 };
 
 export type Subscribers_Delete_Input = {
@@ -165,6 +208,13 @@ export type Subscribers_Update_Input = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   middleName: Scalars['String'];
+};
+
+export type Subscribers_Where_Exp = {
+  firstName?: InputMaybe<FilterString>;
+  id?: InputMaybe<FilterId>;
+  lastName?: InputMaybe<FilterString>;
+  middleName?: InputMaybe<FilterString>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -243,6 +293,8 @@ export type ResolversTypes = ResolversObject<{
   CommunicationPhoneNumber: ResolverTypeWrapper<CommunicationPhoneNumber>;
   CommunicationType: ResolverTypeWrapper<CommunicationType>;
   Count: ResolverTypeWrapper<Count>;
+  FilterId: FilterId;
+  FilterString: FilterString;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   OrderBy: OrderBy;
@@ -251,10 +303,13 @@ export type ResolversTypes = ResolversObject<{
   Subscriber: ResolverTypeWrapper<Subscriber>;
   SubscriberDeleteRes: ResolverTypeWrapper<SubscriberDeleteRes>;
   communication_phone_numbers_order_by: Communication_Phone_Numbers_Order_By;
+  communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
   communication_types_order_by: Communication_Types_Order_By;
+  communication_types_where_exp: Communication_Types_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
+  subscribers_where_exp: Subscribers_Where_Exp;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -265,6 +320,8 @@ export type ResolversParentTypes = ResolversObject<{
   CommunicationPhoneNumber: CommunicationPhoneNumber;
   CommunicationType: CommunicationType;
   Count: Count;
+  FilterId: FilterId;
+  FilterString: FilterString;
   Int: Scalars['Int'];
   Mutation: {};
   Query: {};
@@ -272,10 +329,13 @@ export type ResolversParentTypes = ResolversObject<{
   Subscriber: Subscriber;
   SubscriberDeleteRes: SubscriberDeleteRes;
   communication_phone_numbers_order_by: Communication_Phone_Numbers_Order_By;
+  communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
   communication_types_order_by: Communication_Types_Order_By;
+  communication_types_where_exp: Communication_Types_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
+  subscribers_where_exp: Subscribers_Where_Exp;
 }>;
 
 export type AggregateResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Aggregate'] = ResolversParentTypes['Aggregate']> = ResolversObject<{
@@ -317,12 +377,13 @@ export type MutationResolvers<ContextType = MyContext, ParentType extends Resolv
 
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   communication_phone_numbers?: Resolver<Array<Maybe<ResolversTypes['CommunicationPhoneNumber']>>, ParentType, ContextType, Partial<QueryCommunication_Phone_NumbersArgs>>;
-  communication_phone_numbers_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType>;
+  communication_phone_numbers_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryCommunication_Phone_Numbers_AggregateArgs>>;
   communication_types?: Resolver<Array<ResolversTypes['CommunicationType']>, ParentType, ContextType, Partial<QueryCommunication_TypesArgs>>;
-  communication_types_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType>;
+  communication_types_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryCommunication_Types_AggregateArgs>>;
+  communication_types_by_pk?: Resolver<Maybe<ResolversTypes['CommunicationType']>, ParentType, ContextType, RequireFields<QueryCommunication_Types_By_PkArgs, 'id'>>;
   login?: Resolver<Maybe<ResolversTypes['AuthData']>, ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
   subscribers?: Resolver<Array<ResolversTypes['Subscriber']>, ParentType, ContextType, Partial<QuerySubscribersArgs>>;
-  subscribers_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType>;
+  subscribers_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QuerySubscribers_AggregateArgs>>;
   subscribers_by_pk?: Resolver<Maybe<ResolversTypes['Subscriber']>, ParentType, ContextType, RequireFields<QuerySubscribers_By_PkArgs, 'id'>>;
 }>;
 

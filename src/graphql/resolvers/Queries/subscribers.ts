@@ -4,25 +4,42 @@ import {
   QuerySubscribers_By_PkArgs,
 } from "../../__generated/graphql";
 import { Subscriber } from "../../../db/models/Subscriber";
+import { InferAttributes, Order, WhereOptions } from "sequelize";
 
 export const subscribers = async (
   _parent: unknown,
-  { limit, offset }: QuerySubscribersArgs
+  { limit, offset, where }: QuerySubscribersArgs
 ) => {
   try {
-    const options: { limit?: number; offset?: number } = {};
+    const options: {
+      limit?: number;
+      offset?: number;
+      order?: Order;
+      where?: WhereOptions<
+        InferAttributes<
+          Subscriber,
+          {
+            omit: never;
+          }
+        >
+      >;
+    } = {
+      ...(limit && { limit }),
+      ...(offset && { offset }),
+      ...(where && {
+        where: Object.entries(where).reduce((accumulator, currentValue) => {
+          const [key, value] = currentValue;
+          return {
+            ...accumulator,
+            [key]: value?._eq,
+          };
+        }, {}),
+      }),
+    };
 
-    if (limit) {
-      options.limit = limit;
-    }
+    console.log(options);
 
-    if (offset) {
-      options.offset = offset;
-    }
-
-    const subscribers = await Subscriber.findAll(options);
-
-    return subscribers;
+    return await Subscriber.findAll(options);
   } catch (e) {
     console.error(e);
     throw new Error("500");

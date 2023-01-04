@@ -5,15 +5,6 @@ type Subscriber {
   lastName: String!
 }
 
-type Count {
-  count: Int!
-}
-
-enum OrderBy {
-  asc
-  desc
-}
-
 input subscribers_order_by {
   id: OrderBy
   firstName: OrderBy
@@ -21,6 +12,9 @@ input subscribers_order_by {
   middleName: OrderBy
 }
 
-type Aggregate {
-  aggregate: Count!
+input subscribers_where_exp {
+  id: FilterId
+  firstName: FilterString
+  lastName: FilterString
+  middleName: FilterString
 }
