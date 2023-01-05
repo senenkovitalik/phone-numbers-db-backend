@@ -7,8 +7,6 @@ import {
 import { Subscriber } from "../../../db/models/Subscriber";
 import { InferAttributes, Order, WhereOptions } from "sequelize";
 
-const 
-
 export const subscribers = async (
   _parent: unknown,
   { limit, offset, order_by, where }: QuerySubscribersArgs
