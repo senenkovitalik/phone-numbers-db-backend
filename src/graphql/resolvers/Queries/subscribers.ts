@@ -1,56 +1,17 @@
 import {
   Aggregate,
-  FilterId,
   QuerySubscribersArgs,
   QuerySubscribers_By_PkArgs,
 } from "../../__generated/graphql";
 import { Subscriber } from "../../../db/models/Subscriber";
-import { InferAttributes, Order, WhereOptions } from "sequelize";
+import { calculateOptions } from "../utils";
 
 export const subscribers = async (
   _parent: unknown,
-  { limit, offset, order_by, where }: QuerySubscribersArgs
+  args: QuerySubscribersArgs
 ) => {
   try {
-    const options: {
-      limit?: number;
-      offset?: number;
-      order?: Order;
-      where?: WhereOptions<
-        InferAttributes<
-          Subscriber,
-          {
-            omit: never;
-          }
-        >
-      >;
-    } = {
-      ...(limit && { limit }),
-      ...(offset && { offset }),
-      ...(order_by && { order: Object.entries(order_by as object) }),
-      ...(where && {
-        where: Object.entries(where).reduce((accumulator, currentValue) => {
-          const [key, value] = currentValue;
-
-          if (key === "id" && value) {
-            return {
-              ...accumulator,
-              [key]: [
-                ...((value as FilterId)._eq ? [(value as FilterId)._eq] : []),
-                ...(Array.isArray((value as FilterId)._in)
-                  ? ((value as FilterId)._in as [])
-                  : []),
-              ],
-            };
-          }
-
-          return {
-            ...accumulator,
-            [key]: value?._eq,
-          };
-        }, {}),
-      }),
-    };
+    const options = calculateOptions(args);
 
     return await Subscriber.findAll(options);
   } catch (e) {
