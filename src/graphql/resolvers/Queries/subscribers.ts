@@ -1,6 +1,7 @@
 import {
   Aggregate,
   QuerySubscribersArgs,
+  QuerySubscribers_AggregateArgs,
   QuerySubscribers_By_PkArgs,
 } from "../../__generated/graphql";
 import { Subscriber } from "../../../db/models/Subscriber";
@@ -20,13 +21,17 @@ export const subscribers = async (
   }
 };
 
-export const subscribers_aggregate = async (): Promise<Aggregate> => {
+export const subscribers_aggregate = async (
+  _parent: unknown,
+  args: QuerySubscribers_AggregateArgs
+): Promise<Aggregate> => {
   try {
-    const subscribersCount = await Subscriber.count();
+    const options = calculateOptions(args);
 
+    const { count } = await Subscriber.findAndCountAll(options);
     return {
       aggregate: {
-        count: subscribersCount,
+        count,
       },
     };
   } catch (e) {
