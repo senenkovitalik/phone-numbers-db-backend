@@ -1,11 +1,8 @@
-import { FindOptions } from "sequelize";
 import { FilterId } from "../__generated/graphql";
+import { CalcOptsI, OptionsType } from "./types";
 
 // prettier-ignore
-type OptionsType = Pick<FindOptions, "limit" | "offset" | "order" | "where">;
-
-// prettier-ignore
-export function calculateOptions({ limit, offset, order_by, where }: unknown): OptionsType {
+export function calculateOptions<T extends CalcOptsI>({ limit, offset, order_by, where }: T): OptionsType {
   return {
     ...(limit && { limit }),
     ...(offset && { offset }),
