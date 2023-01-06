@@ -105,7 +105,7 @@ export type Query = {
 export type QueryCommunication_Phone_NumbersArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Communication_Phone_Numbers_Order_By>>;
+  order_by?: InputMaybe<Communication_Phone_Numbers_Order_By>;
   where?: InputMaybe<Communication_Phone_Numbers_Where_Exp>;
 };
 
@@ -118,7 +118,7 @@ export type QueryCommunication_Phone_Numbers_AggregateArgs = {
 export type QueryCommunication_TypesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by: Communication_Types_Order_By;
+  order_by?: InputMaybe<Communication_Types_Order_By>;
   where?: InputMaybe<Communication_Types_Where_Exp>;
 };
 
@@ -378,7 +378,7 @@ export type MutationResolvers<ContextType = MyContext, ParentType extends Resolv
 export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   communication_phone_numbers?: Resolver<Array<Maybe<ResolversTypes['CommunicationPhoneNumber']>>, ParentType, ContextType, Partial<QueryCommunication_Phone_NumbersArgs>>;
   communication_phone_numbers_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryCommunication_Phone_Numbers_AggregateArgs>>;
-  communication_types?: Resolver<Array<ResolversTypes['CommunicationType']>, ParentType, ContextType, RequireFields<QueryCommunication_TypesArgs, 'order_by'>>;
+  communication_types?: Resolver<Array<ResolversTypes['CommunicationType']>, ParentType, ContextType, Partial<QueryCommunication_TypesArgs>>;
   communication_types_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryCommunication_Types_AggregateArgs>>;
   communication_types_by_pk?: Resolver<Maybe<ResolversTypes['CommunicationType']>, ParentType, ContextType, RequireFields<QueryCommunication_Types_By_PkArgs, 'id'>>;
   login?: Resolver<Maybe<ResolversTypes['AuthData']>, ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
