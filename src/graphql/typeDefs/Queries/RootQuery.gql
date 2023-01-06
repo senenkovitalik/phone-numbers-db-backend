@@ -13,7 +13,7 @@ type Query {
   communication_types(
     limit: Int
     offset: Int
-    order_by: [communication_types_order_by!]
+    order_by: communication_types_order_by!
     where: communication_types_where_exp
   ): [CommunicationType!]!
   communication_types_aggregate(

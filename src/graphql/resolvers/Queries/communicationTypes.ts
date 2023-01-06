@@ -1,5 +1,4 @@
-import { InferAttributes, WhereOptions } from "sequelize";
-import { Communication, CommunicationPhoneNumber } from "../../../db/models";
+import { Communication } from "../../../db/models";
 import {
   Aggregate,
   CommunicationType,
@@ -7,71 +6,16 @@ import {
   QueryCommunication_Types_AggregateArgs,
   QueryCommunication_Types_By_PkArgs,
 } from "../../__generated/graphql";
+import { calculateOptions } from "../utils";
 
 export const communication_types = async (
   _parent: unknown,
-  { limit, offset, where }: QueryCommunication_TypesArgs
+  args: QueryCommunication_TypesArgs
 ): Promise<Communication[]> => {
   try {
-    const options: {
-      limit?: number;
-      offset?: number;
-      where?: WhereOptions<
-        InferAttributes<
-          CommunicationPhoneNumber,
-          {
-            omit: never;
-          }
-        >
-      >;
-    } = {
-      limit: 10,
-      offset: 0,
-      where: {},
-    };
+    const options = calculateOptions(args);
 
-    if (limit) {
-      options.limit = limit;
-    }
-
-    if (offset) {
-      options.offset = offset;
-    }
-
-    if (where) {
-      const { id, value, description } = where;
-
-      if (id) {
-        if (id._in || id._eq) {
-          options.where = {
-            ...options.where,
-            id: (id._in || id._eq) as number | number[],
-          };
-        }
-      }
-
-      if (value) {
-        if (value._eq) {
-          options.where = {
-            ...options.where,
-            value: value._eq,
-          };
-        }
-      }
-
-      if (description) {
-        if (description._eq) {
-          options.where = {
-            ...options.where,
-            value: description._eq,
-          };
-        }
-      }
-    }
-
-    const communicationTypes = await Communication.findAll(options);
-
-    return communicationTypes;
+    return await Communication.findAll(options);
   } catch (e) {
     console.error(e);
     throw new Error("500");
@@ -80,52 +24,10 @@ export const communication_types = async (
 
 export const communication_types_aggregate = async (
   _parent: unknown,
-  { where }: QueryCommunication_Types_AggregateArgs
+  args: QueryCommunication_Types_AggregateArgs
 ): Promise<Aggregate> => {
   try {
-    const options: {
-      where?: WhereOptions<
-        InferAttributes<
-          CommunicationPhoneNumber,
-          {
-            omit: never;
-          }
-        >
-      >;
-    } = {
-      where: {},
-    };
-
-    if (where) {
-      const { id, value, description } = where;
-
-      if (id) {
-        if (id._in || id._eq) {
-          options.where = {
-            ...options.where,
-            id: (id._in || id._eq) as number | number[],
-          };
-        }
-      }
-
-      if (value) {
-        if (value._eq) {
-          options.where = {
-            ...options.where,
-            value: value._eq,
-          };
-        }
-      }
-
-      if (description) {
-        if (description._eq) {
-          options.where = {
-            ...options.where,
-            value: description._eq,
-          };
-        }
-      }
-    }
+    const options = calculateOptions(args);
 
     const count = await Communication.findAndCountAll(options);
 
