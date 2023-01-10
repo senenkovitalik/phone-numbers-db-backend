@@ -2,7 +2,7 @@ import { FilterId } from "../__generated/graphql";
 import { CalcOptsI, OptionsType } from "./types";
 
 // prettier-ignore
-export function calculateOptions<T extends CalcOptsI>({ limit, offset, order_by, where }: T): OptionsType {
+export function calculateOptions({ limit, offset, order_by, where }: CalcOptsI): OptionsType {
   return {
     ...(limit && { limit }),
     ...(offset && { offset }),
