@@ -45,7 +45,6 @@ export const subscribers_by_pk = async (
   { id }: QuerySubscribers_By_PkArgs
 ) => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return await Subscriber.findByPk(id);
   } catch (e) {
     console.error(e);

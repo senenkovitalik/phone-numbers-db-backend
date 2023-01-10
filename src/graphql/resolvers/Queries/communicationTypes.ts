@@ -47,7 +47,6 @@ export const communication_types_by_pk = async (
   { id }: QueryCommunication_Types_By_PkArgs
 ): Promise<CommunicationType | null> => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return await Communication.findByPk(id);
   } catch (e) {
     console.error(e);
