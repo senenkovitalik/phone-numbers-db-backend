@@ -30,6 +30,15 @@ type Query {
   communication_phone_numbers_aggregate(
     where: communication_phone_numbers_where_exp
   ): Aggregate!
+
+  locations(
+    limit: Int
+    offset: Int
+    order_by: locations_order_by
+    where: locations_where_exp
+  ): [Location!]!
+  locations_aggregate(where: locations_where_exp): Aggregate!
+  locations_by_pk(id: Int!): Location
 }
 
 enum OrderBy {

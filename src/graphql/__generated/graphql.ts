@@ -54,6 +54,20 @@ export type FilterString = {
   _eq: Scalars['String'];
 };
 
+export type Location = {
+  __typename?: 'Location';
+  building?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  country: Scalars['String'];
+  district?: Maybe<Scalars['String']>;
+  floor?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  region?: Maybe<Scalars['String']>;
+  room?: Maybe<Scalars['String']>;
+  section?: Maybe<Scalars['String']>;
+  street?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   delete_subscribers: SubscriberDeleteRes;
@@ -95,6 +109,9 @@ export type Query = {
   communication_types: Array<CommunicationType>;
   communication_types_aggregate: Aggregate;
   communication_types_by_pk?: Maybe<CommunicationType>;
+  locations: Array<Location>;
+  locations_aggregate: Aggregate;
+  locations_by_pk?: Maybe<Location>;
   login?: Maybe<AuthData>;
   subscribers: Array<Subscriber>;
   subscribers_aggregate: Aggregate;
@@ -129,6 +146,24 @@ export type QueryCommunication_Types_AggregateArgs = {
 
 
 export type QueryCommunication_Types_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryLocationsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Locations_Order_By>;
+  where?: InputMaybe<Locations_Where_Exp>;
+};
+
+
+export type QueryLocations_AggregateArgs = {
+  where?: InputMaybe<Locations_Where_Exp>;
+};
+
+
+export type QueryLocations_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -191,6 +226,32 @@ export type Communication_Types_Where_Exp = {
   description?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
   value?: InputMaybe<FilterString>;
+};
+
+export type Locations_Order_By = {
+  building?: InputMaybe<OrderBy>;
+  city?: InputMaybe<OrderBy>;
+  country?: InputMaybe<OrderBy>;
+  district?: InputMaybe<OrderBy>;
+  floor?: InputMaybe<OrderBy>;
+  id?: InputMaybe<OrderBy>;
+  region?: InputMaybe<OrderBy>;
+  room?: InputMaybe<OrderBy>;
+  section?: InputMaybe<OrderBy>;
+  street?: InputMaybe<OrderBy>;
+};
+
+export type Locations_Where_Exp = {
+  building?: InputMaybe<FilterString>;
+  city?: InputMaybe<FilterString>;
+  country?: InputMaybe<FilterString>;
+  district?: InputMaybe<FilterString>;
+  floor?: InputMaybe<FilterString>;
+  id?: InputMaybe<FilterId>;
+  region?: InputMaybe<FilterString>;
+  room?: InputMaybe<FilterString>;
+  section?: InputMaybe<FilterString>;
+  street?: InputMaybe<FilterString>;
 };
 
 export type Subscribers_Delete_Input = {
@@ -296,6 +357,7 @@ export type ResolversTypes = ResolversObject<{
   FilterId: FilterId;
   FilterString: FilterString;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Location: ResolverTypeWrapper<Location>;
   Mutation: ResolverTypeWrapper<{}>;
   OrderBy: OrderBy;
   Query: ResolverTypeWrapper<{}>;
@@ -306,6 +368,8 @@ export type ResolversTypes = ResolversObject<{
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
   communication_types_order_by: Communication_Types_Order_By;
   communication_types_where_exp: Communication_Types_Where_Exp;
+  locations_order_by: Locations_Order_By;
+  locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
@@ -323,6 +387,7 @@ export type ResolversParentTypes = ResolversObject<{
   FilterId: FilterId;
   FilterString: FilterString;
   Int: Scalars['Int'];
+  Location: Location;
   Mutation: {};
   Query: {};
   String: Scalars['String'];
@@ -332,6 +397,8 @@ export type ResolversParentTypes = ResolversObject<{
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
   communication_types_order_by: Communication_Types_Order_By;
   communication_types_where_exp: Communication_Types_Where_Exp;
+  locations_order_by: Locations_Order_By;
+  locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
@@ -368,6 +435,20 @@ export type CountResolvers<ContextType = MyContext, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type LocationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = ResolversObject<{
+  building?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  floor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  room?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  section?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  street?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   delete_subscribers?: Resolver<ResolversTypes['SubscriberDeleteRes'], ParentType, ContextType, RequireFields<MutationDelete_SubscribersArgs, 'where'>>;
   delete_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationDelete_Subscribers_By_PkArgs, 'id'>>;
@@ -381,6 +462,9 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
   communication_types?: Resolver<Array<ResolversTypes['CommunicationType']>, ParentType, ContextType, Partial<QueryCommunication_TypesArgs>>;
   communication_types_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryCommunication_Types_AggregateArgs>>;
   communication_types_by_pk?: Resolver<Maybe<ResolversTypes['CommunicationType']>, ParentType, ContextType, RequireFields<QueryCommunication_Types_By_PkArgs, 'id'>>;
+  locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType, Partial<QueryLocationsArgs>>;
+  locations_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryLocations_AggregateArgs>>;
+  locations_by_pk?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<QueryLocations_By_PkArgs, 'id'>>;
   login?: Resolver<Maybe<ResolversTypes['AuthData']>, ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
   subscribers?: Resolver<Array<ResolversTypes['Subscriber']>, ParentType, ContextType, Partial<QuerySubscribersArgs>>;
   subscribers_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QuerySubscribers_AggregateArgs>>;
@@ -406,6 +490,7 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   CommunicationPhoneNumber?: CommunicationPhoneNumberResolvers<ContextType>;
   CommunicationType?: CommunicationTypeResolvers<ContextType>;
   Count?: CountResolvers<ContextType>;
+  Location?: LocationResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscriber?: SubscriberResolvers<ContextType>;
