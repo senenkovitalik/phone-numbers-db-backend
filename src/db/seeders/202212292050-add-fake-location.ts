@@ -1,8 +1,9 @@
-import { InferCreationAttributes, Op } from "sequelize";
+import { CreationAttributes } from "sequelize";
 import { Location } from "../models";
 
-const locationData: InferCreationAttributes<Location, { omit: "id" }>[] = [
+const locationData: CreationAttributes<Location>[] = [
   {
+    name: "ARRAKIS",
     country: "Ukraine",
     region: "Zhytomir",
     city: "Yaropovichi",
@@ -10,6 +11,7 @@ const locationData: InferCreationAttributes<Location, { omit: "id" }>[] = [
     updatedAt: new Date(),
   },
   {
+    name: "KALADAN",
     country: "Ukraine",
     region: "Rivne",
     district: "Rivne",
@@ -21,28 +23,13 @@ const locationData: InferCreationAttributes<Location, { omit: "id" }>[] = [
 ];
 
 module.exports = {
-  up: () => {
+  up: async () => {
     return Location.bulkCreate(locationData);
   },
   down: () => {
     return Location.destroy({
       where: {
-        [Op.or]: [
-          {
-            [Op.and]: {
-              region: "Zhytomir",
-              city: "Yaropovichi",
-            },
-          },
-          {
-            [Op.and]: {
-              region: "Rivne",
-              district: "Rivne",
-              street: "Petra Mohily",
-              building: "5",
-            },
-          },
-        ],
+        name: locationData.map(({ name }) => name),
       },
     });
   },

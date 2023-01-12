@@ -17,21 +17,36 @@ module.exports = {
       },
       communicationTypeId: {
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false,
+        allowNull: true,
         field: "communication_type_id",
         references: {
           model: "communication_type",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       },
       locationId: {
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false,
+        allowNull: true,
         field: "location_id",
         references: {
           model: "location",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      subscriberId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true,
+        field: "subscriber_id",
+        references: {
+          model: "subscriber",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       },
       createdAt: {
         type: DataTypes.DATE,

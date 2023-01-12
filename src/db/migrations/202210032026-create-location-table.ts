@@ -11,6 +11,14 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
+      name: {
+        type: DataTypes.STRING(30),
+        allowNull: true,
+      },
+      description: {
+        type: DataTypes.STRING(50),
+        allowNull: true,
+      },
       country: {
         type: DataTypes.STRING(30),
         allowNull: true,

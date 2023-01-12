@@ -1,6 +1,8 @@
 type Location {
   id: Int!
-  country: String!
+  name: String!
+  description: String
+  country: String
   region: String
   district: String
   city: String
@@ -13,6 +15,8 @@ type Location {
 
 input locations_order_by {
   id: OrderBy
+  name: OrderBy
+  description: OrderBy
   country: OrderBy
   region: OrderBy
   district: OrderBy
@@ -26,6 +30,8 @@ input locations_order_by {
 
 input locations_where_exp {
   id: FilterId
+  name: FilterString
+  description: FilterString
   country: FilterString
   region: FilterString
   district: FilterString

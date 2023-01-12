@@ -11,6 +11,7 @@ import { sequelize } from "../index";
 
 import { Communication } from "./Communication";
 import { Location } from "./Location";
+import { Subscriber } from "./Subscriber";
 
 export class CommunicationPhoneNumber extends Model<
   InferAttributes<CommunicationPhoneNumber>,
@@ -19,7 +20,8 @@ export class CommunicationPhoneNumber extends Model<
   declare id: CreationOptional<number>;
   declare value: string;
   declare communicationTypeId: ForeignKey<Communication["id"]>;
-  declare locationId: ForeignKey<Location["id"]>;
+  declare locationId: ForeignKey<Location["id"]> | null;
+  declare subscriberId: ForeignKey<Subscriber["id"]> | null;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
@@ -42,6 +44,8 @@ CommunicationPhoneNumber.init(
         model: "communication_type",
         key: "id",
       },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
     },
     locationId: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -51,12 +55,22 @@ CommunicationPhoneNumber.init(
         key: "id",
       },
     },
+    subscriberId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      references: {
+        model: "subscriber",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
     underscored: true,
-    tableName: "communication_phone_number"
+    tableName: "communication_phone_number",
   }
 );

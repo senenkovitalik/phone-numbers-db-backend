@@ -30,6 +30,7 @@ type Query {
   communication_phone_numbers_aggregate(
     where: communication_phone_numbers_where_exp
   ): Aggregate!
+  communication_phone_numbers_by_pk(id: Int!): CommunicationPhoneNumber
 
   locations(
     limit: Int
