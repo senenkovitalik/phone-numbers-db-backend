@@ -12,7 +12,9 @@ export const update_communication_phone_numbers_by_pk = async (
       },
     });
 
-    return await CommunicationPhoneNumber.findByPk(id) as CommunicationPhoneNumber;
+    return (await CommunicationPhoneNumber.findByPk(
+      id
+    )) as CommunicationPhoneNumber;
   } catch (e) {
     console.error(e);
     throw new Error("500");

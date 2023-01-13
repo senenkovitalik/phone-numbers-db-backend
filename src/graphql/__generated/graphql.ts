@@ -230,8 +230,8 @@ export type Communication_Phone_Numbers_Order_By = {
 
 export type Communication_Phone_Numbers_Update_Input = {
   communicationTypeId: Scalars['Int'];
-  locationId: Scalars['Int'];
-  subscriberId: Scalars['Int'];
+  locationId?: InputMaybe<Scalars['Int']>;
+  subscriberId?: InputMaybe<Scalars['Int']>;
   value: Scalars['String'];
 };
 
