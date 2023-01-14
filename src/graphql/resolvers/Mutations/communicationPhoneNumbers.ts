@@ -1,5 +1,7 @@
 import { CommunicationPhoneNumber } from "../../../db/models";
 import {
+  AffectedRows,
+  MutationDelete_Communication_Phone_NumbersArgs,
   MutationDelete_Communication_Phone_Numbers_By_PkArgs,
   MutationInsert_Communication_Phone_Numbers_OneArgs,
   MutationUpdate_Communication_Phone_Numbers_By_PkArgs,
@@ -47,9 +49,7 @@ export const delete_communication_phone_numbers_by_pk = async (
     const res = await CommunicationPhoneNumber.findByPk(id);
 
     if (res === null) {
-      throw new Error(
-        `CommunicationPhoneNumber ID=${id} not found`
-      );
+      throw new Error(`CommunicationPhoneNumber ID=${id} not found`);
     }
 
     const count = await CommunicationPhoneNumber.destroy({ where: { id } });
@@ -61,6 +61,24 @@ export const delete_communication_phone_numbers_by_pk = async (
     }
 
     return res;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const delete_communication_phone_numbers = async (
+  _parent: unknown,
+  { where: { ids } }: MutationDelete_Communication_Phone_NumbersArgs
+): Promise<AffectedRows> => {
+  try {
+    const count = await CommunicationPhoneNumber.destroy({
+      where: { id: ids },
+    });
+
+    return {
+      affected_rows: count,
+    };
   } catch (e) {
     console.error(e);
     throw e;

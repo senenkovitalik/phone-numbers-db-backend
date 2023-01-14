@@ -5,7 +5,7 @@ type Mutation {
   ): Subscriber!
   insert_subscribers_one(data: subscribers_update_input): Subscriber!
   delete_subscribers_by_pk(id: Int!): Subscriber!
-  delete_subscribers(where: subscribers_delete_input!): SubscriberDeleteRes!
+  delete_subscribers(where: subscribers_delete_input!): AffectedRows!
 
   update_communication_phone_numbers_by_pk(
     id: Int!
@@ -17,4 +17,12 @@ type Mutation {
   ): CommunicationPhoneNumber!
 
   delete_communication_phone_numbers_by_pk(id: Int!): CommunicationPhoneNumber!
+
+  delete_communication_phone_numbers(
+    where: communication_phone_numbers_delete_input!
+  ): AffectedRows!
+}
+
+type AffectedRows {
+  affected_rows: Int!
 }

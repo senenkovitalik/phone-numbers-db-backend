@@ -15,6 +15,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type AffectedRows = {
+  __typename?: 'AffectedRows';
+  affected_rows: Scalars['Int'];
+};
+
 export type Aggregate = {
   __typename?: 'Aggregate';
   aggregate: Count;
@@ -73,13 +78,19 @@ export type Location = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  delete_communication_phone_numbers: AffectedRows;
   delete_communication_phone_numbers_by_pk: CommunicationPhoneNumber;
-  delete_subscribers: SubscriberDeleteRes;
+  delete_subscribers: AffectedRows;
   delete_subscribers_by_pk: Subscriber;
   insert_communication_phone_numbers_one: CommunicationPhoneNumber;
   insert_subscribers_one: Subscriber;
   update_communication_phone_numbers_by_pk: CommunicationPhoneNumber;
   update_subscribers_by_pk: Subscriber;
+};
+
+
+export type MutationDelete_Communication_Phone_NumbersArgs = {
+  where: Communication_Phone_Numbers_Delete_Input;
 };
 
 
@@ -227,9 +238,8 @@ export type Subscriber = {
   middleName: Scalars['String'];
 };
 
-export type SubscriberDeleteRes = {
-  __typename?: 'SubscriberDeleteRes';
-  affected_rows: Scalars['Int'];
+export type Communication_Phone_Numbers_Delete_Input = {
+  ids: Array<Scalars['Int']>;
 };
 
 export type Communication_Phone_Numbers_Order_By = {
@@ -388,6 +398,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  AffectedRows: ResolverTypeWrapper<AffectedRows>;
   Aggregate: ResolverTypeWrapper<Aggregate>;
   AuthData: ResolverTypeWrapper<AuthData>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -403,7 +414,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriber: ResolverTypeWrapper<Subscriber>;
-  SubscriberDeleteRes: ResolverTypeWrapper<SubscriberDeleteRes>;
+  communication_phone_numbers_delete_input: Communication_Phone_Numbers_Delete_Input;
   communication_phone_numbers_order_by: Communication_Phone_Numbers_Order_By;
   communication_phone_numbers_update_input: Communication_Phone_Numbers_Update_Input;
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
@@ -419,6 +430,7 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  AffectedRows: AffectedRows;
   Aggregate: Aggregate;
   AuthData: AuthData;
   Boolean: Scalars['Boolean'];
@@ -433,7 +445,7 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars['String'];
   Subscriber: Subscriber;
-  SubscriberDeleteRes: SubscriberDeleteRes;
+  communication_phone_numbers_delete_input: Communication_Phone_Numbers_Delete_Input;
   communication_phone_numbers_order_by: Communication_Phone_Numbers_Order_By;
   communication_phone_numbers_update_input: Communication_Phone_Numbers_Update_Input;
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
@@ -445,6 +457,11 @@ export type ResolversParentTypes = ResolversObject<{
   subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
   subscribers_where_exp: Subscribers_Where_Exp;
+}>;
+
+export type AffectedRowsResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['AffectedRows'] = ResolversParentTypes['AffectedRows']> = ResolversObject<{
+  affected_rows?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AggregateResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Aggregate'] = ResolversParentTypes['Aggregate']> = ResolversObject<{
@@ -495,8 +512,9 @@ export type LocationResolvers<ContextType = MyContext, ParentType extends Resolv
 }>;
 
 export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  delete_communication_phone_numbers?: Resolver<ResolversTypes['AffectedRows'], ParentType, ContextType, RequireFields<MutationDelete_Communication_Phone_NumbersArgs, 'where'>>;
   delete_communication_phone_numbers_by_pk?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationDelete_Communication_Phone_Numbers_By_PkArgs, 'id'>>;
-  delete_subscribers?: Resolver<ResolversTypes['SubscriberDeleteRes'], ParentType, ContextType, RequireFields<MutationDelete_SubscribersArgs, 'where'>>;
+  delete_subscribers?: Resolver<ResolversTypes['AffectedRows'], ParentType, ContextType, RequireFields<MutationDelete_SubscribersArgs, 'where'>>;
   delete_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationDelete_Subscribers_By_PkArgs, 'id'>>;
   insert_communication_phone_numbers_one?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Phone_Numbers_OneArgs, 'data'>>;
   insert_subscribers_one?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, Partial<MutationInsert_Subscribers_OneArgs>>;
@@ -528,12 +546,8 @@ export type SubscriberResolvers<ContextType = MyContext, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type SubscriberDeleteResResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['SubscriberDeleteRes'] = ResolversParentTypes['SubscriberDeleteRes']> = ResolversObject<{
-  affected_rows?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type Resolvers<ContextType = MyContext> = ResolversObject<{
+  AffectedRows?: AffectedRowsResolvers<ContextType>;
   Aggregate?: AggregateResolvers<ContextType>;
   AuthData?: AuthDataResolvers<ContextType>;
   CommunicationPhoneNumber?: CommunicationPhoneNumberResolvers<ContextType>;
@@ -543,6 +557,5 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscriber?: SubscriberResolvers<ContextType>;
-  SubscriberDeleteRes?: SubscriberDeleteResResolvers<ContextType>;
 }>;
 
