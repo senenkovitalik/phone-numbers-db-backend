@@ -46,13 +46,13 @@ export const delete_subscribers_by_pk = async (
   { id }: ID
 ): Promise<Subscriber> => {
   try {
-    const res = (await Subscriber.findByPk(id)) as Subscriber;
+    const res = await Subscriber.findByPk(id);
 
-    const count = await Subscriber.destroy({ where: { id } });
-
-    if (count === 1) {
+    if (res === null) {
       throw new Error(`Subscriber ID=${id} not found. No rows affected.`);
     }
+
+    await Subscriber.destroy({ where: { id } });
 
     return res;
   } catch (e) {
