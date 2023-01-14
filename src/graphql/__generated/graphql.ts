@@ -73,12 +73,18 @@ export type Location = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  delete_communication_phone_numbers_by_pk: CommunicationPhoneNumber;
   delete_subscribers: SubscriberDeleteRes;
   delete_subscribers_by_pk: Subscriber;
   insert_communication_phone_numbers_one: CommunicationPhoneNumber;
   insert_subscribers_one: Subscriber;
   update_communication_phone_numbers_by_pk: CommunicationPhoneNumber;
   update_subscribers_by_pk: Subscriber;
+};
+
+
+export type MutationDelete_Communication_Phone_Numbers_By_PkArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -489,6 +495,7 @@ export type LocationResolvers<ContextType = MyContext, ParentType extends Resolv
 }>;
 
 export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  delete_communication_phone_numbers_by_pk?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationDelete_Communication_Phone_Numbers_By_PkArgs, 'id'>>;
   delete_subscribers?: Resolver<ResolversTypes['SubscriberDeleteRes'], ParentType, ContextType, RequireFields<MutationDelete_SubscribersArgs, 'where'>>;
   delete_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationDelete_Subscribers_By_PkArgs, 'id'>>;
   insert_communication_phone_numbers_one?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Phone_Numbers_OneArgs, 'data'>>;

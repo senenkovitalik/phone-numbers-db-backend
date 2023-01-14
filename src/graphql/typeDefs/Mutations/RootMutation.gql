@@ -11,7 +11,10 @@ type Mutation {
     id: Int!
     data: communication_phone_numbers_update_input!
   ): CommunicationPhoneNumber!
+
   insert_communication_phone_numbers_one(
     data: communication_phone_numbers_update_input!
   ): CommunicationPhoneNumber!
+
+  delete_communication_phone_numbers_by_pk(id: Int!): CommunicationPhoneNumber!
 }
