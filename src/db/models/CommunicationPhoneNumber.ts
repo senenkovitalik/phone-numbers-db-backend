@@ -49,7 +49,7 @@ CommunicationPhoneNumber.init(
     },
     locationId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "location",
         key: "id",
