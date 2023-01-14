@@ -86,6 +86,7 @@ export type Mutation = {
   insert_communication_types_one: CommunicationType;
   insert_subscribers_one: Subscriber;
   update_communication_phone_numbers_by_pk: CommunicationPhoneNumber;
+  update_communication_types_by_pk: CommunicationType;
   update_subscribers_by_pk: Subscriber;
 };
 
@@ -127,6 +128,12 @@ export type MutationInsert_Subscribers_OneArgs = {
 
 export type MutationUpdate_Communication_Phone_Numbers_By_PkArgs = {
   data: Communication_Phone_Numbers_Update_Input;
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdate_Communication_Types_By_PkArgs = {
+  data: Communication_Types_Update_Input;
   id: Scalars['Int'];
 };
 
@@ -533,6 +540,7 @@ export type MutationResolvers<ContextType = MyContext, ParentType extends Resolv
   insert_communication_types_one?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Types_OneArgs, 'data'>>;
   insert_subscribers_one?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, Partial<MutationInsert_Subscribers_OneArgs>>;
   update_communication_phone_numbers_by_pk?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationUpdate_Communication_Phone_Numbers_By_PkArgs, 'data' | 'id'>>;
+  update_communication_types_by_pk?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType, RequireFields<MutationUpdate_Communication_Types_By_PkArgs, 'data' | 'id'>>;
   update_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationUpdate_Subscribers_By_PkArgs, 'data' | 'id'>>;
 }>;
 

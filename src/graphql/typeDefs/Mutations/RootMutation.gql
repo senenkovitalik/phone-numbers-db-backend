@@ -12,6 +12,12 @@ type Mutation {
     data: communication_types_update_input!
   ): CommunicationType!
 
+  update_communication_types_by_pk(
+    id: Int!
+    data: communication_types_update_input!
+  ): CommunicationType!
+
+  # communication phone number
   update_communication_phone_numbers_by_pk(
     id: Int!
     data: communication_phone_numbers_update_input!
