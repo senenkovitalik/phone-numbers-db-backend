@@ -83,6 +83,7 @@ export type Mutation = {
   delete_subscribers: AffectedRows;
   delete_subscribers_by_pk: Subscriber;
   insert_communication_phone_numbers_one: CommunicationPhoneNumber;
+  insert_communication_types_one: CommunicationType;
   insert_subscribers_one: Subscriber;
   update_communication_phone_numbers_by_pk: CommunicationPhoneNumber;
   update_subscribers_by_pk: Subscriber;
@@ -111,6 +112,11 @@ export type MutationDelete_Subscribers_By_PkArgs = {
 
 export type MutationInsert_Communication_Phone_Numbers_OneArgs = {
   data: Communication_Phone_Numbers_Update_Input;
+};
+
+
+export type MutationInsert_Communication_Types_OneArgs = {
+  data: Communication_Types_Update_Input;
 };
 
 
@@ -268,6 +274,11 @@ export type Communication_Types_Order_By = {
   value?: InputMaybe<OrderBy>;
 };
 
+export type Communication_Types_Update_Input = {
+  description?: InputMaybe<Scalars['String']>;
+  value: Scalars['String'];
+};
+
 export type Communication_Types_Where_Exp = {
   description?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
@@ -419,6 +430,7 @@ export type ResolversTypes = ResolversObject<{
   communication_phone_numbers_update_input: Communication_Phone_Numbers_Update_Input;
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
   communication_types_order_by: Communication_Types_Order_By;
+  communication_types_update_input: Communication_Types_Update_Input;
   communication_types_where_exp: Communication_Types_Where_Exp;
   locations_order_by: Locations_Order_By;
   locations_where_exp: Locations_Where_Exp;
@@ -450,6 +462,7 @@ export type ResolversParentTypes = ResolversObject<{
   communication_phone_numbers_update_input: Communication_Phone_Numbers_Update_Input;
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
   communication_types_order_by: Communication_Types_Order_By;
+  communication_types_update_input: Communication_Types_Update_Input;
   communication_types_where_exp: Communication_Types_Where_Exp;
   locations_order_by: Locations_Order_By;
   locations_where_exp: Locations_Where_Exp;
@@ -517,6 +530,7 @@ export type MutationResolvers<ContextType = MyContext, ParentType extends Resolv
   delete_subscribers?: Resolver<ResolversTypes['AffectedRows'], ParentType, ContextType, RequireFields<MutationDelete_SubscribersArgs, 'where'>>;
   delete_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationDelete_Subscribers_By_PkArgs, 'id'>>;
   insert_communication_phone_numbers_one?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Phone_Numbers_OneArgs, 'data'>>;
+  insert_communication_types_one?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Types_OneArgs, 'data'>>;
   insert_subscribers_one?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, Partial<MutationInsert_Subscribers_OneArgs>>;
   update_communication_phone_numbers_by_pk?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationUpdate_Communication_Phone_Numbers_By_PkArgs, 'data' | 'id'>>;
   update_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationUpdate_Subscribers_By_PkArgs, 'data' | 'id'>>;
