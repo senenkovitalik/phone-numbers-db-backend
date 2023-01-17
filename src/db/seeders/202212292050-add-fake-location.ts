@@ -20,6 +20,26 @@ const locationData: CreationAttributes<Location>[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    name: "ARRAKEEN",
+    country: "Ukraine",
+    region: "Poltava",
+    district: "Poltava",
+    street: "Bohuna",
+    building: "15",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "BANDALONG",
+    country: "Ukraine",
+    region: "Lviv",
+    district: "Lviv",
+    street: "Bandery",
+    building: "1",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
 ];
 
 module.exports = {
