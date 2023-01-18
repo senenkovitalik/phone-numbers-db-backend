@@ -56,6 +56,10 @@ export type FilterId = {
   _in?: InputMaybe<Array<Scalars['Int']>>;
 };
 
+export type FilterInt = {
+  _eq: Scalars['Int'];
+};
+
 export type FilterString = {
   _eq: Scalars['String'];
 };
@@ -277,7 +281,10 @@ export type Communication_Phone_Numbers_Update_Input = {
 };
 
 export type Communication_Phone_Numbers_Where_Exp = {
+  communicationTypeId?: InputMaybe<FilterInt>;
   id?: InputMaybe<FilterId>;
+  locationId?: InputMaybe<FilterInt>;
+  subscriberId?: InputMaybe<FilterInt>;
   value?: InputMaybe<FilterString>;
 };
 
@@ -430,6 +437,7 @@ export type ResolversTypes = ResolversObject<{
   CommunicationType: ResolverTypeWrapper<CommunicationType>;
   Count: ResolverTypeWrapper<Count>;
   FilterId: FilterId;
+  FilterInt: FilterInt;
   FilterString: FilterString;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Location: ResolverTypeWrapper<Location>;
@@ -463,6 +471,7 @@ export type ResolversParentTypes = ResolversObject<{
   CommunicationType: CommunicationType;
   Count: Count;
   FilterId: FilterId;
+  FilterInt: FilterInt;
   FilterString: FilterString;
   Int: Scalars['Int'];
   Location: Location;

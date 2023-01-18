@@ -63,3 +63,7 @@ input FilterId {
 input FilterString {
   _eq: String!
 }
+
+input FilterInt {
+  _eq: Int!
+}

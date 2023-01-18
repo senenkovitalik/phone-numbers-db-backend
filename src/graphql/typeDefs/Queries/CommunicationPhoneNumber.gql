@@ -17,4 +17,7 @@ input communication_phone_numbers_order_by {
 input communication_phone_numbers_where_exp {
   id: FilterId
   value: FilterString
+  communicationTypeId: FilterInt
+  locationId: FilterInt
+  subscriberId: FilterInt
 }
