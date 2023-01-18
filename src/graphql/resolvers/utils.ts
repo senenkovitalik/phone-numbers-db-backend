@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { FilterId } from "../__generated/graphql";
 import { CalcOptsI, OptionsType } from "./types";
 
@@ -20,6 +21,16 @@ export function calculateOptions({ limit, offset, order_by, where }: CalcOptsI):
                 ? ((value as FilterId)._in as [])
                 : []),
             ],
+          };
+        }
+
+        // find text values using LIKE %query_value%
+        if (typeof value?._eq === "string") {
+          return {
+            ...accumulator,
+            [key]: {
+              [Op.like]: `%${value?._eq}%`
+            }
           };
         }
 
