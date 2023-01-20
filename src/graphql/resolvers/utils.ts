@@ -1,15 +1,6 @@
 import { Op, Sequelize, Utils } from "sequelize";
-import { FilterId, InputMaybe } from "../__generated/graphql";
-import { CalcOptsI, OptionsType } from "./types";
-
-interface ProcessFieldsI {
-  key: string;
-  value: InputMaybe<{
-    _eq?: InputMaybe<string | number>;
-    _in?: InputMaybe<number[]>;
-  }>;
-  accumulator: Record<string, unknown>;
-}
+import { FilterId } from "../__generated/graphql";
+import { CalcOptsI, OptionsType, WhereOptsI } from "./types";
 
 const isEmptyObject = (obj: unknown) => {
   return (
@@ -19,55 +10,57 @@ const isEmptyObject = (obj: unknown) => {
   );
 };
 
-const processId = ({ key, value, accumulator }: ProcessFieldsI) => {
-  return {
-    ...accumulator,
-    [key]: [
-      ...((value as FilterId)._eq ? [(value as FilterId)._eq] : []),
-      ...(Array.isArray((value as FilterId)._in)
-        ? ((value as FilterId)._in as [])
-        : []),
-    ],
-  };
-};
-
-const processFullText = (
-  key: string,
-  value: InputMaybe<{
-    _eq?: InputMaybe<string | number>;
-    _in?: InputMaybe<number[]>;
-  }>,
-  accumulator: Record<string, unknown>,
-  fulltextIndexFields: string[]
+const processWhereArgs = (
+  where: WhereOptsI,
+  fulltextIndexFields?: string[]
 ) => {
-  if (value && typeof value._eq === "string") {
+  return Object.entries(where).reduce((accumulator, currentValue) => {
+    const [key, value] = currentValue;
+
+    if (key === "id" && value) {
+      return {
+        ...accumulator,
+        [key]: [
+          ...((value as FilterId)._eq ? [(value as FilterId)._eq] : []),
+          ...(Array.isArray((value as FilterId)._in)
+            ? ((value as FilterId)._in as [])
+            : []),
+        ],
+      };
+    }
+
+    // fulltext search
+    if (
+      key === "q" &&
+      value &&
+      typeof value._eq === "string" &&
+      fulltextIndexFields
+    ) {
+      return {
+        ...accumulator,
+        [key]: Sequelize.literal(
+          `MATCH (${fulltextIndexFields.join(",")}) AGAINST ('${
+            value._eq
+          }*' IN BOOLEAN MODE)`
+        ),
+      };
+    }
+
+    // find text values using LIKE %query_value%
+    if (typeof value?._eq === "string") {
+      return {
+        ...accumulator,
+        [key]: {
+          [Op.like]: `%${value?._eq ? value?._eq : ""}%`,
+        },
+      };
+    }
+
     return {
       ...accumulator,
-      [key]: Sequelize.literal(
-        `MATCH (${fulltextIndexFields.join(",")}) AGAINST ('${
-          value._eq
-        }*' IN BOOLEAN MODE)`
-      ),
+      [key]: value?._eq,
     };
-  }
-
-  return { ...accumulator };
-};
-
-const processString = (
-  key: string,
-  value: InputMaybe<{
-    _eq?: InputMaybe<string | number>;
-    _in?: InputMaybe<number[]>;
-  }>,
-  accumulator: Record<string, unknown>
-) => {
-  return {
-    ...accumulator,
-    [key]: {
-      [Op.like]: `%${value?._eq ? value?._eq : ""}%`,
-    },
-  };
+  }, {});
 };
 
 export function calculateOptions(
@@ -75,50 +68,24 @@ export function calculateOptions(
   fulltextIndexFields?: string[]
 ): OptionsType {
   let whereClauseObj: { [key: string]: unknown } & { q?: Utils.Literal } = {};
-
   let whereClause = {};
 
   if (where) {
-    whereClauseObj = Object.entries(where).reduce(
-      (accumulator, currentValue) => {
-        const [key, value] = currentValue;
-
-        if (key === "id" && value) {
-          return processId({ key, value, accumulator });
-        }
-
-        if (key === "q" && fulltextIndexFields) {
-          return processFullText(key, value, accumulator, fulltextIndexFields);
-        }
-
-        // find text values using LIKE %query_value%
-        if (typeof value?._eq === "string") {
-          return processString(key, value, accumulator);
-        }
-
-        return {
-          ...accumulator,
-          [key]: value?._eq,
-        };
-      },
-      {}
-    );
+    whereClauseObj = processWhereArgs(where, fulltextIndexFields);
 
     const { q, ...rest } = whereClauseObj;
 
-    const isQisEmpty = isEmptyObject(q);
-    const isRestIsEmpty = isEmptyObject(rest);
+    const isFulltextArgEmpty = isEmptyObject(q);
+    const isRestArgsEmpty = isEmptyObject(rest);
 
-    if (!isQisEmpty && !isRestIsEmpty) {
-      if (q) {
-        whereClause = {
-          [Op.and]: [rest, Sequelize.where(q, Op.not, null)],
-        };
-      }
-    } else if (isQisEmpty && !isRestIsEmpty) {
+    if (!isFulltextArgEmpty && !isRestArgsEmpty) {
+      whereClause = {
+        [Op.and]: [rest, Sequelize.where(q as Utils.Literal, Op.not, null)],
+      };
+    } else if (isFulltextArgEmpty && !isRestArgsEmpty) {
       whereClause = rest;
-    } else if (!isQisEmpty && isRestIsEmpty) {
-      if (q) whereClause = q;
+    } else if (!isFulltextArgEmpty && isRestArgsEmpty) {
+      whereClause = q as Utils.Literal;
     }
   }
 
