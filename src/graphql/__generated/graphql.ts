@@ -357,6 +357,7 @@ export type Subscribers_Where_Exp = {
   id?: InputMaybe<FilterId>;
   lastName?: InputMaybe<FilterString>;
   middleName?: InputMaybe<FilterString>;
+  q?: InputMaybe<FilterString>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

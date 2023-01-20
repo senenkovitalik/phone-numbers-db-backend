@@ -16,6 +16,10 @@ export class Subscriber extends Model<
   declare middleName: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  static getFulltextIndexFields() {
+    return ["first_name", "middle_name", "last_name"];
+  }
 }
 
 Subscriber.init(
