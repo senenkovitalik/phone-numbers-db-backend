@@ -2,9 +2,9 @@ import { Op, Sequelize, Utils } from "sequelize";
 import { FilterId } from "../__generated/graphql";
 import { CalcOptsI, OptionsType, WhereOptsI } from "./types";
 
-const isEmptyObject = (obj: unknown) => {
+const isEmptyObject = (obj: unknown = {}) => {
   return (
-    obj &&
+    !!obj &&
     Object.keys(obj).length === 0 &&
     Object.getPrototypeOf(obj) === Object.prototype
   );
