@@ -1,9 +1,9 @@
 type CommunicationPhoneNumber {
   id: Int!
   value: String!
-  communicationTypeId: Int!
-  locationId: Int
-  subscriberId: Int
+  communicationType: CommunicationType!
+  location: Location
+  subscriber: Subscriber
 }
 
 input communication_phone_numbers_order_by {
@@ -19,5 +19,6 @@ input communication_phone_numbers_where_exp {
   value: FilterString
   communicationTypeId: FilterInt
   locationId: FilterInt
-  subscriberId: FilterInt
+  subscriber: FilterString
+  q: FilterString
 }

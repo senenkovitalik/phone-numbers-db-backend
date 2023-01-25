@@ -32,10 +32,10 @@ export type AuthData = {
 
 export type CommunicationPhoneNumber = {
   __typename?: 'CommunicationPhoneNumber';
-  communicationTypeId: Scalars['Int'];
+  communicationType: CommunicationType;
   id: Scalars['Int'];
-  locationId?: Maybe<Scalars['Int']>;
-  subscriberId?: Maybe<Scalars['Int']>;
+  location?: Maybe<Location>;
+  subscriber?: Maybe<Subscriber>;
   value: Scalars['String'];
 };
 
@@ -284,7 +284,8 @@ export type Communication_Phone_Numbers_Where_Exp = {
   communicationTypeId?: InputMaybe<FilterInt>;
   id?: InputMaybe<FilterId>;
   locationId?: InputMaybe<FilterInt>;
-  subscriberId?: InputMaybe<FilterInt>;
+  q?: InputMaybe<FilterString>;
+  subscriber?: InputMaybe<FilterString>;
   value?: InputMaybe<FilterString>;
 };
 
@@ -511,10 +512,10 @@ export type AuthDataResolvers<ContextType = MyContext, ParentType extends Resolv
 }>;
 
 export type CommunicationPhoneNumberResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['CommunicationPhoneNumber'] = ResolversParentTypes['CommunicationPhoneNumber']> = ResolversObject<{
-  communicationTypeId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  communicationType?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  locationId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subscriberId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
+  subscriber?: Resolver<Maybe<ResolversTypes['Subscriber']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

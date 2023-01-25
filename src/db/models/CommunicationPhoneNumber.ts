@@ -5,6 +5,7 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
+  NonAttribute,
 } from "sequelize";
 
 import { sequelize } from "../index";
@@ -24,6 +25,10 @@ export class CommunicationPhoneNumber extends Model<
   declare subscriberId: ForeignKey<Subscriber["id"]> | null;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare communicationType: NonAttribute<Communication>;
+  declare location: NonAttribute<Location>;
+  declare subscriber: NonAttribute<Subscriber> | null;
 }
 
 CommunicationPhoneNumber.init(
