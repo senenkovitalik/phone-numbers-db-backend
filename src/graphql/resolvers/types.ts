@@ -19,3 +19,10 @@ export interface CalcOptsI {
   }>;
   where?: InputMaybe<WhereOptsI>;
 }
+
+export interface FullSearchIds {
+  phoneNumbersIds: number[];
+  communicationTypeIds: number[];
+  locationIds: number[];
+  subscriberIds: number[];
+}

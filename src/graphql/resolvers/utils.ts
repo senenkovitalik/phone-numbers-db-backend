@@ -1,6 +1,13 @@
-import { Op, Sequelize, Utils } from "sequelize";
-import { FilterId } from "../__generated/graphql";
-import { CalcOptsI, OptionsType, WhereOptsI } from "./types";
+import { Model, Op, Sequelize, Utils } from "sequelize";
+import _ from "lodash";
+import {
+  Communication,
+  CommunicationPhoneNumber,
+  Location,
+  Subscriber,
+} from "../../db/models";
+import { FilterId, FilterString, InputMaybe } from "../__generated/graphql";
+import { CalcOptsI, FullSearchIds, OptionsType, WhereOptsI } from "./types";
 
 const isEmptyObject = (obj: unknown = {}) => {
   return (
@@ -98,3 +105,154 @@ export function calculateOptions(
     }),
   };
 }
+
+export const getIdsForFulltextSearch = async (
+  fulltextSearchValue: string
+): Promise<FullSearchIds> => {
+  if (fulltextSearchValue.length === 0) {
+    throw new Error("Search value must have at least one character");
+  }
+
+  const phoneNumbersIds = (
+    await CommunicationPhoneNumber.findAll({
+      where: {
+        value: {
+          [Op.like]: `%${fulltextSearchValue}%`,
+        },
+      },
+      attributes: ["id"],
+    })
+  ).map(getIdPredicate);
+
+  const communicationTypeIds = (
+    await Communication.findAll({
+      where: {
+        value: {
+          [Op.like]: `%${fulltextSearchValue}%`,
+        },
+      },
+      attributes: ["id"],
+    })
+  ).map(getIdPredicate);
+
+  const locationIds = (
+    await Location.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${fulltextSearchValue}%`,
+        },
+      },
+      attributes: ["id"],
+    })
+  ).map(getIdPredicate);
+
+  const subscriberIds = (
+    await Subscriber.findAll({
+      where: fulltextSearchValue
+        ? Sequelize.literal(
+            `MATCH (${Subscriber.getFulltextIndexFields().join(
+              ","
+            )}) AGAINST ('${fulltextSearchValue}*' IN BOOLEAN MODE)`
+          )
+        : {},
+      attributes: ["id"],
+    })
+  ).map(getIdPredicate);
+
+  return {
+    phoneNumbersIds,
+    communicationTypeIds,
+    locationIds,
+    subscriberIds,
+  };
+};
+
+export const getIdPredicate = (item: Model) => item.get("id") as number;
+
+export const buildOpts = (
+  args: CalcOptsI,
+  attributes: Record<string, unknown>
+): OptionsType => {
+  const { where, ...rest } = calculateOptions(args);
+
+  return {
+    where: where ? Object.assign(attributes, where) : {},
+    ...rest,
+  };
+};
+
+export const getCommunicationIncludeOpts = (ids: FullSearchIds | null) => {
+  return {
+    model: Communication,
+    as: "communicationType",
+    ...(ids &&
+      ids.communicationTypeIds.length && {
+        where: {
+          id: ids.communicationTypeIds,
+        },
+      }),
+  };
+};
+
+export const getLocationIncludeOpts = (ids: FullSearchIds | null) => {
+  return {
+    model: Location,
+    as: "location",
+    ...(ids &&
+      ids.locationIds.length && {
+        where: {
+          id: ids.locationIds,
+        },
+      }),
+  };
+};
+
+export const getSubscriberIncludeOpts = (
+  ids: InputMaybe<FullSearchIds>,
+  args?: InputMaybe<FilterString>
+) => {
+  const globalSearchOpts =
+    ids && ids.subscriberIds.length
+      ? {
+          id: ids.subscriberIds,
+        }
+      : null;
+
+  const localSearchOpts =
+    args && args._eq
+      ? Sequelize.literal(
+          `MATCH (${Subscriber.getFulltextIndexFields().join(",")}) AGAINST ('${
+            args._eq
+          }*' IN BOOLEAN MODE)`
+        )
+      : null;
+
+  const optsCollection = [globalSearchOpts, localSearchOpts];
+  const predicate = (item: unknown) => item !== null;
+
+  const isWhereExist = _.some(optsCollection, predicate);
+  const isAndOpExist = _.every(optsCollection, predicate);
+
+  let whereOpts = {};
+
+  if (isAndOpExist) {
+    whereOpts = {
+      [Op.and]: [
+        globalSearchOpts,
+        Sequelize.where(localSearchOpts as Utils.Literal, Op.not, null),
+      ],
+    };
+  } else if (globalSearchOpts) {
+    whereOpts = globalSearchOpts;
+  } else if (localSearchOpts) {
+    whereOpts = localSearchOpts;
+  }
+
+  return {
+    model: Subscriber,
+    as: "subscriber",
+    ...(isWhereExist && {
+      where: whereOpts,
+    }),
+  };
+};
