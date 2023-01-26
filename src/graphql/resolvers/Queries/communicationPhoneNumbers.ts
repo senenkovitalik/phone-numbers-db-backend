@@ -1,4 +1,4 @@
-import { Model, Op, Sequelize } from "sequelize";
+import { Model, Op, Sequelize, Utils } from "sequelize";
 import _ from "lodash";
 import {
   Communication,
@@ -103,11 +103,12 @@ const getCommunicationIncludeOpts = (ids: FullSearchIds | null) => {
   return {
     model: Communication,
     as: "communicationType",
-    ...(_.has(ids, "communicationTypeIds") && {
-      where: {
-        id: (ids as FullSearchIds).communicationTypeIds,
-      },
-    }),
+    ...(ids &&
+      ids.communicationTypeIds.length && {
+        where: {
+          id: ids.communicationTypeIds,
+        },
+      }),
   };
 };
 
@@ -115,11 +116,12 @@ const getLocationIncludeOpts = (ids: FullSearchIds | null) => {
   return {
     model: Location,
     as: "location",
-    ...(_.has(ids, "locationIds") && {
-      where: {
-        id: (ids as FullSearchIds).locationIds,
-      },
-    }),
+    ...(ids &&
+      ids.locationIds.length && {
+        where: {
+          id: ids.locationIds,
+        },
+      }),
   };
 };
 
@@ -127,17 +129,18 @@ const getSubscriberIncludeOpts = (
   ids: FullSearchIds | null,
   args: InputMaybe<FilterString> | undefined
 ) => {
-  const globalSearchOpts = _.has(ids, "subscriberIds")
-    ? {
-        id: (ids as FullSearchIds).subscriberIds,
-      }
-    : null;
+  const globalSearchOpts =
+    ids && ids.subscriberIds.length
+      ? {
+          id: ids.subscriberIds,
+        }
+      : null;
 
   const localSearchOpts = _.has(args, "_eq")
     ? Sequelize.literal(
-        `MATCH (${Subscriber.getFulltextIndexFields().join(",")}) AGAINST ('${
-          (args as FilterString)._eq
-        }*' IN BOOLEAN MODE)`
+        `MATCH (subscriber.${Subscriber.getFulltextIndexFields().join(
+          ","
+        )}) AGAINST ('${(args as FilterString)._eq}*' IN BOOLEAN MODE)`
       )
     : null;
 
@@ -147,20 +150,26 @@ const getSubscriberIncludeOpts = (
   const isWhereExist = _.some(optsCollection, predicate);
   const isAndOpExist = _.every(optsCollection, predicate);
 
+  let whereOpts = {};
+
+  if (isAndOpExist) {
+    whereOpts = {
+      [Op.and]: [
+        globalSearchOpts,
+        Sequelize.where(localSearchOpts as Utils.Literal, Op.not, null),
+      ],
+    };
+  } else if (globalSearchOpts) {
+    whereOpts = globalSearchOpts;
+  } else if (localSearchOpts) {
+    whereOpts = localSearchOpts;
+  }
+
   return {
     model: Subscriber,
     as: "subscriber",
     ...(isWhereExist && {
-      where: {
-        ...(isAndOpExist
-          ? {
-              [Op.and]: optsCollection,
-            }
-          : {
-              ...(globalSearchOpts && globalSearchOpts),
-              ...(localSearchOpts && localSearchOpts),
-            }),
-      },
+      where: whereOpts,
     }),
   };
 };
@@ -196,9 +205,10 @@ export const communication_phone_numbers = async (
         },
       },
       {
-        ...(_.has(ids, "phoneNumbersIds") && {
-          id: (ids as FullSearchIds).phoneNumbersIds,
-        }),
+        ...(ids &&
+          ids.phoneNumbersIds.length && {
+            id: ids.phoneNumbersIds,
+          }),
       }
     );
 
