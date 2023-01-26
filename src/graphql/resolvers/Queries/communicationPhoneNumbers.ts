@@ -126,8 +126,8 @@ const getLocationIncludeOpts = (ids: FullSearchIds | null) => {
 };
 
 const getSubscriberIncludeOpts = (
-  ids: FullSearchIds | null,
-  args: InputMaybe<FilterString> | undefined
+  ids: InputMaybe<FullSearchIds>,
+  args?: InputMaybe<FilterString>
 ) => {
   const globalSearchOpts =
     ids && ids.subscriberIds.length
@@ -136,13 +136,14 @@ const getSubscriberIncludeOpts = (
         }
       : null;
 
-  const localSearchOpts = _.has(args, "_eq")
-    ? Sequelize.literal(
-        `MATCH (subscriber.${Subscriber.getFulltextIndexFields().join(
-          ","
-        )}) AGAINST ('${(args as FilterString)._eq}*' IN BOOLEAN MODE)`
-      )
-    : null;
+  const localSearchOpts =
+    args && args._eq
+      ? Sequelize.literal(
+          `MATCH (${Subscriber.getFulltextIndexFields().join(
+            ","
+          )}) AGAINST ('${args._eq}*' IN BOOLEAN MODE)`
+        )
+      : null;
 
   const optsCollection = [globalSearchOpts, localSearchOpts];
   const predicate = (item: unknown) => item !== null;
