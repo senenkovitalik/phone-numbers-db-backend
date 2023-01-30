@@ -3,27 +3,28 @@ import {
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
-  Model
+  Model,
 } from "sequelize";
 
 import { sequelize } from "../index";
-import { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
-import { LocationsSubscribers } from "./LocationsSubscribers";
-import { Subscriber } from "./Subscriber";
 export class Location extends Model<
   InferAttributes<Location>,
   InferCreationAttributes<Location>
 > {
   declare id: CreationOptional<number>;
-  declare country: string;
-  declare region: string;
-  declare district: string;
-  declare city: string;
-  declare street: string;
-  declare building: string;
-  declare section: string;
-  declare floor: string;
-  declare room: string;
+  declare name: string;
+  declare description: CreationOptional<string>;
+  declare country: CreationOptional<string>;
+  declare region: CreationOptional<string>;
+  declare district: CreationOptional<string>;
+  declare city: CreationOptional<string>;
+  declare street: CreationOptional<string>;
+  declare building: CreationOptional<string>;
+  declare section: CreationOptional<string>;
+  declare floor: CreationOptional<string>;
+  declare room: CreationOptional<string>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 }
 
 Location.init(
@@ -31,7 +32,15 @@ Location.init(
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.STRING(30),
       allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
     },
     country: {
       type: DataTypes.STRING(30),
@@ -69,13 +78,12 @@ Location.init(
       type: DataTypes.STRING(3),
       allowNull: true,
     },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
     tableName: "location",
+    underscored: true,
   }
 );
-
-Location.belongsToMany(Subscriber, { through: LocationsSubscribers });
-
-Location.hasMany(CommunicationTerminalEquipment);

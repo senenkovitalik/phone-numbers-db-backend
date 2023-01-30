@@ -4,13 +4,15 @@ import {
   ForeignKey,
   InferAttributes,
   InferCreationAttributes,
-  Model
+  Model,
+  NonAttribute,
 } from "sequelize";
 
 import { sequelize } from "../index";
 
 import { Communication } from "./Communication";
-import { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
+import { Location } from "./Location";
+import { Subscriber } from "./Subscriber";
 
 export class CommunicationPhoneNumber extends Model<
   InferAttributes<CommunicationPhoneNumber>,
@@ -19,11 +21,14 @@ export class CommunicationPhoneNumber extends Model<
   declare id: CreationOptional<number>;
   declare value: string;
   declare communicationTypeId: ForeignKey<Communication["id"]>;
-  declare communicationTerminalEquipmentId: ForeignKey<
-    CommunicationTerminalEquipment["id"]
-  >;
+  declare locationId: ForeignKey<Location["id"]> | null;
+  declare subscriberId: ForeignKey<Subscriber["id"]> | null;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare communicationType: NonAttribute<Communication>;
+  declare location: NonAttribute<Location>;
+  declare subscriber: NonAttribute<Subscriber> | null;
 }
 
 CommunicationPhoneNumber.init(
@@ -31,11 +36,39 @@ CommunicationPhoneNumber.init(
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
-      allowNull: false,
+      autoIncrement: true,
     },
     value: {
       type: DataTypes.STRING(15),
       allowNull: false,
+    },
+    communicationTypeId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+      references: {
+        model: "communication_type",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    },
+    locationId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      references: {
+        model: "location",
+        key: "id",
+      },
+    },
+    subscriberId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      references: {
+        model: "subscriber",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
@@ -43,9 +76,6 @@ CommunicationPhoneNumber.init(
   {
     sequelize,
     underscored: true,
+    tableName: "communication_phone_number",
   }
 );
-
-CommunicationPhoneNumber.belongsTo(CommunicationTerminalEquipment);
-
-CommunicationPhoneNumber.belongsTo(Communication);

@@ -1,0 +1,21 @@
+type Subscriber {
+  id: Int!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+}
+
+input subscribers_order_by {
+  id: OrderBy
+  firstName: OrderBy
+  lastName: OrderBy
+  middleName: OrderBy
+}
+
+input subscribers_where_exp {
+  id: FilterId
+  firstName: FilterString
+  lastName: FilterString
+  middleName: FilterString
+  q: FilterString
+}

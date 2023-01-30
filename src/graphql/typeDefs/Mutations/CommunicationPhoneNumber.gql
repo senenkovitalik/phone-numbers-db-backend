@@ -1,0 +1,10 @@
+input communication_phone_numbers_update_input {
+  value: String!
+  communicationTypeId: Int!
+  locationId: Int
+  subscriberId: Int
+}
+
+input communication_phone_numbers_delete_input {
+  ids: [Int!]!
+}

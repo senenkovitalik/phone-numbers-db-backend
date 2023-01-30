@@ -46,5 +46,3 @@ User.init(
     underscored: true,
   }
 );
-
-User.belongsTo(UserRole);

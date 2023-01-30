@@ -9,32 +9,53 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
-        allowNull: false,
+        autoIncrement: true,
       },
       value: {
         type: DataTypes.STRING(15),
         allowNull: false,
       },
-      communicationTerminalEquipmentId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: true,
-        field: "communication_terminal_equipment_id",
-        references: {
-          model: "communication_terminal_equipment",
-          key: "id",
-        },
-      },
       communicationTypeId: {
         type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: false,
+        allowNull: true,
         field: "communication_type_id",
         references: {
           model: "communication_type",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       },
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
+      locationId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true,
+        field: "location_id",
+        references: {
+          model: "location",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      subscriberId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true,
+        field: "subscriber_id",
+        references: {
+          model: "subscriber",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: "created_at",
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: "updated_at",
+      },
     });
   },
   down: (queryInterface: QueryInterface) => {

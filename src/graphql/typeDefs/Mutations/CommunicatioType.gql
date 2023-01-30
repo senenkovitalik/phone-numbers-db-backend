@@ -1,0 +1,4 @@
+input communication_types_update_input {
+  value: String!
+  description: String
+}

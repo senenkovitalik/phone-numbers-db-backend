@@ -1,0 +1,24 @@
+type CommunicationPhoneNumber {
+  id: Int!
+  value: String!
+  communicationType: CommunicationType!
+  location: Location
+  subscriber: Subscriber
+}
+
+input communication_phone_numbers_order_by {
+  id: OrderBy
+  value: OrderBy
+  communicationTypeId: OrderBy
+  locationId: OrderBy
+  subscriberId: OrderBy
+}
+
+input communication_phone_numbers_where_exp {
+  id: FilterId
+  value: FilterString
+  communicationTypeId: FilterInt
+  locationId: FilterInt
+  subscriber: FilterString
+  q: FilterString
+}

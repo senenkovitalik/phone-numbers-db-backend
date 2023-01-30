@@ -1,16 +1,12 @@
 import {
   CreationOptional,
   DataTypes,
-  ForeignKey,
   InferAttributes,
   InferCreationAttributes,
   Model
 } from "sequelize";
 
 import { sequelize } from "../index";
-
-import { CommunicationPhoneNumber } from "./CommunicationPhoneNumber";
-import { CommunicationTerminalEquipment } from "./CommunicationTerminalEquipment";
 
 export class Communication extends Model<
   InferAttributes<Communication>,
@@ -19,7 +15,6 @@ export class Communication extends Model<
   declare id: CreationOptional<number>;
   declare value: string;
   declare description: string | null;
-  declare parentId: ForeignKey<Communication["id"]>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
@@ -29,10 +24,10 @@ Communication.init(
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
-      allowNull: false,
+      autoIncrement: true,
     },
     value: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(20),
       allowNull: false,
     },
     description: {
@@ -44,9 +39,6 @@ Communication.init(
   },
   {
     sequelize,
+    tableName: "communication_type"
   }
 );
-
-Communication.hasMany(CommunicationTerminalEquipment);
-
-Communication.hasMany(CommunicationPhoneNumber);

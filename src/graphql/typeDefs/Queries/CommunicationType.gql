@@ -1,0 +1,17 @@
+input communication_types_order_by {
+  id: OrderBy
+  value: OrderBy
+  description: OrderBy
+}
+
+type CommunicationType {
+  id: Int!
+  value: String!
+  description: String
+}
+
+input communication_types_where_exp {
+  id: FilterId
+  value: FilterString
+  description: FilterString
+}

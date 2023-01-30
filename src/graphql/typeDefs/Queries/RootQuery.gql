@@ -1,3 +1,69 @@
 type Query {
   login(email: String!, password: String!): AuthData
+
+  subscribers(
+    limit: Int
+    offset: Int
+    order_by: subscribers_order_by
+    where: subscribers_where_exp
+  ): [Subscriber!]!
+  subscribers_aggregate(where: subscribers_where_exp): Aggregate!
+  subscribers_by_pk(id: Int!): Subscriber
+
+  communication_types(
+    limit: Int
+    offset: Int
+    order_by: communication_types_order_by
+    where: communication_types_where_exp
+  ): [CommunicationType!]!
+  communication_types_aggregate(
+    where: communication_types_where_exp
+  ): Aggregate!
+  communication_types_by_pk(id: Int!): CommunicationType
+
+  communication_phone_numbers(
+    limit: Int
+    offset: Int
+    order_by: communication_phone_numbers_order_by
+    where: communication_phone_numbers_where_exp
+  ): [CommunicationPhoneNumber]!
+  communication_phone_numbers_aggregate(
+    where: communication_phone_numbers_where_exp
+  ): Aggregate!
+  communication_phone_numbers_by_pk(id: Int!): CommunicationPhoneNumber
+
+  locations(
+    limit: Int
+    offset: Int
+    order_by: locations_order_by
+    where: locations_where_exp
+  ): [Location!]!
+  locations_aggregate(where: locations_where_exp): Aggregate!
+  locations_by_pk(id: Int!): Location
+}
+
+enum OrderBy {
+  asc
+  desc
+}
+
+type Count {
+  count: Int!
+}
+
+type Aggregate {
+  aggregate: Count!
+}
+
+input FilterId {
+  _eq: Int
+  _in: [Int!]
+}
+
+input FilterString {
+  _eq: String!
+}
+
+input FilterInt {
+  _eq: Int!
 }

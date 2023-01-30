@@ -1,0 +1,9 @@
+input subscribers_update_input {
+  firstName: String!
+  middleName: String!
+  lastName: String!
+}
+
+input subscribers_delete_input {
+  ids: [Int!]!
+}
