@@ -9,6 +9,7 @@ import {
 } from "../../__generated/graphql";
 import {
   buildOpts,
+  buildOpts_NEW,
   getCommunicationIncludeOpts,
   getIdsForFulltextSearch,
   getLocationIncludeOpts,
@@ -38,20 +39,21 @@ export const communication_phone_numbers = async (
         ? await getIdsForFulltextSearch(fulltextSearchArg._eq)
         : null;
 
-    const opts = buildOpts(
-      {
+    const opts = buildOpts_NEW({
+      args: {
         ...restArgs,
         where: {
           ...restWhereArgs,
         },
       },
-      {
+      attributes: {
         ...(ids &&
           ids.phoneNumbersIds.length && {
             id: ids.phoneNumbersIds,
           }),
-      }
-    );
+      },
+      model: CommunicationPhoneNumber
+    });
 
     return await CommunicationPhoneNumber.findAll({
       ...opts,

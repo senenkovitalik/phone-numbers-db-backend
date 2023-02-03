@@ -1,4 +1,5 @@
 import {
+  Association,
   CreationOptional,
   DataTypes,
   ForeignKey,
@@ -28,7 +29,11 @@ export class CommunicationPhoneNumber extends Model<
 
   declare communicationType: NonAttribute<Communication>;
   declare location: NonAttribute<Location>;
-  declare subscriber: NonAttribute<Subscriber> | null;
+  declare subscriber?: NonAttribute<Subscriber> | null;
+
+  declare static associations: {
+    subscriber: Association<CommunicationPhoneNumber, Subscriber>;
+  };
 }
 
 CommunicationPhoneNumber.init(

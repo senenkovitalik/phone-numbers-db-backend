@@ -266,11 +266,8 @@ export type Communication_Phone_Numbers_Delete_Input = {
 };
 
 export type Communication_Phone_Numbers_Order_By = {
-  communicationTypeId?: InputMaybe<OrderBy>;
-  id?: InputMaybe<OrderBy>;
-  locationId?: InputMaybe<OrderBy>;
-  subscriberId?: InputMaybe<OrderBy>;
-  value?: InputMaybe<OrderBy>;
+  field: Scalars['String'];
+  order: OrderBy;
 };
 
 export type Communication_Phone_Numbers_Update_Input = {

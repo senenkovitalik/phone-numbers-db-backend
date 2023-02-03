@@ -7,11 +7,8 @@ type CommunicationPhoneNumber {
 }
 
 input communication_phone_numbers_order_by {
-  id: OrderBy
-  value: OrderBy
-  communicationTypeId: OrderBy
-  locationId: OrderBy
-  subscriberId: OrderBy
+  field: String!
+  order: OrderBy!
 }
 
 input communication_phone_numbers_where_exp {

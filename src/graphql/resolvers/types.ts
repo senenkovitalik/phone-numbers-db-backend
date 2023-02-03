@@ -20,6 +20,16 @@ export interface CalcOptsI {
   where?: InputMaybe<WhereOptsI>;
 }
 
+export interface CalcOptsI_NEW {
+  limit?: InputMaybe<number>;
+  offset?: InputMaybe<number>;
+  order_by?: InputMaybe<{
+    field: string;
+    order: OrderBy;
+  }>;
+  where?: InputMaybe<WhereOptsI>;
+}
+
 export interface FullSearchIds {
   phoneNumbersIds: number[];
   communicationTypeIds: number[];
