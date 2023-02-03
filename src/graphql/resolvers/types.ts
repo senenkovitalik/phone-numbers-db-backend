@@ -1,5 +1,5 @@
-import { FindOptions } from "sequelize";
-import { InputMaybe, OrderBy } from "../__generated/graphql";
+import { Association, FindOptions, Model, ModelStatic } from "sequelize";
+import { FilterString, InputMaybe, OrderBy } from "../__generated/graphql";
 
 // prettier-ignore
 export type OptionsType = Pick<FindOptions, "limit" | "offset" | "order" | "where">;
@@ -35,4 +35,22 @@ export interface FullSearchIds {
   communicationTypeIds: number[];
   locationIds: number[];
   subscriberIds: number[];
+}
+
+export interface GetSubscriberIncludeOptsI {
+  args?: FilterString | null | undefined;
+  ids?: number[] | undefined;
+}
+
+export type OrderItemAssociation =
+  | Association
+  | ModelStatic<Model>
+  | { model: ModelStatic<Model>; as: string }
+  | string;
+
+export interface CalculateOptionsI {
+  args: CalcOptsI_NEW;
+  fulltextIndexFields?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  model?: ModelStatic<any>;
 }

@@ -1,12 +1,4 @@
-import {
-  Association,
-  Model,
-  ModelStatic,
-  Op,
-  Order,
-  Sequelize,
-  Utils,
-} from "sequelize";
+import { Model, Op, Order, Sequelize, Utils } from "sequelize";
 import _ from "lodash";
 import {
   Communication,
@@ -14,12 +6,14 @@ import {
   Location,
   Subscriber,
 } from "../../db/models";
-import { FilterId, FilterString } from "../__generated/graphql";
+import { FilterId } from "../__generated/graphql";
 import {
   CalcOptsI,
-  CalcOptsI_NEW,
+  CalculateOptionsI,
   FullSearchIds,
+  GetSubscriberIncludeOptsI,
   OptionsType,
+  OrderItemAssociation,
   WhereOptsI,
 } from "./types";
 
@@ -118,18 +112,6 @@ export function calculateOptions(
       where: whereClause,
     }),
   };
-}
-
-type OrderItemAssociation =
-  | Association
-  | ModelStatic<Model>
-  | { model: ModelStatic<Model>; as: string }
-  | string;
-
-export interface CalculateOptionsI {
-  args: CalcOptsI_NEW;
-  fulltextIndexFields?: string[];
-  model?: ModelStatic<any>;
 }
 
 /**
@@ -259,40 +241,6 @@ export const getIdsForFulltextSearch = async (
 
 export const getIdPredicate = (item: Model) => item.get("id") as number;
 
-export const buildOpts = (
-  args: CalcOptsI,
-  attributes: Record<string, unknown>
-): OptionsType => {
-  const { where, ...rest } = calculateOptions(args);
-
-  return {
-    where: where ? Object.assign(attributes, where) : {},
-    ...rest,
-  };
-};
-
-export interface BuildOptsI {
-  args: CalcOptsI_NEW;
-  attributes: Record<string, unknown>;
-  model?: ModelStatic<any>;
-}
-
-export const buildOpts_NEW = ({
-  args,
-  attributes,
-  model,
-}: BuildOptsI): OptionsType => {
-  const { where, ...rest } = calculateOptions_NEW({
-    args,
-    ...(model && { model }),
-  });
-
-  return {
-    where: where ? Object.assign(attributes, where) : {},
-    ...rest,
-  };
-};
-
 export const getCommunicationIncludeOpts = (ids?: number[]) => {
   return {
     model: Communication,
@@ -318,11 +266,6 @@ export const getLocationIncludeOpts = (ids?: number[]) => {
       }),
   };
 };
-
-export interface GetSubscriberIncludeOptsI {
-  args?: FilterString | null | undefined;
-  ids?: number[] | undefined;
-}
 
 export const getSubscriberIncludeOpts = ({
   args,
