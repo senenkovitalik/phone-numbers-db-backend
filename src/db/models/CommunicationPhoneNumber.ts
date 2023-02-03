@@ -27,8 +27,8 @@ export class CommunicationPhoneNumber extends Model<
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare communicationType: NonAttribute<Communication>;
-  declare location: NonAttribute<Location>;
+  declare communicationType?: NonAttribute<Communication>;
+  declare location?: NonAttribute<Location>;
   declare subscriber?: NonAttribute<Subscriber> | null;
 
   declare static associations: {
