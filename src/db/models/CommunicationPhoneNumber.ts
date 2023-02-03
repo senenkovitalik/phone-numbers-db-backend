@@ -32,6 +32,8 @@ export class CommunicationPhoneNumber extends Model<
   declare subscriber?: NonAttribute<Subscriber> | null;
 
   declare static associations: {
+    communicationType: Association<CommunicationPhoneNumber, Communication>;
+    location: Association<CommunicationPhoneNumber, Location>;
     subscriber: Association<CommunicationPhoneNumber, Subscriber>;
   };
 }
