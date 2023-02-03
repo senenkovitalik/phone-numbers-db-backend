@@ -9,7 +9,7 @@ import { calculateOptions } from "../utils";
 
 export const locations = async (_parent: unknown, args: QueryLocationsArgs) => {
   try {
-    const options = calculateOptions(args);
+    const options = calculateOptions({ args });
 
     return await Location.findAll(options);
   } catch (e) {
@@ -23,7 +23,7 @@ export const locations_aggregate = async (
   args: QueryLocations_AggregateArgs
 ): Promise<Aggregate> => {
   try {
-    const options = calculateOptions(args);
+    const options = calculateOptions({ args });
 
     const { count } = await Location.findAndCountAll(options);
 

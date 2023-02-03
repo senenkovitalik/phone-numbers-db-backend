@@ -4,7 +4,7 @@ type Query {
   subscribers(
     limit: Int
     offset: Int
-    order_by: subscribers_order_by
+    order_by: Order
     where: subscribers_where_exp
   ): [Subscriber!]!
   subscribers_aggregate(where: subscribers_where_exp): Aggregate!
@@ -13,7 +13,7 @@ type Query {
   communication_types(
     limit: Int
     offset: Int
-    order_by: communication_types_order_by
+    order_by: Order
     where: communication_types_where_exp
   ): [CommunicationType!]!
   communication_types_aggregate(
@@ -24,7 +24,7 @@ type Query {
   communication_phone_numbers(
     limit: Int
     offset: Int
-    order_by: communication_phone_numbers_order_by
+    order_by: Order
     where: communication_phone_numbers_where_exp
   ): [CommunicationPhoneNumber]!
   communication_phone_numbers_aggregate(
@@ -35,11 +35,16 @@ type Query {
   locations(
     limit: Int
     offset: Int
-    order_by: locations_order_by
+    order_by: Order
     where: locations_where_exp
   ): [Location!]!
   locations_aggregate(where: locations_where_exp): Aggregate!
   locations_by_pk(id: Int!): Location
+}
+
+input Order {
+  field: String!
+  order: OrderBy!
 }
 
 enum OrderBy {

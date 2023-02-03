@@ -1,4 +1,5 @@
 import {
+  Association,
   CreationOptional,
   DataTypes,
   ForeignKey,
@@ -26,9 +27,15 @@ export class CommunicationPhoneNumber extends Model<
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare communicationType: NonAttribute<Communication>;
-  declare location: NonAttribute<Location>;
-  declare subscriber: NonAttribute<Subscriber> | null;
+  declare communicationType?: NonAttribute<Communication>;
+  declare location?: NonAttribute<Location>;
+  declare subscriber?: NonAttribute<Subscriber> | null;
+
+  declare static associations: {
+    communicationType: Association<CommunicationPhoneNumber, Communication>;
+    location: Association<CommunicationPhoneNumber, Location>;
+    subscriber: Association<CommunicationPhoneNumber, Subscriber>;
+  };
 }
 
 CommunicationPhoneNumber.init(

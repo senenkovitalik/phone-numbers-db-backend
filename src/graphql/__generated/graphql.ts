@@ -153,6 +153,11 @@ export type MutationUpdate_Subscribers_By_PkArgs = {
   id: Scalars['Int'];
 };
 
+export type Order = {
+  field: Scalars['String'];
+  order: OrderBy;
+};
+
 export enum OrderBy {
   Asc = 'asc',
   Desc = 'desc'
@@ -179,7 +184,7 @@ export type Query = {
 export type QueryCommunication_Phone_NumbersArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Communication_Phone_Numbers_Order_By>;
+  order_by?: InputMaybe<Order>;
   where?: InputMaybe<Communication_Phone_Numbers_Where_Exp>;
 };
 
@@ -197,7 +202,7 @@ export type QueryCommunication_Phone_Numbers_By_PkArgs = {
 export type QueryCommunication_TypesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Communication_Types_Order_By>;
+  order_by?: InputMaybe<Order>;
   where?: InputMaybe<Communication_Types_Where_Exp>;
 };
 
@@ -215,7 +220,7 @@ export type QueryCommunication_Types_By_PkArgs = {
 export type QueryLocationsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Locations_Order_By>;
+  order_by?: InputMaybe<Order>;
   where?: InputMaybe<Locations_Where_Exp>;
 };
 
@@ -239,7 +244,7 @@ export type QueryLoginArgs = {
 export type QuerySubscribersArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Subscribers_Order_By>;
+  order_by?: InputMaybe<Order>;
   where?: InputMaybe<Subscribers_Where_Exp>;
 };
 
@@ -265,14 +270,6 @@ export type Communication_Phone_Numbers_Delete_Input = {
   ids: Array<Scalars['Int']>;
 };
 
-export type Communication_Phone_Numbers_Order_By = {
-  communicationTypeId?: InputMaybe<OrderBy>;
-  id?: InputMaybe<OrderBy>;
-  locationId?: InputMaybe<OrderBy>;
-  subscriberId?: InputMaybe<OrderBy>;
-  value?: InputMaybe<OrderBy>;
-};
-
 export type Communication_Phone_Numbers_Update_Input = {
   communicationTypeId: Scalars['Int'];
   locationId?: InputMaybe<Scalars['Int']>;
@@ -289,12 +286,6 @@ export type Communication_Phone_Numbers_Where_Exp = {
   value?: InputMaybe<FilterString>;
 };
 
-export type Communication_Types_Order_By = {
-  description?: InputMaybe<OrderBy>;
-  id?: InputMaybe<OrderBy>;
-  value?: InputMaybe<OrderBy>;
-};
-
 export type Communication_Types_Update_Input = {
   description?: InputMaybe<Scalars['String']>;
   value: Scalars['String'];
@@ -304,21 +295,6 @@ export type Communication_Types_Where_Exp = {
   description?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
   value?: InputMaybe<FilterString>;
-};
-
-export type Locations_Order_By = {
-  building?: InputMaybe<OrderBy>;
-  city?: InputMaybe<OrderBy>;
-  country?: InputMaybe<OrderBy>;
-  description?: InputMaybe<OrderBy>;
-  district?: InputMaybe<OrderBy>;
-  floor?: InputMaybe<OrderBy>;
-  id?: InputMaybe<OrderBy>;
-  name?: InputMaybe<OrderBy>;
-  region?: InputMaybe<OrderBy>;
-  room?: InputMaybe<OrderBy>;
-  section?: InputMaybe<OrderBy>;
-  street?: InputMaybe<OrderBy>;
 };
 
 export type Locations_Where_Exp = {
@@ -338,13 +314,6 @@ export type Locations_Where_Exp = {
 
 export type Subscribers_Delete_Input = {
   ids: Array<Scalars['Int']>;
-};
-
-export type Subscribers_Order_By = {
-  firstName?: InputMaybe<OrderBy>;
-  id?: InputMaybe<OrderBy>;
-  lastName?: InputMaybe<OrderBy>;
-  middleName?: InputMaybe<OrderBy>;
 };
 
 export type Subscribers_Update_Input = {
@@ -444,21 +413,18 @@ export type ResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Location: ResolverTypeWrapper<Location>;
   Mutation: ResolverTypeWrapper<{}>;
+  Order: Order;
   OrderBy: OrderBy;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriber: ResolverTypeWrapper<Subscriber>;
   communication_phone_numbers_delete_input: Communication_Phone_Numbers_Delete_Input;
-  communication_phone_numbers_order_by: Communication_Phone_Numbers_Order_By;
   communication_phone_numbers_update_input: Communication_Phone_Numbers_Update_Input;
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
-  communication_types_order_by: Communication_Types_Order_By;
   communication_types_update_input: Communication_Types_Update_Input;
   communication_types_where_exp: Communication_Types_Where_Exp;
-  locations_order_by: Locations_Order_By;
   locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
-  subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
   subscribers_where_exp: Subscribers_Where_Exp;
 }>;
@@ -478,20 +444,17 @@ export type ResolversParentTypes = ResolversObject<{
   Int: Scalars['Int'];
   Location: Location;
   Mutation: {};
+  Order: Order;
   Query: {};
   String: Scalars['String'];
   Subscriber: Subscriber;
   communication_phone_numbers_delete_input: Communication_Phone_Numbers_Delete_Input;
-  communication_phone_numbers_order_by: Communication_Phone_Numbers_Order_By;
   communication_phone_numbers_update_input: Communication_Phone_Numbers_Update_Input;
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
-  communication_types_order_by: Communication_Types_Order_By;
   communication_types_update_input: Communication_Types_Update_Input;
   communication_types_where_exp: Communication_Types_Where_Exp;
-  locations_order_by: Locations_Order_By;
   locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
-  subscribers_order_by: Subscribers_Order_By;
   subscribers_update_input: Subscribers_Update_Input;
   subscribers_where_exp: Subscribers_Where_Exp;
 }>;

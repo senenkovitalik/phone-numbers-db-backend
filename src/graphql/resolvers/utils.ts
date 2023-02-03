@@ -1,4 +1,4 @@
-import { Model, Op, Sequelize, Utils } from "sequelize";
+import { Model, Op, Order, Sequelize, Utils } from "sequelize";
 import _ from "lodash";
 import {
   Communication,
@@ -6,8 +6,15 @@ import {
   Location,
   Subscriber,
 } from "../../db/models";
-import { FilterId, FilterString, InputMaybe } from "../__generated/graphql";
-import { CalcOptsI, FullSearchIds, OptionsType, WhereOptsI } from "./types";
+import { FilterId } from "../__generated/graphql";
+import {
+  CalculateOptionsI,
+  FullSearchIds,
+  GetSubscriberIncludeOptsI,
+  OptionsType,
+  OrderItemAssociation,
+  WhereOptsI,
+} from "./types";
 
 const isEmptyObject = (obj: unknown = {}) => {
   return (
@@ -70,12 +77,18 @@ const processWhereArgs = (
   }, {});
 };
 
-export function calculateOptions(
-  { limit, offset, order_by, where }: CalcOptsI,
-  fulltextIndexFields?: string[]
-): OptionsType {
+/**
+ * Calculate options for query.
+ * @returns {OptionsType} Query options
+ */
+export function calculateOptions({
+  args: { limit, offset, order_by, where },
+  fulltextIndexFields,
+  model,
+}: CalculateOptionsI): OptionsType {
   let whereClauseObj: { [key: string]: unknown } & { q?: Utils.Literal } = {};
   let whereClause = {};
+  const order: Order = [];
 
   if (where) {
     whereClauseObj = processWhereArgs(where, fulltextIndexFields);
@@ -96,10 +109,32 @@ export function calculateOptions(
     }
   }
 
+  if (order_by) {
+    const { field, order: orderValue } = order_by;
+    const splitted = field.split(".");
+
+    if (splitted.length > 1) {
+      const subModel = splitted[0] as string;
+      const subModelField = splitted[1] as string;
+
+      if (model && Object.hasOwnProperty.call(model, "associations")) {
+        order.push([
+          model.associations[subModel] as OrderItemAssociation,
+          subModelField,
+          orderValue,
+        ]);
+      } else {
+        throw new Error("Model was not provided or no associations exist");
+      }
+    } else {
+      order.push([field, orderValue]);
+    }
+  }
+
   return {
     ...(limit && { limit }),
     ...(offset && { offset }),
-    ...(order_by && { order: Object.entries(order_by as object) }),
+    ...(order && { order }),
     ...(whereClause && {
       where: whereClause,
     }),
@@ -169,52 +204,40 @@ export const getIdsForFulltextSearch = async (
 
 export const getIdPredicate = (item: Model) => item.get("id") as number;
 
-export const buildOpts = (
-  args: CalcOptsI,
-  attributes: Record<string, unknown>
-): OptionsType => {
-  const { where, ...rest } = calculateOptions(args);
-
-  return {
-    where: where ? Object.assign(attributes, where) : {},
-    ...rest,
-  };
-};
-
-export const getCommunicationIncludeOpts = (ids: FullSearchIds | null) => {
+export const getCommunicationIncludeOpts = (ids?: number[]) => {
   return {
     model: Communication,
     as: "communicationType",
     ...(ids &&
-      ids.communicationTypeIds.length && {
+      ids.length && {
         where: {
-          id: ids.communicationTypeIds,
+          id: ids,
         },
       }),
   };
 };
 
-export const getLocationIncludeOpts = (ids: FullSearchIds | null) => {
+export const getLocationIncludeOpts = (ids?: number[]) => {
   return {
     model: Location,
     as: "location",
     ...(ids &&
-      ids.locationIds.length && {
+      ids.length && {
         where: {
-          id: ids.locationIds,
+          id: ids,
         },
       }),
   };
 };
 
-export const getSubscriberIncludeOpts = (
-  ids: InputMaybe<FullSearchIds>,
-  args?: InputMaybe<FilterString>
-) => {
+export const getSubscriberIncludeOpts = ({
+  args,
+  ids,
+}: GetSubscriberIncludeOptsI) => {
   const globalSearchOpts =
-    ids && ids.subscriberIds.length
+    ids && ids.length
       ? {
-          id: ids.subscriberIds,
+          id: ids,
         }
       : null;
 

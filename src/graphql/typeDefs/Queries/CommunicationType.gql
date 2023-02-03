@@ -1,9 +1,3 @@
-input communication_types_order_by {
-  id: OrderBy
-  value: OrderBy
-  description: OrderBy
-}
-
 type CommunicationType {
   id: Int!
   value: String!
