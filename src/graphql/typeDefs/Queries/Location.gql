@@ -13,21 +13,6 @@ type Location {
   room: String
 }
 
-input locations_order_by {
-  id: OrderBy
-  name: OrderBy
-  description: OrderBy
-  country: OrderBy
-  region: OrderBy
-  district: OrderBy
-  city: OrderBy
-  street: OrderBy
-  building: OrderBy
-  section: OrderBy
-  floor: OrderBy
-  room: OrderBy
-}
-
 input locations_where_exp {
   id: FilterId
   name: FilterString

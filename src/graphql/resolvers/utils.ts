@@ -8,7 +8,6 @@ import {
 } from "../../db/models";
 import { FilterId } from "../__generated/graphql";
 import {
-  CalcOptsI,
   CalculateOptionsI,
   FullSearchIds,
   GetSubscriberIncludeOptsI,
@@ -78,47 +77,11 @@ const processWhereArgs = (
   }, {});
 };
 
-export function calculateOptions(
-  { limit, offset, order_by, where }: CalcOptsI,
-  fulltextIndexFields?: string[]
-): OptionsType {
-  let whereClauseObj: { [key: string]: unknown } & { q?: Utils.Literal } = {};
-  let whereClause = {};
-
-  if (where) {
-    whereClauseObj = processWhereArgs(where, fulltextIndexFields);
-
-    const { q, ...rest } = whereClauseObj;
-
-    const isFulltextArgEmpty = isEmptyObject(q);
-    const isRestArgsEmpty = isEmptyObject(rest);
-
-    if (!isFulltextArgEmpty && !isRestArgsEmpty) {
-      whereClause = {
-        [Op.and]: [rest, Sequelize.where(q as Utils.Literal, Op.not, null)],
-      };
-    } else if (isFulltextArgEmpty && !isRestArgsEmpty) {
-      whereClause = rest;
-    } else if (!isFulltextArgEmpty && isRestArgsEmpty) {
-      whereClause = q as Utils.Literal;
-    }
-  }
-
-  return {
-    ...(limit && { limit }),
-    ...(offset && { offset }),
-    ...(order_by && { order: Object.entries(order_by as object) }),
-    ...(whereClause && {
-      where: whereClause,
-    }),
-  };
-}
-
 /**
  * Calculate options for query.
  * @returns {OptionsType} Query options
  */
-export function calculateOptions_NEW({
+export function calculateOptions({
   args: { limit, offset, order_by, where },
   fulltextIndexFields,
   model,

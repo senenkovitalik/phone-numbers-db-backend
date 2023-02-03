@@ -13,7 +13,7 @@ export const communication_types = async (
   args: QueryCommunication_TypesArgs
 ): Promise<Communication[]> => {
   try {
-    const options = calculateOptions(args);
+    const options = calculateOptions({ args });
 
     return await Communication.findAll(options);
   } catch (e) {
@@ -27,7 +27,7 @@ export const communication_types_aggregate = async (
   args: QueryCommunication_Types_AggregateArgs
 ): Promise<Aggregate> => {
   try {
-    const options = calculateOptions(args);
+    const options = calculateOptions({ args });
 
     const count = await Communication.findAndCountAll(options);
 

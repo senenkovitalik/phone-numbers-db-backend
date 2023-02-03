@@ -12,7 +12,10 @@ export const subscribers = async (
   args: QuerySubscribersArgs
 ) => {
   try {
-    const options = calculateOptions(args, Subscriber.getFulltextIndexFields());
+    const options = calculateOptions({
+      args,
+      fulltextIndexFields: Subscriber.getFulltextIndexFields(),
+    });
 
     return await Subscriber.findAll(options);
   } catch (e) {
@@ -26,7 +29,10 @@ export const subscribers_aggregate = async (
   args: QuerySubscribers_AggregateArgs
 ): Promise<Aggregate> => {
   try {
-    const options = calculateOptions(args, Subscriber.getFulltextIndexFields());
+    const options = calculateOptions({
+      args,
+      fulltextIndexFields: Subscriber.getFulltextIndexFields(),
+    });
     const count = await Subscriber.count(options);
 
     return {

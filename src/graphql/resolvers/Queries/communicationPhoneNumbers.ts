@@ -7,7 +7,7 @@ import {
   QueryCommunication_Phone_Numbers_By_PkArgs,
 } from "../../__generated/graphql";
 import {
-  calculateOptions_NEW,
+  calculateOptions,
   getCommunicationIncludeOpts,
   getIdsForFulltextSearch,
   getLocationIncludeOpts,
@@ -27,7 +27,7 @@ export const communication_phone_numbers = async (
         ? await getIdsForFulltextSearch(where.q._eq)
         : null;
 
-    const { where: whereValue, ...rest } = calculateOptions_NEW({
+    const { where: whereValue, ...rest } = calculateOptions({
       args: {
         ...restArgs,
         where: {
@@ -82,7 +82,7 @@ export const communication_phone_numbers_aggregate = async (
         ? await getIdsForFulltextSearch(where.q._eq)
         : null;
 
-    const { where: whereValue, ...rest } = calculateOptions_NEW({
+    const { where: whereValue, ...rest } = calculateOptions({
       args: {
         ...restArgs,
         where: {
