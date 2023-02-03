@@ -14,7 +14,7 @@ import {
   Location,
   Subscriber,
 } from "../../db/models";
-import { FilterId, FilterString, InputMaybe } from "../__generated/graphql";
+import { FilterId, FilterString } from "../__generated/graphql";
 import {
   CalcOptsI,
   CalcOptsI_NEW,
@@ -178,6 +178,8 @@ export function calculateOptions_NEW({
           subModelField,
           orderValue,
         ]);
+      } else {
+        throw new Error("Model was not provided or no associations exist");
       }
     } else {
       order.push([field, orderValue]);
@@ -291,40 +293,45 @@ export const buildOpts_NEW = ({
   };
 };
 
-export const getCommunicationIncludeOpts = (ids: FullSearchIds | null) => {
+export const getCommunicationIncludeOpts = (ids?: number[]) => {
   return {
     model: Communication,
     as: "communicationType",
     ...(ids &&
-      ids.communicationTypeIds.length && {
+      ids.length && {
         where: {
-          id: ids.communicationTypeIds,
+          id: ids,
         },
       }),
   };
 };
 
-export const getLocationIncludeOpts = (ids: FullSearchIds | null) => {
+export const getLocationIncludeOpts = (ids?: number[]) => {
   return {
     model: Location,
     as: "location",
     ...(ids &&
-      ids.locationIds.length && {
+      ids.length && {
         where: {
-          id: ids.locationIds,
+          id: ids,
         },
       }),
   };
 };
 
-export const getSubscriberIncludeOpts = (
-  ids: InputMaybe<FullSearchIds>,
-  args?: InputMaybe<FilterString>
-) => {
+export interface GetSubscriberIncludeOptsI {
+  args?: FilterString | null | undefined;
+  ids?: number[] | undefined;
+}
+
+export const getSubscriberIncludeOpts = ({
+  args,
+  ids,
+}: GetSubscriberIncludeOptsI) => {
   const globalSearchOpts =
-    ids && ids.subscriberIds.length
+    ids && ids.length
       ? {
-          id: ids.subscriberIds,
+          id: ids,
         }
       : null;
 

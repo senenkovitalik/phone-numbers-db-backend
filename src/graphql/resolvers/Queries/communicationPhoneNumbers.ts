@@ -1,15 +1,13 @@
+import _ from "lodash";
 import { CommunicationPhoneNumber } from "../../../db/models";
 import {
   Aggregate,
-  FilterString,
-  InputMaybe,
   QueryCommunication_Phone_NumbersArgs,
   QueryCommunication_Phone_Numbers_AggregateArgs,
   QueryCommunication_Phone_Numbers_By_PkArgs,
 } from "../../__generated/graphql";
 import {
-  buildOpts,
-  buildOpts_NEW,
+  calculateOptions_NEW,
   getCommunicationIncludeOpts,
   getIdsForFulltextSearch,
   getLocationIncludeOpts,
@@ -22,45 +20,47 @@ export const communication_phone_numbers = async (
 ) => {
   try {
     const { where, ...restArgs } = args;
+    const restWhereArgs = where && _.omit(where, ["subscriber", "q"]);
 
-    let subscriberArgs: InputMaybe<FilterString> | undefined;
-    let restWhereArgs;
-    let fulltextSearchArg: InputMaybe<FilterString> | undefined;
-
-    if (where) {
-      const { subscriber, q, ...restWhere } = where;
-      subscriberArgs = subscriber;
-      restWhereArgs = restWhere;
-      fulltextSearchArg = q ? q : null;
-    }
-
-    const ids =
-      fulltextSearchArg && fulltextSearchArg._eq.length > 0
-        ? await getIdsForFulltextSearch(fulltextSearchArg._eq)
+    const idsForFulltextSearch =
+      where && where.q && where.q._eq.length > 0
+        ? await getIdsForFulltextSearch(where.q._eq)
         : null;
 
-    const opts = buildOpts_NEW({
+    const { where: whereValue, ...rest } = calculateOptions_NEW({
       args: {
         ...restArgs,
         where: {
           ...restWhereArgs,
         },
       },
-      attributes: {
-        ...(ids &&
-          ids.phoneNumbersIds.length && {
-            id: ids.phoneNumbersIds,
-          }),
-      },
-      model: CommunicationPhoneNumber
+      model: CommunicationPhoneNumber,
     });
+
+    const opts = {
+      ...(whereValue && {
+        where: Object.assign(
+          {
+            ...(idsForFulltextSearch &&
+              idsForFulltextSearch.phoneNumbersIds.length && {
+                id: idsForFulltextSearch.phoneNumbersIds,
+              }),
+          },
+          whereValue
+        ),
+      }),
+      ...rest,
+    };
 
     return await CommunicationPhoneNumber.findAll({
       ...opts,
       include: [
-        getCommunicationIncludeOpts(ids),
-        getLocationIncludeOpts(ids),
-        getSubscriberIncludeOpts(ids, subscriberArgs),
+        getCommunicationIncludeOpts(idsForFulltextSearch?.communicationTypeIds),
+        getLocationIncludeOpts(idsForFulltextSearch?.locationIds),
+        getSubscriberIncludeOpts({
+          args: where?.subscriber,
+          ids: idsForFulltextSearch?.subscriberIds,
+        }),
       ],
     });
   } catch (e) {
@@ -75,44 +75,47 @@ export const communication_phone_numbers_aggregate = async (
 ): Promise<Aggregate> => {
   try {
     const { where, ...restArgs } = args;
+    const restWhereArgs = where && _.omit(where, ["subscriber", "q"]);
 
-    let subscriberArgs: InputMaybe<FilterString> | undefined;
-    let restWhereArgs;
-    let fulltextSearchArg: InputMaybe<FilterString> | undefined;
-
-    if (where) {
-      const { subscriber, q, ...restWhere } = where;
-      subscriberArgs = subscriber;
-      restWhereArgs = restWhere;
-      fulltextSearchArg = q ? q : null;
-    }
-
-    const ids =
-      fulltextSearchArg && fulltextSearchArg._eq.length > 0
-        ? await getIdsForFulltextSearch(fulltextSearchArg._eq)
+    const idsForFulltextSearch =
+      where && where.q && where.q._eq.length > 0
+        ? await getIdsForFulltextSearch(where.q._eq)
         : null;
 
-    const opts = buildOpts(
-      {
+    const { where: whereValue, ...rest } = calculateOptions_NEW({
+      args: {
         ...restArgs,
         where: {
           ...restWhereArgs,
         },
       },
-      {
-        ...(ids &&
-          ids.phoneNumbersIds.length && {
-            id: ids.phoneNumbersIds,
-          }),
-      }
-    );
+      model: CommunicationPhoneNumber,
+    });
+
+    const opts = {
+      ...(whereValue && {
+        where: Object.assign(
+          {
+            ...(idsForFulltextSearch &&
+              idsForFulltextSearch.phoneNumbersIds.length && {
+                id: idsForFulltextSearch.phoneNumbersIds,
+              }),
+          },
+          whereValue
+        ),
+      }),
+      ...rest,
+    };
 
     const count = await CommunicationPhoneNumber.count({
       ...opts,
       include: [
-        getCommunicationIncludeOpts(ids),
-        getLocationIncludeOpts(ids),
-        getSubscriberIncludeOpts(ids, subscriberArgs),
+        getCommunicationIncludeOpts(idsForFulltextSearch?.communicationTypeIds),
+        getLocationIncludeOpts(idsForFulltextSearch?.locationIds),
+        getSubscriberIncludeOpts({
+          args: where?.subscriber,
+          ids: idsForFulltextSearch?.subscriberIds,
+        }),
       ],
     });
 
