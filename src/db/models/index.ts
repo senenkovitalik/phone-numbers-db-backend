@@ -6,8 +6,17 @@ import { Subscriber } from "./Subscriber";
 import { User } from "./User";
 import { UserRole } from "./UserRole";
 
-Subscriber.belongsToMany(Location, { through: LocationsSubscribers });
-Location.belongsToMany(Subscriber, { through: LocationsSubscribers });
+Subscriber.belongsToMany(Location, {
+  through: LocationsSubscribers,
+  as: "locations",
+  foreignKey: "subscriberId",
+  timestamps: false,
+});
+Location.belongsToMany(Subscriber, {
+  through: LocationsSubscribers,
+  foreignKey: "locationId",
+  timestamps: false,
+});
 
 Communication.hasMany(CommunicationPhoneNumber, {
   foreignKey: "communication_type_id",

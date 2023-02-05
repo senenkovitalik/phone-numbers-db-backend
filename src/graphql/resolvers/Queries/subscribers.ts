@@ -6,6 +6,7 @@ import {
 } from "../../__generated/graphql";
 import { Subscriber } from "../../../db/models/Subscriber";
 import { calculateOptions } from "../utils";
+import { Location } from "../../../db/models";
 
 export const subscribers = async (
   _parent: unknown,
@@ -17,7 +18,10 @@ export const subscribers = async (
       fulltextIndexFields: Subscriber.getFulltextIndexFields(),
     });
 
-    return await Subscriber.findAll(options);
+    return await Subscriber.findAll({
+      ...options,
+      include: { model: Location, as: "locations" },
+    });
   } catch (e) {
     console.error(e);
     throw new Error("500");
@@ -51,7 +55,9 @@ export const subscribers_by_pk = async (
   { id }: QuerySubscribers_By_PkArgs
 ) => {
   try {
-    return await Subscriber.findByPk(id);
+    return await Subscriber.findByPk(id, {
+      include: { model: Location, as: "locations" },
+    });
   } catch (e) {
     console.error(e);
     throw new Error("500");

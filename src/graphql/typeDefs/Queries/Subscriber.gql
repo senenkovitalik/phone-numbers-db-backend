@@ -3,6 +3,7 @@ type Subscriber {
   firstName: String!
   middleName: String!
   lastName: String!
+  locations: [Location!]!
 }
 
 input subscribers_where_exp {

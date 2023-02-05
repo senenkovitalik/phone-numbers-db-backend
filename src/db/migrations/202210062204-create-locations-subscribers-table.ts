@@ -28,8 +28,6 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
     });
   },
   down: (queryInterface: QueryInterface) => {

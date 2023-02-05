@@ -1,10 +1,8 @@
 import {
-  CreationOptional,
-  DataTypes,
   ForeignKey,
   InferAttributes,
   InferCreationAttributes,
-  Model
+  Model,
 } from "sequelize";
 
 import { sequelize } from "../index";
@@ -18,18 +16,14 @@ export class LocationsSubscribers extends Model<
 > {
   declare subscriberId: ForeignKey<Subscriber["id"]>;
   declare locationId: ForeignKey<Location["id"]>;
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
 }
 
 LocationsSubscribers.init(
-  {
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
-  },
+  {},
   {
     sequelize,
     tableName: "locations_subscribers",
     underscored: true,
+    timestamps: false,
   }
 );

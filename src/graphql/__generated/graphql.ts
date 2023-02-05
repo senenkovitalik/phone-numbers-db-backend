@@ -263,6 +263,7 @@ export type Subscriber = {
   firstName: Scalars['String'];
   id: Scalars['Int'];
   lastName: Scalars['String'];
+  locations: Array<Location>;
   middleName: Scalars['String'];
 };
 
@@ -545,6 +546,7 @@ export type SubscriberResolvers<ContextType = MyContext, ParentType extends Reso
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType>;
   middleName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
