@@ -1,4 +1,5 @@
-import { Subscriber } from "../../../db/models";
+import _ from "lodash";
+import { Location, LocationsSubscribers, Subscriber } from "../../../db/models";
 import {
   MutationInsert_Subscribers_OneArgs,
   MutationUpdate_Subscribers_By_PkArgs,
@@ -9,16 +10,50 @@ import {
 
 export const update_subscribers_by_pk = async (
   _parent: unknown,
-  { id, data }: MutationUpdate_Subscribers_By_PkArgs
+  { id: subscriberId, data }: MutationUpdate_Subscribers_By_PkArgs
 ): Promise<Subscriber> => {
   try {
-    await Subscriber.update(data, {
+    const oldSubscriberLocations = (
+      await LocationsSubscribers.findAll({
+        attributes: ["locationId"],
+        where: {
+          subscriberId,
+        },
+      })
+    ).map((item) => item.get("locationId"));
+
+    const { locations, ...rest } = data;
+
+    const toAdd = _.difference(locations, oldSubscriberLocations);
+    const toRemove = _.difference(oldSubscriberLocations, locations);
+
+    if (toAdd.length !== 0) {
+      await LocationsSubscribers.bulkCreate(
+        toAdd.map((locationId) => ({
+          locationId,
+          subscriberId,
+        }))
+      );
+    }
+
+    if (toRemove.length !== 0) {
+      await LocationsSubscribers.destroy({
+        where: {
+          subscriberId,
+          locationId: toRemove
+        },
+      });
+    }
+
+    await Subscriber.update(rest, {
       where: {
-        id,
+        id: subscriberId,
       },
     });
 
-    return (await Subscriber.findByPk(id)) as Subscriber;
+    return (await Subscriber.findByPk(subscriberId, {
+      include: { model: Location, as: "locations" },
+    })) as Subscriber;
   } catch (e) {
     console.error(e);
     throw new Error("500");

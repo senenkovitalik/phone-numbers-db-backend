@@ -320,6 +320,7 @@ export type Subscribers_Delete_Input = {
 export type Subscribers_Update_Input = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
+  locations: Array<Scalars['Int']>;
   middleName: Scalars['String'];
 };
 
