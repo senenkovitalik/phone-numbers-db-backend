@@ -96,15 +96,24 @@ export const delete_subscribers_by_pk = async (
   { id }: ID
 ): Promise<Subscriber> => {
   try {
-    const res = await Subscriber.findByPk(id);
+    const subscriber = await Subscriber.findByPk(id);
 
-    if (res === null) {
+    if (subscriber === null) {
       throw new Error(`Subscriber ID=${id} not found. No rows affected.`);
     }
 
     await Subscriber.destroy({ where: { id } });
 
-    return res;
+    await LocationsSubscribers.destroy({
+      where: {
+        subscriberId: subscriber.get("id"),
+      },
+    });
+
+    // add locations prop cause graphql want it, get an error otherwise
+    subscriber.locations = [];
+
+    return subscriber;
   } catch (e) {
     console.error(e);
     throw e;
@@ -117,6 +126,8 @@ export const delete_subscribers = async (
 ): Promise<AffectedRows> => {
   try {
     const count = await Subscriber.destroy({ where: { id: ids } });
+
+    await LocationsSubscribers.destroy({ where: { subscriberId: ids } });
 
     return {
       affected_rows: count,
