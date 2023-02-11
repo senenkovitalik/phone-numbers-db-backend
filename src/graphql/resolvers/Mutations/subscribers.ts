@@ -1,24 +1,60 @@
-import { Subscriber } from "../../../db/models";
+import _ from "lodash";
+import { sequelize } from "../../../db";
+import { Location, LocationsSubscribers, Subscriber } from "../../../db/models";
 import {
   MutationInsert_Subscribers_OneArgs,
   MutationUpdate_Subscribers_By_PkArgs,
-  Subscribers_Update_Input,
   MutationDelete_SubscribersArgs,
   AffectedRows,
+  MutationDelete_Subscribers_By_PkArgs,
 } from "../../__generated/graphql";
 
 export const update_subscribers_by_pk = async (
   _parent: unknown,
-  { id, data }: MutationUpdate_Subscribers_By_PkArgs
+  { id: subscriberId, data }: MutationUpdate_Subscribers_By_PkArgs
 ): Promise<Subscriber> => {
   try {
-    await Subscriber.update(data, {
+    const oldSubscriberLocations = (
+      await LocationsSubscribers.findAll({
+        attributes: ["locationId"],
+        where: {
+          subscriberId,
+        },
+      })
+    ).map((item) => item.get("locationId"));
+
+    const { locations, ...rest } = data;
+
+    const toAdd = _.difference(locations, oldSubscriberLocations);
+    const toRemove = _.difference(oldSubscriberLocations, locations);
+
+    if (toAdd.length !== 0) {
+      await LocationsSubscribers.bulkCreate(
+        toAdd.map((locationId) => ({
+          locationId,
+          subscriberId,
+        }))
+      );
+    }
+
+    if (toRemove.length !== 0) {
+      await LocationsSubscribers.destroy({
+        where: {
+          subscriberId,
+          locationId: toRemove,
+        },
+      });
+    }
+
+    await Subscriber.update(rest, {
       where: {
-        id,
+        id: subscriberId,
       },
     });
 
-    return (await Subscriber.findByPk(id)) as Subscriber;
+    return (await Subscriber.findByPk(subscriberId, {
+      include: { model: Location, as: "locations" },
+    })) as Subscriber;
   } catch (e) {
     console.error(e);
     throw new Error("500");
@@ -30,31 +66,55 @@ export const insert_subscribers_one = async (
   { data }: MutationInsert_Subscribers_OneArgs
 ): Promise<Subscriber> => {
   try {
-    return await Subscriber.create(data as Subscribers_Update_Input);
+    const { locations, ...rest } = data;
+
+    const newSubscriber = await Subscriber.create(rest);
+    const subscriberId = newSubscriber.get("id");
+
+    if (locations.length !== 0) {
+      await LocationsSubscribers.bulkCreate(
+        locations.map((locationId) => ({
+          subscriberId,
+          locationId,
+        }))
+      );
+    }
+
+    return (await Subscriber.findByPk(subscriberId, {
+      include: { model: Location, as: "locations" },
+    })) as Subscriber;
   } catch (e) {
     console.error(e);
     throw new Error("500");
   }
 };
 
-interface ID {
-  id: number;
-}
-
 export const delete_subscribers_by_pk = async (
   _parent: unknown,
-  { id }: ID
+  { id }: MutationDelete_Subscribers_By_PkArgs
 ): Promise<Subscriber> => {
   try {
-    const res = await Subscriber.findByPk(id);
+    const subscriber = await Subscriber.findByPk(id);
 
-    if (res === null) {
+    if (subscriber === null) {
       throw new Error(`Subscriber ID=${id} not found. No rows affected.`);
     }
 
-    await Subscriber.destroy({ where: { id } });
+    await sequelize.transaction(async (t) => {
+      await Subscriber.destroy({ where: { id }, transaction: t });
 
-    return res;
+      await LocationsSubscribers.destroy({
+        where: {
+          subscriberId: subscriber.get("id"),
+        },
+        transaction: t,
+      });
+    });
+
+    // add locations prop cause graphql want it, get an error otherwise
+    subscriber.locations = [];
+
+    return subscriber;
   } catch (e) {
     console.error(e);
     throw e;
@@ -66,7 +126,14 @@ export const delete_subscribers = async (
   { where: { ids } }: MutationDelete_SubscribersArgs
 ): Promise<AffectedRows> => {
   try {
-    const count = await Subscriber.destroy({ where: { id: ids } });
+    const count = await sequelize.transaction(async (t) => {
+      await LocationsSubscribers.destroy({
+        where: { subscriberId: ids },
+        transaction: t,
+      });
+
+      return await Subscriber.destroy({ where: { id: ids }, transaction: t });
+    });
 
     return {
       affected_rows: count,

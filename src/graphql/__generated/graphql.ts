@@ -132,7 +132,7 @@ export type MutationInsert_Communication_Types_OneArgs = {
 
 
 export type MutationInsert_Subscribers_OneArgs = {
-  data?: InputMaybe<Subscribers_Update_Input>;
+  data: Subscribers_Update_Input;
 };
 
 
@@ -263,6 +263,7 @@ export type Subscriber = {
   firstName: Scalars['String'];
   id: Scalars['Int'];
   lastName: Scalars['String'];
+  locations: Array<Location>;
   middleName: Scalars['String'];
 };
 
@@ -319,6 +320,7 @@ export type Subscribers_Delete_Input = {
 export type Subscribers_Update_Input = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
+  locations: Array<Scalars['Int']>;
   middleName: Scalars['String'];
 };
 
@@ -519,7 +521,7 @@ export type MutationResolvers<ContextType = MyContext, ParentType extends Resolv
   delete_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationDelete_Subscribers_By_PkArgs, 'id'>>;
   insert_communication_phone_numbers_one?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Phone_Numbers_OneArgs, 'data'>>;
   insert_communication_types_one?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Types_OneArgs, 'data'>>;
-  insert_subscribers_one?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, Partial<MutationInsert_Subscribers_OneArgs>>;
+  insert_subscribers_one?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationInsert_Subscribers_OneArgs, 'data'>>;
   update_communication_phone_numbers_by_pk?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationUpdate_Communication_Phone_Numbers_By_PkArgs, 'data' | 'id'>>;
   update_communication_types_by_pk?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType, RequireFields<MutationUpdate_Communication_Types_By_PkArgs, 'data' | 'id'>>;
   update_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationUpdate_Subscribers_By_PkArgs, 'data' | 'id'>>;
@@ -545,6 +547,7 @@ export type SubscriberResolvers<ContextType = MyContext, ParentType extends Reso
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType>;
   middleName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

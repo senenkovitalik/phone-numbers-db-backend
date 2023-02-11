@@ -1,14 +1,17 @@
 import {
+  Association,
   CreationOptional,
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
   Model,
+  NonAttribute,
 } from "sequelize";
 import { sequelize } from "../index";
+import { Location } from "./Location";
 export class Subscriber extends Model<
-  InferAttributes<Subscriber>,
-  InferCreationAttributes<Subscriber>
+  InferAttributes<Subscriber, { omit: "locations" }>,
+  InferCreationAttributes<Subscriber, { omit: "locations" }>
 > {
   declare id: CreationOptional<number>;
   declare firstName: string;
@@ -16,6 +19,12 @@ export class Subscriber extends Model<
   declare middleName: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare locations: NonAttribute<Location[]>;
+
+  declare static associations: {
+    locations: Association<Subscriber, Location>;
+  };
 
   static getFulltextIndexFields() {
     return ["first_name", "middle_name", "last_name"];
