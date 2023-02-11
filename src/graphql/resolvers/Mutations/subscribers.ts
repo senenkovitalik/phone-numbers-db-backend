@@ -6,6 +6,7 @@ import {
   MutationUpdate_Subscribers_By_PkArgs,
   MutationDelete_SubscribersArgs,
   AffectedRows,
+  MutationDelete_Subscribers_By_PkArgs,
 } from "../../__generated/graphql";
 
 export const update_subscribers_by_pk = async (
@@ -88,13 +89,9 @@ export const insert_subscribers_one = async (
   }
 };
 
-interface ID {
-  id: number;
-}
-
 export const delete_subscribers_by_pk = async (
   _parent: unknown,
-  { id }: ID
+  { id }: MutationDelete_Subscribers_By_PkArgs
 ): Promise<Subscriber> => {
   try {
     const subscriber = await Subscriber.findByPk(id);
