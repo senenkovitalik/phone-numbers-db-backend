@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { sequelize } from "../../../db";
 import { Location, LocationsSubscribers, Subscriber } from "../../../db/models";
 import {
   MutationInsert_Subscribers_OneArgs,
@@ -102,12 +103,15 @@ export const delete_subscribers_by_pk = async (
       throw new Error(`Subscriber ID=${id} not found. No rows affected.`);
     }
 
-    await Subscriber.destroy({ where: { id } });
+    await sequelize.transaction(async (t) => {
+      await Subscriber.destroy({ where: { id }, transaction: t });
 
-    await LocationsSubscribers.destroy({
-      where: {
-        subscriberId: subscriber.get("id"),
-      },
+      await LocationsSubscribers.destroy({
+        where: {
+          subscriberId: subscriber.get("id"),
+        },
+        transaction: t,
+      });
     });
 
     // add locations prop cause graphql want it, get an error otherwise
@@ -125,9 +129,14 @@ export const delete_subscribers = async (
   { where: { ids } }: MutationDelete_SubscribersArgs
 ): Promise<AffectedRows> => {
   try {
-    const count = await Subscriber.destroy({ where: { id: ids } });
+    const count = await sequelize.transaction(async (t) => {
+      await LocationsSubscribers.destroy({
+        where: { subscriberId: ids },
+        transaction: t,
+      });
 
-    await LocationsSubscribers.destroy({ where: { subscriberId: ids } });
+      return await Subscriber.destroy({ where: { id: ids }, transaction: t });
+    });
 
     return {
       affected_rows: count,
