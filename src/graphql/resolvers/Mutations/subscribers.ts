@@ -3,7 +3,6 @@ import { Location, LocationsSubscribers, Subscriber } from "../../../db/models";
 import {
   MutationInsert_Subscribers_OneArgs,
   MutationUpdate_Subscribers_By_PkArgs,
-  Subscribers_Update_Input,
   MutationDelete_SubscribersArgs,
   AffectedRows,
 } from "../../__generated/graphql";
@@ -40,7 +39,7 @@ export const update_subscribers_by_pk = async (
       await LocationsSubscribers.destroy({
         where: {
           subscriberId,
-          locationId: toRemove
+          locationId: toRemove,
         },
       });
     }
@@ -65,7 +64,23 @@ export const insert_subscribers_one = async (
   { data }: MutationInsert_Subscribers_OneArgs
 ): Promise<Subscriber> => {
   try {
-    return await Subscriber.create(data as Subscribers_Update_Input);
+    const { locations, ...rest } = data;
+
+    const newSubscriber = await Subscriber.create(rest);
+    const subscriberId = newSubscriber.get("id");
+
+    if (locations.length !== 0) {
+      await LocationsSubscribers.bulkCreate(
+        locations.map((locationId) => ({
+          subscriberId,
+          locationId,
+        }))
+      );
+    }
+
+    return (await Subscriber.findByPk(subscriberId, {
+      include: { model: Location, as: "locations" },
+    })) as Subscriber;
   } catch (e) {
     console.error(e);
     throw new Error("500");

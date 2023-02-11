@@ -3,7 +3,7 @@ type Mutation {
     id: Int!
     data: subscribers_update_input!
   ): Subscriber!
-  insert_subscribers_one(data: subscribers_update_input): Subscriber!
+  insert_subscribers_one(data: subscribers_update_input!): Subscriber!
   delete_subscribers_by_pk(id: Int!): Subscriber!
   delete_subscribers(where: subscribers_delete_input!): AffectedRows!
 
