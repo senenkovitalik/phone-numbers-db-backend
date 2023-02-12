@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {
   Aggregate,
   QuerySubscribersArgs,
@@ -13,14 +14,25 @@ export const subscribers = async (
   args: QuerySubscribersArgs
 ) => {
   try {
+    const argsWithoutLocations = _.omit(args, "where.locations");
+    const locations = _.get(args, "where.locations._eq");
+
     const options = calculateOptions({
-      args,
+      args: argsWithoutLocations,
       fulltextIndexFields: Subscriber.getFulltextIndexFields(),
     });
 
     return await Subscriber.findAll({
       ...options,
-      include: { model: Location, as: "locations" },
+      include: {
+        model: Location,
+        as: "locations",
+        ...(Boolean(locations) && {
+          where: {
+            id: locations,
+          },
+        }),
+      },
     });
   } catch (e) {
     console.error(e);
@@ -33,11 +45,26 @@ export const subscribers_aggregate = async (
   args: QuerySubscribers_AggregateArgs
 ): Promise<Aggregate> => {
   try {
+    const argsWithoutLocations = _.omit(args, "where.locations");
+    const locations = _.get(args, "where.locations._eq");
+
     const options = calculateOptions({
-      args,
+      args: argsWithoutLocations,
       fulltextIndexFields: Subscriber.getFulltextIndexFields(),
     });
-    const count = await Subscriber.count(options);
+
+    const count = await Subscriber.count({
+      ...options,
+      include: {
+        model: Location,
+        as: "locations",
+        ...(Boolean(locations) && {
+          where: {
+            id: locations,
+          },
+        }),
+      },
+    });
 
     return {
       aggregate: {
