@@ -328,6 +328,7 @@ export type Subscribers_Where_Exp = {
   firstName?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
   lastName?: InputMaybe<FilterString>;
+  locations?: InputMaybe<FilterInt>;
   middleName?: InputMaybe<FilterString>;
   q?: InputMaybe<FilterString>;
 };
