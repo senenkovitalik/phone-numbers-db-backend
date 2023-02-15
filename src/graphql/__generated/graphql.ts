@@ -60,6 +60,10 @@ export type FilterInt = {
   _eq: Scalars['Int'];
 };
 
+export type FilterIntNullable = {
+  _eq?: InputMaybe<Scalars['Int']>;
+};
+
 export type FilterString = {
   _eq: Scalars['String'];
 };
@@ -73,7 +77,7 @@ export type Location = {
   district?: Maybe<Scalars['String']>;
   floor?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   room?: Maybe<Scalars['String']>;
   section?: Maybe<Scalars['String']>;
@@ -307,6 +311,7 @@ export type Locations_Where_Exp = {
   floor?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
   name?: InputMaybe<FilterString>;
+  parentId?: InputMaybe<FilterIntNullable>;
   region?: InputMaybe<FilterString>;
   room?: InputMaybe<FilterString>;
   section?: InputMaybe<FilterString>;
@@ -412,6 +417,7 @@ export type ResolversTypes = ResolversObject<{
   Count: ResolverTypeWrapper<Count>;
   FilterId: FilterId;
   FilterInt: FilterInt;
+  FilterIntNullable: FilterIntNullable;
   FilterString: FilterString;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Location: ResolverTypeWrapper<Location>;
@@ -443,6 +449,7 @@ export type ResolversParentTypes = ResolversObject<{
   Count: Count;
   FilterId: FilterId;
   FilterInt: FilterInt;
+  FilterIntNullable: FilterIntNullable;
   FilterString: FilterString;
   Int: Scalars['Int'];
   Location: Location;
@@ -506,7 +513,7 @@ export type LocationResolvers<ContextType = MyContext, ParentType extends Resolv
   district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   floor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   room?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   section?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

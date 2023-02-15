@@ -72,3 +72,7 @@ input FilterString {
 input FilterInt {
   _eq: Int!
 }
+
+input FilterIntNullable {
+  _eq: Int
+}

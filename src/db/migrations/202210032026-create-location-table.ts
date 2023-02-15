@@ -14,6 +14,7 @@ module.exports = {
       name: {
         type: DataTypes.STRING(30),
         allowNull: true,
+        
       },
       description: {
         type: DataTypes.STRING(50),
@@ -54,6 +55,15 @@ module.exports = {
       room: {
         type: DataTypes.STRING(3),
         allowNull: true,
+      },
+      parentId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        field: "parent_id",
+        allowNull: true,
+        references: {
+          model: "location",
+          key: "id",
+        },
       },
       createdAt: {
         type: DataTypes.DATE,

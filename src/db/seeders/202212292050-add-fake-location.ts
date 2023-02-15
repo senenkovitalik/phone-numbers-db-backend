@@ -7,6 +7,8 @@ const locationData: CreationAttributes<Location>[] = [
     country: "Ukraine",
     region: "Zhytomir",
     city: "Yaropovichi",
+    street: "Sichovich Striltciv",
+    building: "45",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
@@ -40,6 +42,11 @@ const locationData: CreationAttributes<Location>[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    floor: "3",
+    room: "301",
+    parentId: 1,
+  },
 ];
 
 module.exports = {
@@ -47,10 +54,6 @@ module.exports = {
     return Location.bulkCreate(locationData);
   },
   down: () => {
-    return Location.destroy({
-      where: {
-        name: locationData.map(({ name }) => name),
-      },
-    });
+    return Location.destroy({});
   },
 };

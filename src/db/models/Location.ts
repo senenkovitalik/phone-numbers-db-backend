@@ -1,6 +1,7 @@
 import {
   CreationOptional,
   DataTypes,
+  ForeignKey,
   InferAttributes,
   InferCreationAttributes,
   Model,
@@ -12,7 +13,7 @@ export class Location extends Model<
   InferCreationAttributes<Location>
 > {
   declare id: CreationOptional<number>;
-  declare name: string;
+  declare name: CreationOptional<string>;
   declare description: CreationOptional<string>;
   declare country: CreationOptional<string>;
   declare region: CreationOptional<string>;
@@ -23,10 +24,18 @@ export class Location extends Model<
   declare section: CreationOptional<string>;
   declare floor: CreationOptional<string>;
   declare room: CreationOptional<string>;
+  declare parentId: CreationOptional<ForeignKey<Location["id"]>>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
+/*
+There sre two types of location - parent and child.
+Parent location may have many child locations.
+Child locations have only one parent location.
+Parent location must be created with name attribute, parentId attr is equal to null.
+Child locaton have no name, but parentId attribute must be set. 
+*/
 Location.init(
   {
     id: {
@@ -36,7 +45,7 @@ Location.init(
     },
     name: {
       type: DataTypes.STRING(30),
-      allowNull: false,
+      allowNull: true,
     },
     description: {
       type: DataTypes.STRING(50),
@@ -78,6 +87,14 @@ Location.init(
       type: DataTypes.STRING(3),
       allowNull: true,
     },
+    parentId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      references: {
+        model: "location",
+        key: "id",
+      },
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
@@ -85,5 +102,14 @@ Location.init(
     sequelize,
     tableName: "location",
     underscored: true,
+    validate: {
+      nameOrParentId() {
+        if (this["name"] && this["parentId"]) {
+          throw new Error(
+            "Location model must have name eiter parentId attributes, not both."
+          );
+        }
+      },
+    },
   }
 );

@@ -1,6 +1,6 @@
 type Location {
   id: Int!
-  name: String!
+  name: String
   description: String
   country: String
   region: String
@@ -26,4 +26,5 @@ input locations_where_exp {
   section: FilterString
   floor: FilterString
   room: FilterString
+  parentId: FilterIntNullable
 }
