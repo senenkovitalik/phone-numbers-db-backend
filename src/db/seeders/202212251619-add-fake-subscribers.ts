@@ -3,7 +3,8 @@ import { Subscriber } from "../models";
 
 const TABLE_NAME = "subscriber";
 
-const subscribers = Array(34)
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const subscribers = [...Array(34)]
   .map((_, index) => ({
     humanId: (index + 1) as number | null,
     position: null as string | null,
@@ -24,6 +25,8 @@ const subscribers = Array(34)
       updateAt: new Date(),
     },
   ]) as CreationAttributes<Subscriber>[];
+
+console.log(subscribers);
 
 module.exports = {
   up: () => {

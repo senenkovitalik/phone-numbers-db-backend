@@ -151,7 +151,11 @@ const communicationPhoneNumbers: CreationAttributes<CommunicationPhoneNumber>[] 
       communicationTypeId: 4,
       locationId: 4,
     },
-  ].map((item) => ({ ...item, createdAt: new Date(), updatedAt: new Date() }));
+  ].map((item) => ({
+    ...item,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }));
 
 module.exports = {
   up: () => {
