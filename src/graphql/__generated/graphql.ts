@@ -64,6 +64,14 @@ export type FilterString = {
   _eq: Scalars['String'];
 };
 
+export type Human = {
+  __typename?: 'Human';
+  firstName: Scalars['String'];
+  id: Scalars['Int'];
+  lastName: Scalars['String'];
+  middleName: Scalars['String'];
+};
+
 export type Location = {
   __typename?: 'Location';
   building?: Maybe<Scalars['String']>;
@@ -171,6 +179,7 @@ export type Query = {
   communication_types: Array<CommunicationType>;
   communication_types_aggregate: Aggregate;
   communication_types_by_pk?: Maybe<CommunicationType>;
+  humans: Array<Human>;
   locations: Array<Location>;
   locations_aggregate: Aggregate;
   locations_by_pk?: Maybe<Location>;
@@ -214,6 +223,14 @@ export type QueryCommunication_Types_AggregateArgs = {
 
 export type QueryCommunication_Types_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryHumansArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Order>;
+  where?: InputMaybe<Humans_Where_Exp>;
 };
 
 
@@ -296,6 +313,14 @@ export type Communication_Types_Where_Exp = {
   description?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
   value?: InputMaybe<FilterString>;
+};
+
+export type Humans_Where_Exp = {
+  firstName?: InputMaybe<FilterString>;
+  id?: InputMaybe<FilterId>;
+  lastName?: InputMaybe<FilterString>;
+  middleName?: InputMaybe<FilterString>;
+  q?: InputMaybe<FilterString>;
 };
 
 export type Locations_Where_Exp = {
@@ -413,6 +438,7 @@ export type ResolversTypes = ResolversObject<{
   FilterId: FilterId;
   FilterInt: FilterInt;
   FilterString: FilterString;
+  Human: ResolverTypeWrapper<Human>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Location: ResolverTypeWrapper<Location>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -426,6 +452,7 @@ export type ResolversTypes = ResolversObject<{
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
   communication_types_update_input: Communication_Types_Update_Input;
   communication_types_where_exp: Communication_Types_Where_Exp;
+  humans_where_exp: Humans_Where_Exp;
   locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_update_input: Subscribers_Update_Input;
@@ -444,6 +471,7 @@ export type ResolversParentTypes = ResolversObject<{
   FilterId: FilterId;
   FilterInt: FilterInt;
   FilterString: FilterString;
+  Human: Human;
   Int: Scalars['Int'];
   Location: Location;
   Mutation: {};
@@ -456,6 +484,7 @@ export type ResolversParentTypes = ResolversObject<{
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
   communication_types_update_input: Communication_Types_Update_Input;
   communication_types_where_exp: Communication_Types_Where_Exp;
+  humans_where_exp: Humans_Where_Exp;
   locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_update_input: Subscribers_Update_Input;
@@ -498,6 +527,14 @@ export type CountResolvers<ContextType = MyContext, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type HumanResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Human'] = ResolversParentTypes['Human']> = ResolversObject<{
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  middleName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type LocationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = ResolversObject<{
   building?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -535,6 +572,7 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
   communication_types?: Resolver<Array<ResolversTypes['CommunicationType']>, ParentType, ContextType, Partial<QueryCommunication_TypesArgs>>;
   communication_types_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryCommunication_Types_AggregateArgs>>;
   communication_types_by_pk?: Resolver<Maybe<ResolversTypes['CommunicationType']>, ParentType, ContextType, RequireFields<QueryCommunication_Types_By_PkArgs, 'id'>>;
+  humans?: Resolver<Array<ResolversTypes['Human']>, ParentType, ContextType, Partial<QueryHumansArgs>>;
   locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType, Partial<QueryLocationsArgs>>;
   locations_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryLocations_AggregateArgs>>;
   locations_by_pk?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<QueryLocations_By_PkArgs, 'id'>>;
@@ -560,6 +598,7 @@ export type Resolvers<ContextType = MyContext> = ResolversObject<{
   CommunicationPhoneNumber?: CommunicationPhoneNumberResolvers<ContextType>;
   CommunicationType?: CommunicationTypeResolvers<ContextType>;
   Count?: CountResolvers<ContextType>;
+  Human?: HumanResolvers<ContextType>;
   Location?: LocationResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

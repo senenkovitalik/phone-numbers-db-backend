@@ -1,6 +1,13 @@
 type Query {
   login(email: String!, password: String!): AuthData
 
+  humans(
+    limit: Int
+    offset: Int
+    order_by: Order
+    where: humans_where_exp
+  ): [Human!]!
+
   subscribers(
     limit: Int
     offset: Int

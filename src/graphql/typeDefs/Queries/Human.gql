@@ -1,0 +1,14 @@
+type Human {
+  id: Int!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+}
+
+input humans_where_exp {
+  id: FilterId
+  firstName: FilterString
+  lastName: FilterString
+  middleName: FilterString
+  q: FilterString
+}
