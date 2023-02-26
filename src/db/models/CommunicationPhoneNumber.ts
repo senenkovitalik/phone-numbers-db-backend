@@ -13,7 +13,7 @@ import { sequelize } from "../index";
 
 import { Communication } from "./Communication";
 import { Location } from "./Location";
-import { Subscriber } from "./Subscriber";
+// import { Subscriber } from "./Subscriber";
 
 export class CommunicationPhoneNumber extends Model<
   InferAttributes<CommunicationPhoneNumber>,
@@ -23,18 +23,17 @@ export class CommunicationPhoneNumber extends Model<
   declare value: string;
   declare communicationTypeId: ForeignKey<Communication["id"]>;
   declare locationId: ForeignKey<Location["id"]> | null;
-  declare subscriberId: ForeignKey<Subscriber["id"]> | null;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
   declare communicationType: NonAttribute<Communication>;
   declare location?: NonAttribute<Location>;
-  declare subscriber?: NonAttribute<Subscriber> | null;
+  // declare subscriber?: NonAttribute<Subscriber> | null;
 
   declare static associations: {
     communicationType: Association<CommunicationPhoneNumber, Communication>;
     location: Association<CommunicationPhoneNumber, Location>;
-    subscriber: Association<CommunicationPhoneNumber, Subscriber>;
+    // subscriber: Association<CommunicationPhoneNumber, Subscriber>;
   };
 }
 
@@ -66,16 +65,6 @@ CommunicationPhoneNumber.init(
         model: "location",
         key: "id",
       },
-    },
-    subscriberId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: true,
-      references: {
-        model: "subscriber",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,

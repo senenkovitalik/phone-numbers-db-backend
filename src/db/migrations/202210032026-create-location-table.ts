@@ -55,6 +55,15 @@ module.exports = {
         type: DataTypes.STRING(3),
         allowNull: true,
       },
+      parentId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: true,
+        field: "parent_id",
+        references: {
+          model: "location",
+          key: "id",
+        },
+      },
       createdAt: {
         type: DataTypes.DATE,
         field: "created_at",

@@ -1,6 +1,7 @@
 import {
   CreationOptional,
   DataTypes,
+  ForeignKey,
   InferAttributes,
   InferCreationAttributes,
   Model,
@@ -23,6 +24,7 @@ export class Location extends Model<
   declare section: CreationOptional<string>;
   declare floor: CreationOptional<string>;
   declare room: CreationOptional<string>;
+  declare parentId: ForeignKey<Location["id"]> | null;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
@@ -77,6 +79,14 @@ Location.init(
     room: {
       type: DataTypes.STRING(3),
       allowNull: true,
+    },
+    parentId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      references: {
+        model: "location",
+        key: "id",
+      },
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,

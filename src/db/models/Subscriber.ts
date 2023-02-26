@@ -2,33 +2,33 @@ import {
   Association,
   CreationOptional,
   DataTypes,
+  ForeignKey,
   InferAttributes,
   InferCreationAttributes,
   Model,
   NonAttribute,
 } from "sequelize";
 import { sequelize } from "../index";
+import { Human } from "./Human";
 import { Location } from "./Location";
 export class Subscriber extends Model<
-  InferAttributes<Subscriber, { omit: "locations" }>,
-  InferCreationAttributes<Subscriber, { omit: "locations" }>
+  InferAttributes<Subscriber, { omit: "human" | "locations" }>,
+  InferCreationAttributes<Subscriber, { omit: "human" | "locations" }>
 > {
   declare id: CreationOptional<number>;
-  declare firstName: string;
-  declare lastName: string;
-  declare middleName: string;
+  declare humanId: ForeignKey<Human["id"]> | null;
+  declare position: string | null;
+  declare description: CreationOptional<string | null>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
+  declare human: NonAttribute<Human> | null;
   declare locations: NonAttribute<Location[]>;
 
   declare static associations: {
+    human: Association<Subscriber, Human>;
     locations: Association<Subscriber, Location>;
   };
-
-  static getFulltextIndexFields() {
-    return ["first_name", "middle_name", "last_name"];
-  }
 }
 
 Subscriber.init(
@@ -38,20 +38,21 @@ Subscriber.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    firstName: {
-      type: DataTypes.STRING(30),
+    humanId: {
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true,
-      field: "first_name",
+      references: {
+        model: "human",
+        key: "id",
+      },
     },
-    middleName: {
-      type: DataTypes.STRING(30),
+    position: {
+      type: DataTypes.STRING(100),
       allowNull: true,
-      field: "middle_name",
     },
-    lastName: {
-      type: DataTypes.STRING(30),
+    description: {
+      type: DataTypes.STRING(100),
       allowNull: true,
-      field: "last_name",
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,

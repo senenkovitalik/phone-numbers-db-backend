@@ -11,20 +11,22 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      firstName: {
-        type: DataTypes.STRING(30),
+      humanId: {
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true,
-        field: 'first_name'
+        field: "human_id",
+        references: {
+          model: "human",
+          key: "id",
+        },
       },
-      middleName: {
-        type: DataTypes.STRING(30),
+      position: {
+        type: DataTypes.STRING(100),
         allowNull: true,
-        field: 'middle_name'
       },
-      lastName: {
-        type: DataTypes.STRING(30),
+      description: {
+        type: DataTypes.STRING(100),
         allowNull: true,
-        field: 'last_name'
       },
       createdAt: {
         type: DataTypes.DATE,

@@ -1,3 +1,4 @@
+import { Human } from "./Human";
 import { Communication } from "./Communication";
 import { CommunicationPhoneNumber } from "./CommunicationPhoneNumber";
 import { Location } from "./Location";
@@ -5,6 +6,11 @@ import { LocationsSubscribers } from "./LocationsSubscribers";
 import { Subscriber } from "./Subscriber";
 import { User } from "./User";
 import { UserRole } from "./UserRole";
+
+Human.belongsTo(Subscriber, {
+  foreignKey: "human_id",
+  as: "human"
+});
 
 Subscriber.belongsToMany(Location, {
   through: LocationsSubscribers,
@@ -30,12 +36,13 @@ CommunicationPhoneNumber.belongsTo(Communication, {
 Location.hasMany(CommunicationPhoneNumber, { as: "location" });
 CommunicationPhoneNumber.belongsTo(Location, { as: "location" });
 
-Subscriber.hasOne(CommunicationPhoneNumber, { as: "subscriber" });
-CommunicationPhoneNumber.belongsTo(Subscriber, { as: "subscriber" });
+// Subscriber.hasOne(CommunicationPhoneNumber, { as: "subscriber" });
+// CommunicationPhoneNumber.belongsTo(Subscriber, { as: "subscriber" });
 
 UserRole.hasMany(User);
 User.belongsTo(UserRole);
 
+export * from "./Human";
 export * from "./Communication";
 export * from "./CommunicationPhoneNumber";
 export * from "./Location";

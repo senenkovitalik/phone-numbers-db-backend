@@ -23,8 +23,6 @@ module.exports = {
           model: "communication_type",
           key: "id",
         },
-        onUpdate: "CASCADE",
-        onDelete: "SET NULL"
       },
       locationId: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -34,19 +32,6 @@ module.exports = {
           model: "location",
           key: "id",
         },
-        onUpdate: "CASCADE",
-        onDelete: "SET NULL"
-      },
-      subscriberId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        allowNull: true,
-        field: "subscriber_id",
-        references: {
-          model: "subscriber",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "SET NULL"
       },
       createdAt: {
         type: DataTypes.DATE,

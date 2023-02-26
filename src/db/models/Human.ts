@@ -1,0 +1,52 @@
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from "sequelize";
+import { sequelize } from "../index";
+export class Human extends Model<
+  InferAttributes<Human>,
+  InferCreationAttributes<Human>
+> {
+  declare id: CreationOptional<number>;
+  declare firstName: string;
+  declare lastName: string;
+  declare middleName: string;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+
+  static getFulltextIndexFields() {
+    return ["first_name", "middle_name", "last_name"];
+  }
+}
+
+Human.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    firstName: {
+      type: DataTypes.STRING(30),
+      allowNull: true,
+    },
+    middleName: {
+      type: DataTypes.STRING(30),
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING(30),
+      allowNull: true,
+    },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+  },
+  {
+    sequelize,
+    tableName: "human",
+    underscored: true,
+  }
+);
