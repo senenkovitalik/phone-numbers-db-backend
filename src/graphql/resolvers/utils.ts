@@ -3,6 +3,7 @@ import _ from "lodash";
 import {
   Communication,
   CommunicationPhoneNumber,
+  Human,
   Location,
   Subscriber,
 } from "../../db/models";
@@ -185,7 +186,7 @@ export const getIdsForFulltextSearch = async (
     await Subscriber.findAll({
       where: fulltextSearchValue
         ? Sequelize.literal(
-            `MATCH (${Subscriber.getFulltextIndexFields().join(
+            `MATCH (${Human.getFulltextIndexFields().join(
               ","
             )}) AGAINST ('${fulltextSearchValue}*' IN BOOLEAN MODE)`
           )
@@ -244,7 +245,7 @@ export const getSubscriberIncludeOpts = ({
   const localSearchOpts =
     args && args._eq
       ? Sequelize.literal(
-          `MATCH (${Subscriber.getFulltextIndexFields().join(",")}) AGAINST ('${
+          `MATCH (${Human.getFulltextIndexFields().join(",")}) AGAINST ('${
             args._eq
           }*' IN BOOLEAN MODE)`
         )

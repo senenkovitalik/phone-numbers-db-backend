@@ -82,6 +82,7 @@ export type Location = {
   floor?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   name: Scalars['String'];
+  parentId?: Maybe<Scalars['Int']>;
   region?: Maybe<Scalars['String']>;
   room?: Maybe<Scalars['String']>;
   section?: Maybe<Scalars['String']>;
@@ -180,6 +181,7 @@ export type Query = {
   communication_types_aggregate: Aggregate;
   communication_types_by_pk?: Maybe<CommunicationType>;
   humans: Array<Human>;
+  humans_aggregate: Aggregate;
   locations: Array<Location>;
   locations_aggregate: Aggregate;
   locations_by_pk?: Maybe<Location>;
@@ -234,6 +236,11 @@ export type QueryHumansArgs = {
 };
 
 
+export type QueryHumans_AggregateArgs = {
+  where?: InputMaybe<Humans_Where_Exp>;
+};
+
+
 export type QueryLocationsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -277,11 +284,10 @@ export type QuerySubscribers_By_PkArgs = {
 
 export type Subscriber = {
   __typename?: 'Subscriber';
-  firstName: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  human?: Maybe<Human>;
   id: Scalars['Int'];
-  lastName: Scalars['String'];
-  locations: Array<Location>;
-  middleName: Scalars['String'];
+  position?: Maybe<Scalars['String']>;
 };
 
 export type Communication_Phone_Numbers_Delete_Input = {
@@ -332,6 +338,7 @@ export type Locations_Where_Exp = {
   floor?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
   name?: InputMaybe<FilterString>;
+  parentId?: InputMaybe<FilterId>;
   region?: InputMaybe<FilterString>;
   room?: InputMaybe<FilterString>;
   section?: InputMaybe<FilterString>;
@@ -343,18 +350,12 @@ export type Subscribers_Delete_Input = {
 };
 
 export type Subscribers_Update_Input = {
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
   locations: Array<Scalars['Int']>;
-  middleName: Scalars['String'];
 };
 
 export type Subscribers_Where_Exp = {
-  firstName?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
-  lastName?: InputMaybe<FilterString>;
   locations?: InputMaybe<FilterInt>;
-  middleName?: InputMaybe<FilterString>;
   q?: InputMaybe<FilterString>;
 };
 
@@ -544,6 +545,7 @@ export type LocationResolvers<ContextType = MyContext, ParentType extends Resolv
   floor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  parentId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   room?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   section?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -573,6 +575,7 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
   communication_types_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryCommunication_Types_AggregateArgs>>;
   communication_types_by_pk?: Resolver<Maybe<ResolversTypes['CommunicationType']>, ParentType, ContextType, RequireFields<QueryCommunication_Types_By_PkArgs, 'id'>>;
   humans?: Resolver<Array<ResolversTypes['Human']>, ParentType, ContextType, Partial<QueryHumansArgs>>;
+  humans_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryHumans_AggregateArgs>>;
   locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType, Partial<QueryLocationsArgs>>;
   locations_aggregate?: Resolver<ResolversTypes['Aggregate'], ParentType, ContextType, Partial<QueryLocations_AggregateArgs>>;
   locations_by_pk?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, RequireFields<QueryLocations_By_PkArgs, 'id'>>;
@@ -583,11 +586,10 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
 }>;
 
 export type SubscriberResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Subscriber'] = ResolversParentTypes['Subscriber']> = ResolversObject<{
-  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  human?: Resolver<Maybe<ResolversTypes['Human']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType>;
-  middleName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  position?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

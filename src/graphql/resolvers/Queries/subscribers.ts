@@ -7,31 +7,20 @@ import {
 } from "../../__generated/graphql";
 import { Subscriber } from "../../../db/models/Subscriber";
 import { calculateOptions } from "../utils";
-import { Location } from "../../../db/models";
+import { Human } from "../../../db/models";
 
 export const subscribers = async (
   _parent: unknown,
   args: QuerySubscribersArgs
 ) => {
   try {
-    const argsWithoutLocations = _.omit(args, "where.locations");
-    const locations = _.get(args, "where.locations._eq");
-
-    const options = calculateOptions({
-      args: argsWithoutLocations,
-      fulltextIndexFields: Subscriber.getFulltextIndexFields(),
-    });
+    const options = calculateOptions({ args });
 
     return await Subscriber.findAll({
       ...options,
       include: {
-        model: Location,
-        as: "locations",
-        ...(Boolean(locations) && {
-          where: {
-            id: locations,
-          },
-        }),
+        model: Human,
+        as: "human",
       },
     });
   } catch (e) {
@@ -45,24 +34,13 @@ export const subscribers_aggregate = async (
   args: QuerySubscribers_AggregateArgs
 ): Promise<Aggregate> => {
   try {
-    const argsWithoutLocations = _.omit(args, "where.locations");
-    const locations = _.get(args, "where.locations._eq");
-
-    const options = calculateOptions({
-      args: argsWithoutLocations,
-      fulltextIndexFields: Subscriber.getFulltextIndexFields(),
-    });
+    const options = calculateOptions({ args });
 
     const count = await Subscriber.count({
       ...options,
       include: {
-        model: Location,
-        as: "locations",
-        ...(Boolean(locations) && {
-          where: {
-            id: locations,
-          },
-        }),
+        model: Human,
+        as: "human",
       },
     });
 
@@ -83,7 +61,7 @@ export const subscribers_by_pk = async (
 ) => {
   try {
     return await Subscriber.findByPk(id, {
-      include: { model: Location, as: "locations" },
+      include: { model: Human, as: "human" },
     });
   } catch (e) {
     console.error(e);

@@ -10,10 +10,10 @@ import {
 } from "sequelize";
 import { sequelize } from "../index";
 import { Human } from "./Human";
-import { Location } from "./Location";
+// import { Location } from "./Location";
 export class Subscriber extends Model<
-  InferAttributes<Subscriber, { omit: "human" | "locations" }>,
-  InferCreationAttributes<Subscriber, { omit: "human" | "locations" }>
+  InferAttributes<Subscriber, { omit: "human" }>,
+  InferCreationAttributes<Subscriber, { omit: "human" }>
 > {
   declare id: CreationOptional<number>;
   declare humanId: ForeignKey<Human["id"]> | null;
@@ -23,11 +23,11 @@ export class Subscriber extends Model<
   declare updatedAt: CreationOptional<Date>;
 
   declare human: NonAttribute<Human> | null;
-  declare locations: NonAttribute<Location[]>;
+  // declare locations: NonAttribute<Location[]>;
 
   declare static associations: {
     human: Association<Subscriber, Human>;
-    locations: Association<Subscriber, Location>;
+    // locations: Association<Subscriber, Location>;
   };
 }
 

@@ -11,16 +11,18 @@ export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
   try {
     const options = calculateOptions({ args });
 
-    return await Human.findAll({
+    const a = await Human.findAll({
       ...options,
     });
+
+    return a;
   } catch (e) {
     console.error(e);
     throw new Error("500");
   }
 };
 
-export const subscribers_aggregate = async (
+export const humans_aggregate = async (
   _parent: unknown,
   args: QuerySubscribers_AggregateArgs
 ): Promise<Aggregate> => {

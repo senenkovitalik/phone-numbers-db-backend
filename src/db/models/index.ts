@@ -7,9 +7,13 @@ import { Subscriber } from "./Subscriber";
 import { User } from "./User";
 import { UserRole } from "./UserRole";
 
-Human.belongsTo(Subscriber, {
+Human.hasOne(Subscriber, {
   foreignKey: "human_id",
-  as: "human"
+  as: "human",
+});
+Subscriber.belongsTo(Human, {
+  foreignKey: "human_id",
+  as: "human",
 });
 
 Subscriber.belongsToMany(Location, {

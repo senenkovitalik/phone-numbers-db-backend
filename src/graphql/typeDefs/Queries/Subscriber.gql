@@ -1,16 +1,12 @@
 type Subscriber {
   id: Int!
-  firstName: String!
-  middleName: String!
-  lastName: String!
-  locations: [Location!]!
+  human: Human
+  position: String
+  description: String
 }
 
 input subscribers_where_exp {
   id: FilterId
-  firstName: FilterString
-  lastName: FilterString
-  middleName: FilterString
   locations: FilterInt
   q: FilterString
 }

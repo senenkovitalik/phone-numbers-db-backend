@@ -112,7 +112,7 @@ export const delete_subscribers_by_pk = async (
     });
 
     // add locations prop cause graphql want it, get an error otherwise
-    subscriber.locations = [];
+    // subscriber.locations = [];
 
     return subscriber;
   } catch (e) {

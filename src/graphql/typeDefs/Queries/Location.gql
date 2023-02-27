@@ -11,6 +11,7 @@ type Location {
   section: String
   floor: String
   room: String
+  parentId: Int
 }
 
 input locations_where_exp {
@@ -26,4 +27,5 @@ input locations_where_exp {
   section: FilterString
   floor: FilterString
   room: FilterString
+  parentId: FilterId
 }
