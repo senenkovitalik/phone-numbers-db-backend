@@ -1,8 +1,8 @@
 input subscribers_update_input {
-  # firstName: String!
-  # middleName: String!
-  # lastName: String!
-  locations: [Int!]!
+  humanId: Int!
+  locations: [SubscriberLocationInput!]!
+  position: String
+  description: String
 }
 
 input subscribers_delete_input {

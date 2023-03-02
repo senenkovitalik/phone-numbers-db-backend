@@ -9,7 +9,7 @@ import { UserRole } from "./UserRole";
 
 Human.hasOne(Subscriber, {
   foreignKey: "human_id",
-  as: "human",
+  as: "subscriber",
 });
 Subscriber.belongsTo(Human, {
   foreignKey: "human_id",

@@ -1,0 +1,14 @@
+input SubscriberLocationInput {
+  parentId: Int!
+  name: String!
+  description: String
+  country: String
+  region: String
+  district: String
+  city: String
+  street: String
+  building: String
+  section: String
+  floor: String
+  room: String
+}

@@ -1,14 +1,17 @@
 import {
+  Association,
   CreationOptional,
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
   Model,
+  NonAttribute,
 } from "sequelize";
 import { sequelize } from "../index";
+import { Subscriber } from "./Subscriber";
 export class Human extends Model<
-  InferAttributes<Human>,
-  InferCreationAttributes<Human>
+  InferAttributes<Human, { omit: "subscriber" }>,
+  InferCreationAttributes<Human, { omit: "subscriber" }>
 > {
   declare id: CreationOptional<number>;
   declare firstName: string;
@@ -16,6 +19,12 @@ export class Human extends Model<
   declare middleName: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare subscriber: NonAttribute<Subscriber | null>;
+
+  declare static associations: {
+    subscriber: Association<Human, Subscriber>;
+  };
 
   static getFulltextIndexFields() {
     return ["first_name", "middle_name", "last_name"];

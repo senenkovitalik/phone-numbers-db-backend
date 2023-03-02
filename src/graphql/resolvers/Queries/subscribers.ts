@@ -2,12 +2,12 @@ import _ from "lodash";
 import {
   Aggregate,
   QuerySubscribersArgs,
-  QuerySubscribers_AggregateArgs,
+  // QuerySubscribers_AggregateArgs,
   QuerySubscribers_By_PkArgs,
 } from "../../__generated/graphql";
 import { Subscriber } from "../../../db/models/Subscriber";
 import { calculateOptions } from "../utils";
-import { Human } from "../../../db/models";
+import { Human, Location } from "../../../db/models";
 
 export const subscribers = async (
   _parent: unknown,
@@ -18,10 +18,16 @@ export const subscribers = async (
 
     return await Subscriber.findAll({
       ...options,
-      include: {
-        model: Human,
-        as: "human",
-      },
+      include: [
+        {
+          model: Human,
+          as: "human",
+        },
+        {
+          model: Location,
+          as: "locations",
+        },
+      ],
     });
   } catch (e) {
     console.error(e);
@@ -30,14 +36,14 @@ export const subscribers = async (
 };
 
 export const subscribers_aggregate = async (
-  _parent: unknown,
-  args: QuerySubscribers_AggregateArgs
+  // _parent: unknown,
+  // args: QuerySubscribers_AggregateArgs
 ): Promise<Aggregate> => {
   try {
-    const options = calculateOptions({ args });
+    // const options = calculateOptions({ args });
 
     const count = await Subscriber.count({
-      ...options,
+      // ...options,
       include: {
         model: Human,
         as: "human",

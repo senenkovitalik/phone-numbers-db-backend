@@ -13,17 +13,17 @@ export class Location extends Model<
   InferCreationAttributes<Location>
 > {
   declare id: CreationOptional<number>;
-  declare name: string;
-  declare description: CreationOptional<string>;
-  declare country: CreationOptional<string>;
-  declare region: CreationOptional<string>;
-  declare district: CreationOptional<string>;
-  declare city: CreationOptional<string>;
-  declare street: CreationOptional<string>;
-  declare building: CreationOptional<string>;
-  declare section: CreationOptional<string>;
-  declare floor: CreationOptional<string>;
-  declare room: CreationOptional<string>;
+  declare name: string | null;
+  declare description: CreationOptional<string | null>;
+  declare country: CreationOptional<string | null>;
+  declare region: CreationOptional<string | null>;
+  declare district: CreationOptional<string | null>;
+  declare city: CreationOptional<string | null>;
+  declare street: CreationOptional<string | null>;
+  declare building: CreationOptional<string | null>;
+  declare section: CreationOptional<string | null>;
+  declare floor: CreationOptional<string | null>;
+  declare room: CreationOptional<string | null>;
   declare parentId: ForeignKey<Location["id"]> | null;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;

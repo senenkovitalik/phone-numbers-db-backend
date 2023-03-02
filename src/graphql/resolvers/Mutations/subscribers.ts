@@ -3,63 +3,63 @@ import { sequelize } from "../../../db";
 import { Location, LocationsSubscribers, Subscriber } from "../../../db/models";
 import {
   MutationInsert_Subscribers_OneArgs,
-  MutationUpdate_Subscribers_By_PkArgs,
+  // MutationUpdate_Subscribers_By_PkArgs,
   MutationDelete_SubscribersArgs,
   AffectedRows,
   MutationDelete_Subscribers_By_PkArgs,
 } from "../../__generated/graphql";
 
-export const update_subscribers_by_pk = async (
-  _parent: unknown,
-  { id: subscriberId, data }: MutationUpdate_Subscribers_By_PkArgs
-): Promise<Subscriber> => {
-  try {
-    const oldSubscriberLocations = (
-      await LocationsSubscribers.findAll({
-        attributes: ["locationId"],
-        where: {
-          subscriberId,
-        },
-      })
-    ).map((item) => item.get("locationId"));
+// export const update_subscribers_by_pk = async (
+//   _parent: unknown,
+//   { id: subscriberId, data }: MutationUpdate_Subscribers_By_PkArgs
+// ): Promise<Subscriber> => {
+//   try {
+//     const oldSubscriberLocations = (
+//       await LocationsSubscribers.findAll({
+//         attributes: ["locationId"],
+//         where: {
+//           subscriberId,
+//         },
+//       })
+//     ).map((item) => item.get("locationId"));
 
-    const { locations, ...rest } = data;
+//     const { locations, ...rest } = data;
 
-    const toAdd = _.difference(locations, oldSubscriberLocations);
-    const toRemove = _.difference(oldSubscriberLocations, locations);
+//     const toAdd = _.difference(locations, oldSubscriberLocations);
+//     const toRemove = _.difference(oldSubscriberLocations, locations);
 
-    if (toAdd.length !== 0) {
-      await LocationsSubscribers.bulkCreate(
-        toAdd.map((locationId) => ({
-          locationId,
-          subscriberId,
-        }))
-      );
-    }
+//     if (toAdd.length !== 0) {
+//       await LocationsSubscribers.bulkCreate(
+//         toAdd.map((locationId) => ({
+//           locationId,
+//           subscriberId,
+//         }))
+//       );
+//     }
 
-    if (toRemove.length !== 0) {
-      await LocationsSubscribers.destroy({
-        where: {
-          subscriberId,
-          locationId: toRemove,
-        },
-      });
-    }
+//     if (toRemove.length !== 0) {
+//       await LocationsSubscribers.destroy({
+//         where: {
+//           subscriberId,
+//           locationId: toRemove,
+//         },
+//       });
+//     }
 
-    await Subscriber.update(rest, {
-      where: {
-        id: subscriberId,
-      },
-    });
+//     await Subscriber.update(rest, {
+//       where: {
+//         id: subscriberId,
+//       },
+//     });
 
-    return (await Subscriber.findByPk(subscriberId, {
-      include: { model: Location, as: "locations" },
-    })) as Subscriber;
-  } catch (e) {
-    console.error(e);
-    throw new Error("500");
-  }
-};
+//     return (await Subscriber.findByPk(subscriberId, {
+//       include: { model: Location, as: "locations" },
+//     })) as Subscriber;
+//   } catch (e) {
+//     console.error(e);
+//     throw new Error("500");
+//   }
+// };
 
 export const insert_subscribers_one = async (
   _parent: unknown,
@@ -68,17 +68,28 @@ export const insert_subscribers_one = async (
   try {
     const { locations, ...rest } = data;
 
-    const newSubscriber = await Subscriber.create(rest);
-    const subscriberId = newSubscriber.get("id");
+    const subscriberId = await sequelize.transaction(async (t) => {
+      const newSubscriber = await Subscriber.create(rest, {
+        transaction: t,
+      });
+      const subscriberId = newSubscriber.get("id");
 
-    if (locations.length !== 0) {
-      await LocationsSubscribers.bulkCreate(
-        locations.map((locationId) => ({
-          subscriberId,
-          locationId,
-        }))
-      );
-    }
+      if (locations.length !== 0) {
+        const newLocations = await Location.bulkCreate(locations, {
+          transaction: t,
+        });
+
+        await LocationsSubscribers.bulkCreate(
+          newLocations.map(({ id }) => ({
+            subscriberId,
+            locationId: id,
+          })),
+          { transaction: t }
+        );
+      }
+
+      return subscriberId;
+    });
 
     return (await Subscriber.findByPk(subscriberId, {
       include: { model: Location, as: "locations" },

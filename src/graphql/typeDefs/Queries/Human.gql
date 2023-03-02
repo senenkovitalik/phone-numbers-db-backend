@@ -3,6 +3,7 @@ type Human {
   firstName: String!
   middleName: String!
   lastName: String!
+  subscriber: Subscriber
 }
 
 input humans_where_exp {
@@ -10,5 +11,14 @@ input humans_where_exp {
   firstName: FilterString
   lastName: FilterString
   middleName: FilterString
+  locations: FilterLocations
   q: FilterString
+}
+
+input id {
+  id: Int
+}
+
+input FilterLocations {
+  _eq: id
 }

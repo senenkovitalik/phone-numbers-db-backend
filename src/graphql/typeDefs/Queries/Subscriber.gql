@@ -3,10 +3,15 @@ type Subscriber {
   human: Human
   position: String
   description: String
+  locations: [Location!]
 }
 
 input subscribers_where_exp {
   id: FilterId
-  locations: FilterInt
+  locations: FilterSubscriberLocations
   q: FilterString
+}
+
+input FilterSubscriberLocations {
+  _in: [Int!]
 }

@@ -1,6 +1,6 @@
 type Location {
   id: Int!
-  name: String!
+  name: String
   description: String
   country: String
   region: String

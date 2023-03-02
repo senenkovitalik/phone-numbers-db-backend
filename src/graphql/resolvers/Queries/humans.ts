@@ -2,20 +2,67 @@ import _ from "lodash";
 import {
   Aggregate,
   QueryHumansArgs,
-  QuerySubscribers_AggregateArgs,
+  QueryHumans_AggregateArgs,
 } from "../../__generated/graphql";
-import { calculateOptions } from "../utils";
-import { Human } from "../../../db/models";
+// import { calculateOptions } from "../utils";
+import { Human, Location, Subscriber } from "../../../db/models";
+import { Order } from "sequelize";
 
 export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
   try {
-    const options = calculateOptions({ args });
+    const { limit, offset, order_by, where } = args;
+    const order: Order = [];
 
-    const a = await Human.findAll({
-      ...options,
+    if (order_by) {
+      const { field, order: orderValue } = order_by;
+      order.push([field, orderValue]);
+    }
+
+    let humanWhere = {};
+    let locationsWhere = {};
+
+    if (where) {
+      const { id, locations } = where;
+
+      if (id) {
+        if (id._eq) {
+          humanWhere = { id: id._eq };
+        }
+
+        if (id._in) {
+          humanWhere = { id: id._in };
+        }
+      }
+
+      if (locations) {
+        if (locations._eq) {
+          locationsWhere = locations._eq;
+        }
+      }
+    }
+
+    return await Human.findAll({
+      ...(limit && { limit }),
+      ...(offset && { offset }),
+      ...(order && { order }),
+      ...(humanWhere && {
+        where: humanWhere,
+      }),
+      include: {
+        model: Subscriber,
+        as: "subscriber",
+        ...(locationsWhere && {
+          include: [
+            {
+              model: Location,
+              as: "locations",
+              ...(locationsWhere && { where: locationsWhere }),
+              required: false,
+            },
+          ],
+        }),
+      },
     });
-
-    return a;
   } catch (e) {
     console.error(e);
     throw new Error("500");
@@ -24,13 +71,29 @@ export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
 
 export const humans_aggregate = async (
   _parent: unknown,
-  args: QuerySubscribers_AggregateArgs
+  args: QueryHumans_AggregateArgs
 ): Promise<Aggregate> => {
   try {
-    const options = calculateOptions({ args });
+    const { where } = args;
+
+    let humanWhere = {};
+
+    if (where) {
+      const { id } = where;
+
+      if (id) {
+        if (id._eq) {
+          humanWhere = { id: id._eq };
+        }
+
+        if (id._in) {
+          humanWhere = { id: id._in };
+        }
+      }
+    }
 
     const count = await Human.count({
-      ...options,
+      ...(humanWhere && { where: humanWhere }),
     });
 
     return {

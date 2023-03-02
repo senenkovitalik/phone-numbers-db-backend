@@ -47,10 +47,6 @@ module.exports = {
     return Location.bulkCreate(locationData);
   },
   down: () => {
-    return Location.destroy({
-      where: {
-        name: locationData.map(({ name }) => name),
-      },
-    });
+    return Location.destroy({});
   },
 };
