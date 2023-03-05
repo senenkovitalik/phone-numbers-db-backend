@@ -1,5 +1,5 @@
 input subscribers_update_input {
-  humanId: Int!
+  humanId: Int
   locations: [SubscriberLocationInput!]!
   position: String
   description: String

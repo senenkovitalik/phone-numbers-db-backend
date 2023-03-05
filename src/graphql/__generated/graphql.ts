@@ -350,9 +350,9 @@ export type Humans_Where_Exp = {
   firstName?: InputMaybe<FilterString>;
   id?: InputMaybe<FilterId>;
   lastName?: InputMaybe<FilterString>;
-  locations?: InputMaybe<FilterLocations>;
   middleName?: InputMaybe<FilterString>;
   q?: InputMaybe<FilterString>;
+  subscriber?: InputMaybe<Subscribers_Where_Exp>;
 };
 
 export type Id = {
@@ -381,7 +381,7 @@ export type Subscribers_Delete_Input = {
 
 export type Subscribers_Update_Input = {
   description?: InputMaybe<Scalars['String']>;
-  humanId: Scalars['Int'];
+  humanId?: InputMaybe<Scalars['Int']>;
   locations: Array<SubscriberLocationInput>;
   position?: InputMaybe<Scalars['String']>;
 };

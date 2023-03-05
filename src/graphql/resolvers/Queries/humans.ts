@@ -19,10 +19,11 @@ export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
     }
 
     let humanWhere = {};
+    let subscriberWhere = {};
     let locationsWhere = {};
 
     if (where) {
-      const { id, locations } = where;
+      const { id, subscriber } = where;
 
       if (id) {
         if (id._eq) {
@@ -34,9 +35,21 @@ export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
         }
       }
 
-      if (locations) {
-        if (locations._eq) {
-          locationsWhere = locations._eq;
+      if (subscriber) {
+        const { id, locations } = subscriber;
+
+        if (id) {
+          if (Number.isInteger(id._eq) || id._eq === null) {
+            subscriberWhere = { id: id._eq };
+          }
+
+          if (id._in) {
+            subscriberWhere = { id: id._in };
+          }
+        }
+
+        if (locations && locations._in) {
+          locationsWhere = locations._in;
         }
       }
     }
@@ -51,6 +64,7 @@ export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
       include: {
         model: Subscriber,
         as: "subscriber",
+        ...(subscriberWhere && { where: subscriberWhere }),
         ...(locationsWhere && {
           include: [
             {
@@ -75,11 +89,14 @@ export const humans_aggregate = async (
 ): Promise<Aggregate> => {
   try {
     const { where } = args;
+    const order: Order = [];
 
     let humanWhere = {};
+    let subscriberWhere = {};
+    let locationsWhere = {};
 
     if (where) {
-      const { id } = where;
+      const { id, subscriber } = where;
 
       if (id) {
         if (id._eq) {
@@ -90,10 +107,46 @@ export const humans_aggregate = async (
           humanWhere = { id: id._in };
         }
       }
+
+      if (subscriber) {
+        const { id, locations } = subscriber;
+
+        if (id) {
+          if (Number.isInteger(id._eq) || id._eq === null) {
+            subscriberWhere = { id: id._eq };
+          }
+
+          if (id._in) {
+            subscriberWhere = { id: id._in };
+          }
+        }
+
+        if (locations && locations._in) {
+          locationsWhere = locations._in;
+        }
+      }
     }
 
     const count = await Human.count({
-      ...(humanWhere && { where: humanWhere }),
+      ...(order && { order }),
+      ...(humanWhere && {
+        where: humanWhere,
+      }),
+      include: {
+        model: Subscriber,
+        as: "subscriber",
+        ...(subscriberWhere && { where: subscriberWhere }),
+        ...(locationsWhere && {
+          include: [
+            {
+              model: Location,
+              as: "locations",
+              ...(locationsWhere && { where: locationsWhere }),
+              required: false,
+            },
+          ],
+        }),
+      },
     });
 
     return {

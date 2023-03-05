@@ -66,6 +66,10 @@ export const insert_subscribers_one = async (
   { data }: MutationInsert_Subscribers_OneArgs
 ): Promise<Subscriber> => {
   try {
+    if (!data.humanId && !data.position) {
+      throw new Error("humanId or position must be provided.");
+    }
+
     const { locations, ...rest } = data;
 
     const subscriberId = await sequelize.transaction(async (t) => {
@@ -96,7 +100,7 @@ export const insert_subscribers_one = async (
     })) as Subscriber;
   } catch (e) {
     console.error(e);
-    throw new Error("500");
+    throw e;
   }
 };
 

@@ -8,10 +8,13 @@ type Human {
 
 input humans_where_exp {
   id: FilterId
+  
   firstName: FilterString
   lastName: FilterString
   middleName: FilterString
-  locations: FilterLocations
+
+  subscriber: subscribers_where_exp
+
   q: FilterString
 }
 
