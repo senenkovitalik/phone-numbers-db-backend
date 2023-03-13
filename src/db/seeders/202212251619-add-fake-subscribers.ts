@@ -26,8 +26,6 @@ const subscribers = [...Array(34)]
     },
   ]) as CreationAttributes<Subscriber>[];
 
-console.log(subscribers);
-
 module.exports = {
   up: () => {
     return Subscriber.bulkCreate(subscribers);

@@ -31,7 +31,7 @@ export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
         }
 
         if (id._in) {
-          humanWhere = { id: id._in };
+          humanWhere = { ...humanWhere, id: id._in };
         }
       }
 
@@ -39,7 +39,11 @@ export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
         const { id, locations } = subscriber;
 
         if (id) {
-          if (Number.isInteger(id._eq) || id._eq === null) {
+          if (id._eq == null) {
+            humanWhere = { ...humanWhere, "$subscriber.id$": null };
+          }
+
+          if (Number.isInteger(id._eq)) {
             subscriberWhere = { id: id._eq };
           }
 
@@ -58,23 +62,20 @@ export const humans = async (_parent: unknown, args: QueryHumansArgs) => {
       ...(limit && { limit }),
       ...(offset && { offset }),
       ...(order && { order }),
-      ...(humanWhere && {
-        where: humanWhere,
-      }),
+      where: humanWhere,
       include: {
         model: Subscriber,
         as: "subscriber",
-        ...(subscriberWhere && { where: subscriberWhere }),
-        ...(locationsWhere && {
-          include: [
-            {
-              model: Location,
-              as: "locations",
-              ...(locationsWhere && { where: locationsWhere }),
-              required: false,
-            },
-          ],
-        }),
+        where: subscriberWhere,
+        required: false,
+        include: [
+          {
+            model: Location,
+            as: "locations",
+            where: locationsWhere,
+            required: false,
+          },
+        ],
       },
     });
   } catch (e) {

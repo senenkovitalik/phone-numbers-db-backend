@@ -3,63 +3,67 @@ import { sequelize } from "../../../db";
 import { Location, LocationsSubscribers, Subscriber } from "../../../db/models";
 import {
   MutationInsert_Subscribers_OneArgs,
-  // MutationUpdate_Subscribers_By_PkArgs,
+  MutationUpdate_Subscribers_By_PkArgs,
   MutationDelete_SubscribersArgs,
   AffectedRows,
   MutationDelete_Subscribers_By_PkArgs,
 } from "../../__generated/graphql";
 
-// export const update_subscribers_by_pk = async (
-//   _parent: unknown,
-//   { id: subscriberId, data }: MutationUpdate_Subscribers_By_PkArgs
-// ): Promise<Subscriber> => {
-//   try {
-//     const oldSubscriberLocations = (
-//       await LocationsSubscribers.findAll({
-//         attributes: ["locationId"],
-//         where: {
-//           subscriberId,
-//         },
-//       })
-//     ).map((item) => item.get("locationId"));
+export const update_subscribers_by_pk = async (
+  _parent: unknown,
+  { id: subscriberId, data }: MutationUpdate_Subscribers_By_PkArgs
+): Promise<Subscriber> => {
+  try {
+    const oldSubscriberLocations = (
+      await LocationsSubscribers.findAll({
+        attributes: ["locationId"],
+        where: {
+          subscriberId,
+        },
+      })
+    ).map((item) => item.get("locationId"));
 
-//     const { locations, ...rest } = data;
+    const { locations, ...rest } = data;
+    const mappedLocations = locations.map(({ id }) => id as number);
 
-//     const toAdd = _.difference(locations, oldSubscriberLocations);
-//     const toRemove = _.difference(oldSubscriberLocations, locations);
+    const toAdd = _.difference(mappedLocations, oldSubscriberLocations);
+    const toRemove = _.difference(oldSubscriberLocations, mappedLocations);
 
-//     if (toAdd.length !== 0) {
-//       await LocationsSubscribers.bulkCreate(
-//         toAdd.map((locationId) => ({
-//           locationId,
-//           subscriberId,
-//         }))
-//       );
-//     }
+    if (toAdd.length > 0) {
+      await LocationsSubscribers.bulkCreate(
+        toAdd.map((locationId) => ({
+          locationId,
+          subscriberId,
+        }))
+      );
+    }
 
-//     if (toRemove.length !== 0) {
-//       await LocationsSubscribers.destroy({
-//         where: {
-//           subscriberId,
-//           locationId: toRemove,
-//         },
-//       });
-//     }
+    if (toRemove.length > 0) {
+      await LocationsSubscribers.destroy({
+        where: {
+          subscriberId,
+          locationId: toRemove,
+        },
+      });
+    }
 
-//     await Subscriber.update(rest, {
-//       where: {
-//         id: subscriberId,
-//       },
-//     });
+    await Subscriber.update(rest, {
+      where: {
+        id: subscriberId,
+      },
+    });
 
-//     return (await Subscriber.findByPk(subscriberId, {
-//       include: { model: Location, as: "locations" },
-//     })) as Subscriber;
-//   } catch (e) {
-//     console.error(e);
-//     throw new Error("500");
-//   }
-// };
+    return (await Subscriber.findByPk(subscriberId, {
+      include: {
+        model: Location,
+        as: "locations",
+      },
+    })) as Subscriber;
+  } catch (e) {
+    console.error(e);
+    throw new Error("500");
+  }
+};
 
 export const insert_subscribers_one = async (
   _parent: unknown,
@@ -79,9 +83,12 @@ export const insert_subscribers_one = async (
       const subscriberId = newSubscriber.get("id");
 
       if (locations.length !== 0) {
-        const newLocations = await Location.bulkCreate(locations, {
-          transaction: t,
-        });
+        const newLocations = await Location.bulkCreate(
+          locations.map(({ id, ...rest }) => ({ ...rest })),
+          {
+            transaction: t,
+          }
+        );
 
         await LocationsSubscribers.bulkCreate(
           newLocations.map(({ id }) => ({
@@ -118,6 +125,15 @@ export const delete_subscribers_by_pk = async (
     await sequelize.transaction(async (t) => {
       await Subscriber.destroy({ where: { id }, transaction: t });
 
+      if (subscriber.locations && subscriber.locations.length > 0) {
+        await Location.destroy({
+          where: {
+            id: subscriber.locations.map(({ id }) => id),
+          },
+          transaction: t,
+        });
+      }
+
       await LocationsSubscribers.destroy({
         where: {
           subscriberId: subscriber.get("id"),
@@ -127,7 +143,8 @@ export const delete_subscribers_by_pk = async (
     });
 
     // add locations prop cause graphql want it, get an error otherwise
-    // subscriber.locations = [];
+    // FIX THIS
+    subscriber.locations = [];
 
     return subscriber;
   } catch (e) {
@@ -141,17 +158,42 @@ export const delete_subscribers = async (
   { where: { ids } }: MutationDelete_SubscribersArgs
 ): Promise<AffectedRows> => {
   try {
-    const count = await sequelize.transaction(async (t) => {
-      await LocationsSubscribers.destroy({
-        where: { subscriberId: ids },
-        transaction: t,
-      });
-
-      return await Subscriber.destroy({ where: { id: ids }, transaction: t });
+    const subscribers = await Subscriber.findAll({
+      where: {
+        id: ids,
+      },
     });
 
+    let affected_rows = 0;
+
+    await Promise.all(
+      subscribers.map(async ({ id, locations }) => {
+        return await sequelize.transaction(async (t) => {
+          await Subscriber.destroy({ where: { id }, transaction: t });
+
+          if (locations && locations.length > 0) {
+            await Location.destroy({
+              where: {
+                id: locations.map(({ id }) => id),
+              },
+              transaction: t,
+            });
+
+            await LocationsSubscribers.destroy({
+              where: {
+                subscriberId: id,
+              },
+              transaction: t,
+            });
+          }
+
+          affected_rows++;
+        });
+      })
+    );
+
     return {
-      affected_rows: count,
+      affected_rows,
     };
   } catch (e) {
     console.error(e);

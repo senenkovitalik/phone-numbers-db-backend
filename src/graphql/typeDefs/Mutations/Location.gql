@@ -1,4 +1,5 @@
 input SubscriberLocationInput {
+  id: Int
   parentId: Int!
   name: String!
   description: String

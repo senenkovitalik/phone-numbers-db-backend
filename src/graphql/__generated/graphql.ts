@@ -307,6 +307,7 @@ export type SubscriberLocationInput = {
   description?: InputMaybe<Scalars['String']>;
   district?: InputMaybe<Scalars['String']>;
   floor?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   parentId: Scalars['Int'];
   region?: InputMaybe<Scalars['String']>;

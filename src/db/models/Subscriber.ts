@@ -23,7 +23,7 @@ export class Subscriber extends Model<
   declare updatedAt: CreationOptional<Date>;
 
   declare human: NonAttribute<Human | null>;
-  declare locations: NonAttribute<Location[]>;
+  declare locations?: NonAttribute<Location[]>;
 
   declare static associations: {
     human: Association<Subscriber, Human>;
