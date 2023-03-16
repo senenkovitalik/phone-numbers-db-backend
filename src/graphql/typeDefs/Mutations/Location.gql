@@ -1,7 +1,6 @@
-input SubscriberLocationInput {
-  id: Int
-  parentId: Int!
-  name: String!
+input locations_update_input {
+  parentId: Int
+  name: String
   description: String
   country: String
   region: String

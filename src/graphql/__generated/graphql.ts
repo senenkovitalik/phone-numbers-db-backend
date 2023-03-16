@@ -300,22 +300,6 @@ export type Subscriber = {
   position?: Maybe<Scalars['String']>;
 };
 
-export type SubscriberLocationInput = {
-  building?: InputMaybe<Scalars['String']>;
-  city?: InputMaybe<Scalars['String']>;
-  country?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  district?: InputMaybe<Scalars['String']>;
-  floor?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['Int']>;
-  name: Scalars['String'];
-  parentId: Scalars['Int'];
-  region?: InputMaybe<Scalars['String']>;
-  room?: InputMaybe<Scalars['String']>;
-  section?: InputMaybe<Scalars['String']>;
-  street?: InputMaybe<Scalars['String']>;
-};
-
 export type Communication_Phone_Numbers_Delete_Input = {
   ids: Array<Scalars['Int']>;
 };
@@ -360,6 +344,21 @@ export type Id = {
   id?: InputMaybe<Scalars['Int']>;
 };
 
+export type Locations_Update_Input = {
+  building?: InputMaybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  country?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  district?: InputMaybe<Scalars['String']>;
+  floor?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  parentId?: InputMaybe<Scalars['Int']>;
+  region?: InputMaybe<Scalars['String']>;
+  room?: InputMaybe<Scalars['String']>;
+  section?: InputMaybe<Scalars['String']>;
+  street?: InputMaybe<Scalars['String']>;
+};
+
 export type Locations_Where_Exp = {
   building?: InputMaybe<FilterString>;
   city?: InputMaybe<FilterString>;
@@ -383,7 +382,7 @@ export type Subscribers_Delete_Input = {
 export type Subscribers_Update_Input = {
   description?: InputMaybe<Scalars['String']>;
   humanId?: InputMaybe<Scalars['Int']>;
-  locations: Array<SubscriberLocationInput>;
+  locations?: InputMaybe<Array<Locations_Update_Input>>;
   position?: InputMaybe<Scalars['String']>;
 };
 
@@ -484,7 +483,6 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscriber: ResolverTypeWrapper<Subscriber>;
-  SubscriberLocationInput: SubscriberLocationInput;
   communication_phone_numbers_delete_input: Communication_Phone_Numbers_Delete_Input;
   communication_phone_numbers_update_input: Communication_Phone_Numbers_Update_Input;
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
@@ -492,6 +490,7 @@ export type ResolversTypes = ResolversObject<{
   communication_types_where_exp: Communication_Types_Where_Exp;
   humans_where_exp: Humans_Where_Exp;
   id: Id;
+  locations_update_input: Locations_Update_Input;
   locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_update_input: Subscribers_Update_Input;
@@ -520,7 +519,6 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars['String'];
   Subscriber: Subscriber;
-  SubscriberLocationInput: SubscriberLocationInput;
   communication_phone_numbers_delete_input: Communication_Phone_Numbers_Delete_Input;
   communication_phone_numbers_update_input: Communication_Phone_Numbers_Update_Input;
   communication_phone_numbers_where_exp: Communication_Phone_Numbers_Where_Exp;
@@ -528,6 +526,7 @@ export type ResolversParentTypes = ResolversObject<{
   communication_types_where_exp: Communication_Types_Where_Exp;
   humans_where_exp: Humans_Where_Exp;
   id: Id;
+  locations_update_input: Locations_Update_Input;
   locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
   subscribers_update_input: Subscribers_Update_Input;

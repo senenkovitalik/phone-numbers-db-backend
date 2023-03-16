@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { sequelize } from "../../../db";
-import { Location, LocationsSubscribers, Subscriber } from "../../../db/models";
+import { Human, Location, LocationsSubscribers, Subscriber } from "../../../db/models";
 import {
   MutationInsert_Subscribers_OneArgs,
   MutationUpdate_Subscribers_By_PkArgs,
@@ -14,50 +14,73 @@ export const update_subscribers_by_pk = async (
   { id: subscriberId, data }: MutationUpdate_Subscribers_By_PkArgs
 ): Promise<Subscriber> => {
   try {
-    const oldSubscriberLocations = (
-      await LocationsSubscribers.findAll({
-        attributes: ["locationId"],
+    // get subscriber<->location pairs
+    const pairs = await LocationsSubscribers.findAll({
+      where: { subscriberId },
+    });
+
+    await sequelize.transaction(async (transaction) => {
+      // remove locations
+      await Location.destroy({
         where: {
-          subscriberId,
+          id: pairs.map(({ locationId }) => locationId),
         },
-      })
-    ).map((item) => item.get("locationId"));
+        transaction,
+      });
 
-    const { locations, ...rest } = data;
-    const mappedLocations = locations.map(({ id }) => id as number);
-
-    const toAdd = _.difference(mappedLocations, oldSubscriberLocations);
-    const toRemove = _.difference(oldSubscriberLocations, mappedLocations);
-
-    if (toAdd.length > 0) {
-      await LocationsSubscribers.bulkCreate(
-        toAdd.map((locationId) => ({
-          locationId,
-          subscriberId,
-        }))
-      );
-    }
-
-    if (toRemove.length > 0) {
+      // remove subscriber<->location pairs
       await LocationsSubscribers.destroy({
         where: {
           subscriberId,
-          locationId: toRemove,
         },
+        transaction,
       });
-    }
 
-    await Subscriber.update(rest, {
-      where: {
-        id: subscriberId,
-      },
+      // update subscriber data
+      const { locations, ...rest } = data;
+
+      await Subscriber.update(rest, {
+        where: {
+          id: subscriberId,
+        },
+        transaction,
+      });
+
+      // if locations exist - create them
+      if (locations) {
+        const newLocations = await Promise.all(
+          locations.map(
+            async (location) => await Location.create(location, { transaction })
+          )
+        );
+
+        // create subscriber<->location pairs
+        await Promise.all(
+          newLocations.map(
+            async ({ id }) =>
+              await LocationsSubscribers.create(
+                {
+                  locationId: id,
+                  subscriberId,
+                },
+                { transaction }
+              )
+          )
+        );
+      }
     });
 
     return (await Subscriber.findByPk(subscriberId, {
-      include: {
-        model: Location,
-        as: "locations",
-      },
+      include: [
+        {
+          model: Human,
+          as: "human",
+        },
+        {
+          model: Location,
+          as: "locations",
+        },
+      ],
     })) as Subscriber;
   } catch (e) {
     console.error(e);
@@ -76,26 +99,24 @@ export const insert_subscribers_one = async (
 
     const { locations, ...rest } = data;
 
-    const subscriberId = await sequelize.transaction(async (t) => {
+    const subscriberId = await sequelize.transaction(async (transaction) => {
       const newSubscriber = await Subscriber.create(rest, {
-        transaction: t,
+        transaction,
       });
+
       const subscriberId = newSubscriber.get("id");
 
-      if (locations.length !== 0) {
-        const newLocations = await Location.bulkCreate(
-          locations.map(({ id, ...rest }) => ({ ...rest })),
-          {
-            transaction: t,
-          }
-        );
+      if (locations && locations.length !== 0) {
+        const newLocations = await Location.bulkCreate(locations, {
+          transaction,
+        });
 
         await LocationsSubscribers.bulkCreate(
           newLocations.map(({ id }) => ({
             subscriberId,
             locationId: id,
           })),
-          { transaction: t }
+          { transaction }
         );
       }
 

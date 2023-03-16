@@ -13,7 +13,7 @@ export class Location extends Model<
   InferCreationAttributes<Location>
 > {
   declare id: CreationOptional<number>;
-  declare name: string | null;
+  declare name: CreationOptional<string | null>;
   declare description: CreationOptional<string | null>;
   declare country: CreationOptional<string | null>;
   declare region: CreationOptional<string | null>;
@@ -38,7 +38,7 @@ Location.init(
     },
     name: {
       type: DataTypes.STRING(30),
-      allowNull: false,
+      allowNull: true,
     },
     description: {
       type: DataTypes.STRING(50),
@@ -65,7 +65,7 @@ Location.init(
       allowNull: true,
     },
     building: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.STRING(3),
       allowNull: true,
     },
     section: {

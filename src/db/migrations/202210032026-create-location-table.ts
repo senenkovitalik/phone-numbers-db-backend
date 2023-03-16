@@ -40,7 +40,7 @@ module.exports = {
         allowNull: true,
       },
       building: {
-        type: DataTypes.TINYINT,
+        type: DataTypes.STRING(3),
         allowNull: true,
       },
       section: {

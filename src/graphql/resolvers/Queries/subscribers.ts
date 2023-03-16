@@ -35,10 +35,9 @@ export const subscribers = async (
   }
 };
 
-export const subscribers_aggregate = async (
-  // _parent: unknown,
-  // args: QuerySubscribers_AggregateArgs
-): Promise<Aggregate> => {
+export const subscribers_aggregate = async (): // _parent: unknown,
+// args: QuerySubscribers_AggregateArgs
+Promise<Aggregate> => {
   try {
     // const options = calculateOptions({ args });
 
@@ -67,7 +66,16 @@ export const subscribers_by_pk = async (
 ) => {
   try {
     return await Subscriber.findByPk(id, {
-      include: { model: Human, as: "human" },
+      include: [
+        {
+          model: Human,
+          as: "human",
+        },
+        {
+          model: Location,
+          as: "locations",
+        },
+      ],
     });
   } catch (e) {
     console.error(e);
