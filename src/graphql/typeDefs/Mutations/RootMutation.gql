@@ -34,6 +34,12 @@ type Mutation {
   delete_communication_phone_numbers(
     where: communication_phone_numbers_delete_input!
   ): AffectedRows!
+
+  # location
+  insert_locations_one(data: locations_update_input!): Location!
+  update_locations_by_pk(id: Int!, data: locations_update_input!): Location!
+  delete_locations_by_pk(id: Int!): Location!
+  delete_locations(where: locations_delete_input!): AffectedRows!
 }
 
 type AffectedRows {

@@ -95,5 +95,12 @@ Location.init(
     sequelize,
     tableName: "location",
     underscored: true,
+    validate: {
+      nameOrParentId() {
+        if (!this["name"] && !this["parentId"]) {
+          throw new Error("name or parent must be provided.");
+        }
+      },
+    },
   }
 );

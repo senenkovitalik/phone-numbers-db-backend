@@ -103,13 +103,17 @@ export type Mutation = {
   delete_communication_phone_numbers: AffectedRows;
   delete_communication_phone_numbers_by_pk: CommunicationPhoneNumber;
   delete_communication_types_by_pk: CommunicationType;
+  delete_locations: AffectedRows;
+  delete_locations_by_pk: Location;
   delete_subscribers: AffectedRows;
   delete_subscribers_by_pk: Subscriber;
   insert_communication_phone_numbers_one: CommunicationPhoneNumber;
   insert_communication_types_one: CommunicationType;
+  insert_locations_one: Location;
   insert_subscribers_one: Subscriber;
   update_communication_phone_numbers_by_pk: CommunicationPhoneNumber;
   update_communication_types_by_pk: CommunicationType;
+  update_locations_by_pk: Location;
   update_subscribers_by_pk: Subscriber;
 };
 
@@ -125,6 +129,16 @@ export type MutationDelete_Communication_Phone_Numbers_By_PkArgs = {
 
 
 export type MutationDelete_Communication_Types_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDelete_LocationsArgs = {
+  where: Locations_Delete_Input;
+};
+
+
+export type MutationDelete_Locations_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -149,6 +163,11 @@ export type MutationInsert_Communication_Types_OneArgs = {
 };
 
 
+export type MutationInsert_Locations_OneArgs = {
+  data: Locations_Update_Input;
+};
+
+
 export type MutationInsert_Subscribers_OneArgs = {
   data: Subscribers_Update_Input;
 };
@@ -162,6 +181,12 @@ export type MutationUpdate_Communication_Phone_Numbers_By_PkArgs = {
 
 export type MutationUpdate_Communication_Types_By_PkArgs = {
   data: Communication_Types_Update_Input;
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdate_Locations_By_PkArgs = {
+  data: Locations_Update_Input;
   id: Scalars['Int'];
 };
 
@@ -344,6 +369,10 @@ export type Id = {
   id?: InputMaybe<Scalars['Int']>;
 };
 
+export type Locations_Delete_Input = {
+  ids: Array<Scalars['Int']>;
+};
+
 export type Locations_Update_Input = {
   building?: InputMaybe<Scalars['String']>;
   city?: InputMaybe<Scalars['String']>;
@@ -490,6 +519,7 @@ export type ResolversTypes = ResolversObject<{
   communication_types_where_exp: Communication_Types_Where_Exp;
   humans_where_exp: Humans_Where_Exp;
   id: Id;
+  locations_delete_input: Locations_Delete_Input;
   locations_update_input: Locations_Update_Input;
   locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
@@ -526,6 +556,7 @@ export type ResolversParentTypes = ResolversObject<{
   communication_types_where_exp: Communication_Types_Where_Exp;
   humans_where_exp: Humans_Where_Exp;
   id: Id;
+  locations_delete_input: Locations_Delete_Input;
   locations_update_input: Locations_Update_Input;
   locations_where_exp: Locations_Where_Exp;
   subscribers_delete_input: Subscribers_Delete_Input;
@@ -599,13 +630,17 @@ export type MutationResolvers<ContextType = MyContext, ParentType extends Resolv
   delete_communication_phone_numbers?: Resolver<ResolversTypes['AffectedRows'], ParentType, ContextType, RequireFields<MutationDelete_Communication_Phone_NumbersArgs, 'where'>>;
   delete_communication_phone_numbers_by_pk?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationDelete_Communication_Phone_Numbers_By_PkArgs, 'id'>>;
   delete_communication_types_by_pk?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType, RequireFields<MutationDelete_Communication_Types_By_PkArgs, 'id'>>;
+  delete_locations?: Resolver<ResolversTypes['AffectedRows'], ParentType, ContextType, RequireFields<MutationDelete_LocationsArgs, 'where'>>;
+  delete_locations_by_pk?: Resolver<ResolversTypes['Location'], ParentType, ContextType, RequireFields<MutationDelete_Locations_By_PkArgs, 'id'>>;
   delete_subscribers?: Resolver<ResolversTypes['AffectedRows'], ParentType, ContextType, RequireFields<MutationDelete_SubscribersArgs, 'where'>>;
   delete_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationDelete_Subscribers_By_PkArgs, 'id'>>;
   insert_communication_phone_numbers_one?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Phone_Numbers_OneArgs, 'data'>>;
   insert_communication_types_one?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType, RequireFields<MutationInsert_Communication_Types_OneArgs, 'data'>>;
+  insert_locations_one?: Resolver<ResolversTypes['Location'], ParentType, ContextType, RequireFields<MutationInsert_Locations_OneArgs, 'data'>>;
   insert_subscribers_one?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationInsert_Subscribers_OneArgs, 'data'>>;
   update_communication_phone_numbers_by_pk?: Resolver<ResolversTypes['CommunicationPhoneNumber'], ParentType, ContextType, RequireFields<MutationUpdate_Communication_Phone_Numbers_By_PkArgs, 'data' | 'id'>>;
   update_communication_types_by_pk?: Resolver<ResolversTypes['CommunicationType'], ParentType, ContextType, RequireFields<MutationUpdate_Communication_Types_By_PkArgs, 'data' | 'id'>>;
+  update_locations_by_pk?: Resolver<ResolversTypes['Location'], ParentType, ContextType, RequireFields<MutationUpdate_Locations_By_PkArgs, 'data' | 'id'>>;
   update_subscribers_by_pk?: Resolver<ResolversTypes['Subscriber'], ParentType, ContextType, RequireFields<MutationUpdate_Subscribers_By_PkArgs, 'data' | 'id'>>;
 }>;
 

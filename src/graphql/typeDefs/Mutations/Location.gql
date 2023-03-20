@@ -12,3 +12,7 @@ input locations_update_input {
   floor: String
   room: String
 }
+
+input locations_delete_input {
+  ids: [Int!]!
+}
