@@ -44,7 +44,7 @@ module.exports = {
         allowNull: true,
       },
       section: {
-        type: DataTypes.STRING(3),
+        type: DataTypes.STRING(6),
         allowNull: true,
       },
       floor: {
